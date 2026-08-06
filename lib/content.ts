@@ -53,8 +53,18 @@ export const hero = {
 export type Partner = {
   name: string;
   src: string;
-  /** Optical sizing. Some marks are wordmarks, some are square badges. */
+  /**
+   * Optical sizing. Logo walls fail when every mark is forced through one box,
+   * because a horizontal wordmark and a stacked lockup do not read at the same
+   * height. Three shapes, three treatments:
+   *
+   *   default    a square badge or mark — square box
+   *   wide       a horizontal wordmark — same height, much wider box
+   *   stacked    mark above wordmark — needs extra height or the wordmark
+   *              shrinks to an illegible smear beside its neighbours
+   */
   wide?: boolean;
+  stacked?: boolean;
 };
 
 export type Project = {
@@ -62,6 +72,13 @@ export type Project = {
   /** The industry the product operates in. Sits in the accent label. */
   kind: string;
   name: string;
+  /**
+   * The pitch. One or two short sentences, set large in the serif — this is
+   * the line a visitor actually reads, so it has to sell the product on its
+   * own and stop before it becomes a paragraph. Keep it under ~110 characters.
+   */
+  pitch: string;
+  /** The detail, for the reader the pitch already caught. One sentence. */
   summary: string;
   /**
    * The live product. Present means the claim on this card is checkable in one
@@ -96,8 +113,9 @@ export const projects: readonly Project[] = [
     index: "01",
     kind: "Payments infrastructure",
     name: "Pepay",
+    pitch: "Pay in any token. Get paid in the one you asked for.",
     summary:
-      "Crypto payment infrastructure for merchants, AI agents and programmable finance. Payers send whatever token they hold; merchants receive the stablecoin they asked for, reconciled in a single ledger a finance team can read.",
+      "Crypto payment infrastructure for merchants, AI agents and programmable finance — routing, settlement and reconciliation in one ledger a finance team can read.",
     href: "https://pepay-merchant-dashboard.vercel.app/home",
     status: "Live",
     metric: "$19.9M settled · 75.9K transactions · 26.7K paying wallets",
@@ -112,7 +130,7 @@ export const projects: readonly Project[] = [
       items: [
         { name: "Binance Chain", src: "/work/partners/binance-chain.png", wide: true },
         { name: "YZi Labs", src: "/work/partners/yzi-labs.webp", wide: true },
-        { name: "CoinMarketCap", src: "/work/partners/coinmarketcap.png" },
+        { name: "CoinMarketCap", src: "/work/partners/coinmarketcap.png", stacked: true },
       ],
     },
   },
@@ -120,8 +138,9 @@ export const projects: readonly Project[] = [
     index: "02",
     kind: "Sports media platform",
     name: "Combat Reviews",
+    pitch: "Every card that matters, in one place.",
     summary:
-      "A production platform for discovering combat sports events, rankings, athlete profiles and community predictions — every card that matters, across nine disciplines and every major promotion.",
+      "Events, rankings, athlete profiles and community predictions across nine disciplines and every major promotion — full cards, venues, broadcasters and live countdowns.",
     href: "https://globalfight-p69k.onrender.com/events",
     status: "Live",
     metric: "Nine disciplines · Full cards, venues and live countdowns",
@@ -134,7 +153,7 @@ export const projects: readonly Project[] = [
     partners: {
       label: "Official partners",
       items: [
-        { name: "BATL Promotions", src: "/work/partners/batl-promotions.png" },
+        { name: "BATL Promotions", src: "/work/partners/batl-promotions.png", stacked: true },
         { name: "Box IQ", src: "/work/partners/box-iq.png" },
         { name: "Kong Fight Tape", src: "/work/partners/kong-fight-tape.png" },
       ],
@@ -144,8 +163,9 @@ export const projects: readonly Project[] = [
     index: "03",
     kind: "Enterprise AI",
     name: "Noise",
+    pitch: "Everything your company has ever said, as one searchable memory.",
     summary:
-      "An AI-native enterprise communication platform that unifies email, chat and collaboration into one intelligent workspace — every conversation the company has ever had, as a single searchable memory.",
+      "An AI-native workspace that unifies email, chat, calls and documents across every tool a company already runs — so context belongs to the business, not to whoever happens to remember it.",
     // No public URL yet — access is gated behind a request form, so there is
     // nothing honest to link to. Deliberately left unlinked.
     status: "Private beta",

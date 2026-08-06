@@ -14,19 +14,23 @@ import { projects, type Project } from "@/lib/content";
  * it — the thesis, the method, the studio — is argued to a reader who has
  * already seen the receipts.
  *
- * Two rules hold the design together:
+ * Three rules hold the design together:
  *
- *  1. THE SCREENSHOT IS THE ARGUMENT. It gets the larger half of every row and
- *     is the only full-bleed colour on a page that otherwise withholds it. The
- *     copy beside it is deliberately short — four short blocks, no paragraphs —
- *     because the reader is looking at the picture, not reading the caption.
- *  2. NOTHING IS DECORATIVE. Every number, tag and partner logo is taken from
+ *  1. THE SCREENSHOT IS THE ARGUMENT, so it gets the entire width. An earlier
+ *     version set the plate beside the copy in seven of twelve columns and the
+ *     products simply did not read — a dense dashboard at 740px is a texture,
+ *     not an interface. Full bleed doubles the pixels and the products become
+ *     legible, which is the only reason they are on the page.
+ *  2. THE PITCH IS A LINE, NOT A PARAGRAPH. Each product leads with one serif
+ *     sentence at heading scale that sells it on its own. The descriptive copy
+ *     sits underneath at body size for the reader the pitch already caught.
+ *  3. NOTHING IS DECORATIVE. Every number, tag and partner mark is taken from
  *     the running product. The one accent hairline is spent on hover, on the
  *     top edge of the frame, and nowhere else in the act.
  *
- * Layout alternates left/right so three rows never settle into "another card",
- * which is also why the visual keeps the wider span throughout — swapping the
- * proportions as well as the sides reads as indecision rather than rhythm.
+ * The layout no longer alternates left/right. With the plate full width there
+ * are no sides to alternate, and the rhythm now comes from the band beneath it:
+ * pitch left, detail right, then a hairline row of facts.
  */
 
 /**
@@ -39,13 +43,6 @@ import { projects, type Project } from "@/lib/content";
  * and paints nothing, so the layout looks correct and the logo is just absent.
  */
 const isVector = (src: string) => src.endsWith(".svg");
-
-/** Per-row choreography. The visual always takes seven of twelve columns. */
-const layouts = [
-  { visual: "lg:col-span-7 lg:col-start-1", text: "lg:col-span-4 lg:col-start-9" },
-  { visual: "lg:col-span-7 lg:col-start-6", text: "lg:col-span-4 lg:col-start-1 lg:row-start-1" },
-  { visual: "lg:col-span-7 lg:col-start-1", text: "lg:col-span-4 lg:col-start-9" },
-] as const;
 
 export function Work() {
   return (
@@ -76,12 +73,8 @@ export function Work() {
         <Rule className="mt-14 md:mt-20" />
 
         <div className="mt-14 flex flex-col gap-24 md:mt-20 md:gap-32 lg:gap-40">
-          {projects.map((project, i) => (
-            <ProjectRow
-              key={project.index}
-              project={project}
-              layout={layouts[i % layouts.length]}
-            />
+          {projects.map((project) => (
+            <ProjectBlock key={project.index} project={project} />
           ))}
         </div>
       </div>
@@ -89,40 +82,19 @@ export function Work() {
   );
 }
 
-function ProjectRow({
-  project,
-  layout,
-}: {
-  project: Project;
-  layout: (typeof layouts)[number];
-}) {
+function ProjectBlock({ project }: { project: Project }) {
   return (
-    <article className="group relative grid grid-cols-1 items-center gap-y-9 lg:grid-cols-12 lg:gap-x-12">
-      <div className={layout.visual}>
-        <Reveal y={28}>
-          <Shot project={project} />
-        </Reveal>
-      </div>
-
-      <div className={layout.text}>
-        {/* --- Index, rule, industry ------------------------------------ */}
-        <Reveal delay={0.1}>
-          <div className="flex items-center gap-4">
-            <span className="type-label tnum text-ink-25">{project.index}</span>
-            <span aria-hidden className="h-px w-8 bg-rule-strong" />
-            <span className="type-label text-accent">{project.kind}</span>
-          </div>
-        </Reveal>
-
-        {/* --- Mark, name, and the link that covers the whole row -------- */}
-        <Reveal delay={0.15}>
-          <div className="mt-6 flex items-center gap-3.5">
+    <article className="group relative">
+      {/* --- Masthead: index, industry, mark, name --------------------- */}
+      <Reveal>
+        <div className="flex flex-wrap items-center justify-between gap-x-8 gap-y-5 pb-7">
+          <div className="flex items-center gap-3.5">
             <Mark logo={project.logo} />
             <h3 className="type-h3">
               {project.href ? (
                 // Stretched link: one anchor with a clear accessible name, and
-                // a pseudo-element that makes the entire article clickable. The
-                // article is `relative`, so this resolves against the row.
+                // a pseudo-element that makes the whole block clickable. The
+                // article is `relative`, so this resolves against it.
                 <a
                   href={project.href}
                   target="_blank"
@@ -137,80 +109,110 @@ function ProjectRow({
               )}
             </h3>
           </div>
-        </Reveal>
 
-        <Reveal delay={0.2}>
-          <p className="type-body measure mt-5 text-ink-70">{project.summary}</p>
-        </Reveal>
+          <div className="flex items-center gap-4">
+            <span className="type-label tnum text-ink-25">{project.index}</span>
+            <span aria-hidden className="h-px w-8 bg-rule-strong" />
+            <span className="type-label text-accent">{project.kind}</span>
+          </div>
+        </div>
+      </Reveal>
 
-        {/* --- The number from the running product ---------------------- */}
-        <Reveal delay={0.24}>
-          <p className="type-label tnum mt-7 flex items-start gap-3 border-t border-rule pt-5 text-ink-45">
-            <span aria-hidden className="mt-[0.3em] size-[5px] shrink-0 bg-accent" />
-            <span className="leading-[1.7]">{project.metric}</span>
-          </p>
-        </Reveal>
+      {/* --- The plate. Full width, because that is the whole point. --- */}
+      <Reveal y={28}>
+        <Shot project={project} />
+      </Reveal>
 
-        <Reveal delay={0.28}>
-          <ul className="mt-7 flex flex-wrap gap-2">
-            {project.tags.map((tag) => (
-              <li
-                key={tag}
-                className="type-label border border-rule px-3 py-2 text-ink-45 transition-colors duration-500 group-hover:border-rule-strong"
-              >
-                {tag}
-              </li>
-            ))}
-          </ul>
-        </Reveal>
-
-        {project.partners ? (
-          <Reveal delay={0.32}>
-            <Partners partners={project.partners} />
+      {/* --- The pitch, and the detail behind it ----------------------- */}
+      <div className="mt-10 grid grid-cols-1 gap-y-6 md:mt-12 lg:grid-cols-12 lg:gap-x-12">
+        <div className="lg:col-span-7">
+          <Reveal delay={0.08}>
+            <p className="type-serif max-w-[20ch] text-[clamp(1.6rem,3.3vw,2.9rem)] leading-[1.12] tracking-[-0.02em] text-ink">
+              {project.pitch}
+            </p>
           </Reveal>
-        ) : null}
+        </div>
+        <div className="lg:col-span-5 lg:self-end">
+          <Reveal delay={0.14}>
+            <p className="type-body measure text-ink-70">{project.summary}</p>
+          </Reveal>
+        </div>
+      </div>
 
-        {/* --- Where the link goes, stated rather than implied ---------- */}
-        <Reveal delay={0.36}>
-          <p className="type-label mt-8 flex items-center gap-2.5 text-ink-45">
-            {project.href ? (
-              <>
-                <span className="transition-colors duration-500 group-hover:text-ink">
-                  Visit the live product
-                </span>
-                <span
-                  aria-hidden
-                  className="block text-accent transition-transform duration-[0.7s] ease-[cubic-bezier(0.22,1,0.36,1)] motion-safe:group-hover:translate-x-1.5"
-                >
-                  <svg viewBox="0 0 12 12" className="size-3" fill="none">
-                    <path
-                      d="M2.5 9.5 L9.5 2.5 M4 2.5 h5.5 v5.5"
-                      stroke="currentColor"
-                      strokeWidth="1.2"
+      {/* --- The facts, as a hairline band ---------------------------- */}
+      <div className="mt-10 border-t border-rule pt-7 md:mt-12">
+        <div className="grid grid-cols-1 gap-y-8 lg:grid-cols-12 lg:gap-x-12">
+          <div className="lg:col-span-7">
+            <Reveal delay={0.06}>
+              <p className="type-label tnum flex items-start gap-3 text-ink-45">
+                <span aria-hidden className="mt-[0.3em] size-[5px] shrink-0 bg-accent" />
+                <span className="leading-[1.7]">{project.metric}</span>
+              </p>
+            </Reveal>
+
+            <Reveal delay={0.12}>
+              <ul className="mt-6 flex flex-wrap gap-2">
+                {project.tags.map((tag) => (
+                  <li
+                    key={tag}
+                    className="type-label border border-rule px-3 py-2 text-ink-45 transition-colors duration-500 group-hover:border-rule-strong"
+                  >
+                    {tag}
+                  </li>
+                ))}
+              </ul>
+            </Reveal>
+
+            <Reveal delay={0.18}>
+              <p className="type-label mt-7 flex items-center gap-2.5 text-ink-45">
+                {project.href ? (
+                  <>
+                    <span className="transition-colors duration-500 group-hover:text-ink">
+                      Visit the live product
+                    </span>
+                    <span
+                      aria-hidden
+                      className="block text-accent transition-transform duration-[0.7s] ease-[cubic-bezier(0.22,1,0.36,1)] motion-safe:group-hover:translate-x-1.5"
+                    >
+                      <svg viewBox="0 0 12 12" className="size-3" fill="none">
+                        <path
+                          d="M2.5 9.5 L9.5 2.5 M4 2.5 h5.5 v5.5"
+                          stroke="currentColor"
+                          strokeWidth="1.2"
+                        />
+                      </svg>
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <span
+                      aria-hidden
+                      className="size-[5px] shrink-0 rounded-full bg-accent animate-blink"
                     />
-                  </svg>
-                </span>
-              </>
-            ) : (
-              <>
-                <span
-                  aria-hidden
-                  className="size-[5px] shrink-0 rounded-full bg-accent animate-blink"
-                />
-                {project.status}
-              </>
-            )}
-          </p>
-        </Reveal>
+                    {project.status}
+                  </>
+                )}
+              </p>
+            </Reveal>
+          </div>
+
+          {project.partners ? (
+            <div className="lg:col-span-5">
+              <Reveal delay={0.2}>
+                <Partners partners={project.partners} />
+              </Reveal>
+            </div>
+          ) : null}
+        </div>
       </div>
     </article>
   );
 }
 
 /**
- * The product screenshot.
+ * The product screenshot, at full container width.
  *
- * The frame is a fixed 16:10 box with the image absolutely filling it, so the
+ * The frame is a fixed-aspect box with the image absolutely filling it, so the
  * space is reserved before a single byte of image has arrived — this act would
  * otherwise be the only source of layout shift on the page.
  *
@@ -221,25 +223,27 @@ function ProjectRow({
 function Shot({ project }: { project: Project }) {
   return (
     <figure
-      // Squarer on a phone. A 16:10 desktop capture at 390px wide is a 244px
-      // sliver; cropping ~17% off the right buys a fifth more height and the
+      // Squarer on a phone. A 16:10 desktop capture at 350px wide is a 220px
+      // sliver; cropping ~25% off the right buys a third more height and the
       // interface actually reads. The crop is from the right because all three
       // products carry their primary column on the left.
-      className="relative aspect-[4/3] overflow-hidden border border-rule bg-void sm:aspect-[16/10]
-                 shadow-[0_1px_2px_rgb(20_19_15/0.05),0_18px_40px_-20px_rgb(20_19_15/0.22)]
+      className="relative aspect-[4/3] overflow-hidden border border-rule bg-void
+                 shadow-[0_1px_2px_rgb(20_19_15/0.05),0_24px_50px_-24px_rgb(20_19_15/0.26)]
                  transition-[border-color,box-shadow] duration-[0.9s] ease-[cubic-bezier(0.22,1,0.36,1)]
                  group-hover:border-rule-strong
-                 group-hover:shadow-[0_1px_2px_rgb(20_19_15/0.06),0_28px_60px_-22px_rgb(20_19_15/0.3)]"
+                 group-hover:shadow-[0_1px_2px_rgb(20_19_15/0.06),0_36px_80px_-26px_rgb(20_19_15/0.34)]
+                 sm:aspect-[3/2] lg:aspect-[16/10]"
     >
       <Image
         src={project.shot.src}
         alt={project.shot.alt}
         fill
-        sizes="(min-width: 1024px) 58vw, 100vw"
+        // Full-bleed inside the page container, which is capped at 1560px.
+        sizes="(min-width: 1680px) 1560px, 100vw"
         // Only the first plate is above the fold on a tall desktop viewport;
         // the rest are worth deferring.
         priority={project.index === "01"}
-        quality={82}
+        quality={88}
         className="object-cover object-top transition-transform duration-[1.4s] ease-[cubic-bezier(0.22,1,0.36,1)] motion-safe:group-hover:scale-[1.02]"
       />
 
@@ -254,20 +258,20 @@ function Shot({ project }: { project: Project }) {
 }
 
 /**
- * The product's own mark, set to one optical height across all three rows.
+ * The product's own mark, set to one optical height across all three blocks.
  *
  * Width comes from the artwork's own aspect ratio rather than a shared box —
  * these marks range from a square app icon to a signal waveform four times
  * wider than it is tall, and forcing them through one box either squashes the
  * wide ones to invisibility or floats the square ones in dead space.
  */
-const MARK_HEIGHT_REM = 1.5;
+const MARK_HEIGHT_REM = 1.75;
 
 function Mark({ logo }: { logo: Project["logo"] }) {
   if (logo.square) {
     return (
-      <span className="relative block size-7 shrink-0 overflow-hidden rounded-[6px]">
-        <Image src={logo.src} alt="" fill sizes="28px" className="object-cover" />
+      <span className="relative block size-8 shrink-0 overflow-hidden rounded-[7px]">
+        <Image src={logo.src} alt="" fill sizes="32px" className="object-cover" />
       </span>
     );
   }
@@ -284,7 +288,7 @@ function Mark({ logo }: { logo: Project["logo"] }) {
         src={logo.src}
         alt=""
         fill
-        sizes="120px"
+        sizes="140px"
         unoptimized={isVector(logo.src)}
         className="object-contain object-left"
       />
@@ -295,31 +299,41 @@ function Mark({ logo }: { logo: Project["logo"] }) {
 /**
  * The trusted-by / official-partner strip.
  *
- * Every one of these marks ships on a white plate and most are brand-coloured,
- * which on warm paper would read as a row of stickers. Two things fix that:
- * `mix-blend-multiply` drops the white grounds into the paper, and the strip is
- * held at reduced opacity until the row is hovered. The container is `isolate`
+ * These marks are the borrowed credibility on the page — an accelerator or a
+ * promotion putting its name next to the product — so they are set large
+ * enough to actually be recognised rather than filed away as footnote icons.
+ *
+ * Every one ships on a white plate and most are brand-coloured, which on warm
+ * paper would read as a row of stickers. Two things fix that:
+ * `mix-blend-multiply` drops the white grounds into the paper, and the strip
+ * is held in greyscale until the block is hovered. The container is `isolate`
  * so the blend resolves against its own paper background rather than against
  * the lattice canvas behind the section.
  */
 function Partners({ partners }: { partners: NonNullable<Project["partners"]> }) {
   return (
-    <div className="mt-8 border-t border-rule pt-6">
+    <div className="border-t border-rule pt-7 lg:border-t-0 lg:pt-0">
       <p className="type-label text-ink-25">{partners.label}</p>
-      <ul className="isolate mt-5 flex flex-wrap items-center gap-x-6 gap-y-4 bg-paper">
+      <ul className="isolate mt-6 flex flex-wrap items-center gap-x-8 gap-y-6 bg-paper">
         {partners.items.map((partner) => (
           <li
             key={partner.name}
-            className={`relative h-9 ${partner.wide ? "w-[7rem]" : "w-9"}`}
+            className={`relative ${
+              partner.wide
+                ? "h-14 w-[8.5rem]"
+                : partner.stacked
+                  ? "h-20 w-20"
+                  : "h-14 w-14"
+            }`}
           >
             <Image
               src={partner.src}
               alt={partner.name}
               title={partner.name}
               fill
-              sizes="104px"
+              sizes="136px"
               unoptimized={isVector(partner.src)}
-              className="object-contain object-left opacity-80 mix-blend-multiply grayscale transition-[opacity,filter] duration-[0.7s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:opacity-100 group-hover:grayscale-0"
+              className="object-contain object-left opacity-85 mix-blend-multiply grayscale transition-[opacity,filter] duration-[0.7s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:opacity-100 group-hover:grayscale-0"
             />
           </li>
         ))}

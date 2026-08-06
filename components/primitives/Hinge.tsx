@@ -43,7 +43,10 @@ export function Hinge({
       // Hinges are the one place with almost nothing to read, so the object
       // gets to be at full strength here.
       data-lattice="hinge"
-      className="relative py-20 md:py-28"
+      // Tightened once the proof act went full-bleed. Three hinges at the old
+      // scale cost the better part of two screens of pure connective tissue,
+      // which is a lot of scroll to spend on a question mark.
+      className="relative py-14 md:py-20"
     >
       {/* A dark hinge joins two dark acts, so it has to carry the surface
           itself. Same layering contract as `Section`. */}
@@ -52,7 +55,7 @@ export function Hinge({
       <div className="container-page relative z-10">
         <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
           {/* Line in */}
-          <div className={`relative h-16 w-px md:h-24 ${faint}`}>
+          <div className={`relative h-12 w-px md:h-16 ${faint}`}>
             <motion.div
               style={{ height }}
               className={`absolute inset-x-0 top-0 w-px ${rule}`}
@@ -82,7 +85,7 @@ export function Hinge({
           </motion.p>
 
           {/* Line out */}
-          <div className={`mt-8 h-16 w-px md:h-24 ${faint}`}>
+          <div className={`mt-8 h-12 w-px md:h-16 ${faint}`}>
             <motion.div
               style={{ height }}
               className={`w-px ${rule}`}
