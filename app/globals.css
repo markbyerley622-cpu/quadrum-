@@ -1,0 +1,344 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   QUADRUM — DESIGN SYSTEM
+   A single committed "paper & ink" palette with full-bleed dark inversions
+   used to break the vertical rhythm. Typography carries the design; colour
+   is deliberately withheld so the one accent means something when it lands.
+   ========================================================================== */
+
+@theme {
+  /* --- Surface -------------------------------------------------------- */
+  --color-paper: #f4f2ed;
+  --color-paper-sunk: #ece9e1;
+  --color-paper-raised: #faf9f6;
+
+  /* --- Ink (warm near-black, never pure #000) -------------------------- */
+  --color-ink: #14130f;
+  --color-ink-70: #4b4840;
+  --color-ink-45: #837e71;
+  --color-ink-25: #b3ad9e;
+
+  /* --- Inverted surfaces ----------------------------------------------- */
+  --color-void: #100f0d;
+  --color-void-raised: #1b1916;
+  --color-bone: #edeae2;
+  --color-bone-60: #96907f;
+  --color-bone-35: #5f5a4f;
+
+  /* --- The single accent: burnt sienna. Used sparingly, on purpose. ---- */
+  --color-accent: #b0492a;
+  --color-accent-soft: #c9714f;
+
+  /* --- Hairlines -------------------------------------------------------- */
+  --color-rule: rgb(20 19 15 / 0.14);
+  --color-rule-strong: rgb(20 19 15 / 0.26);
+  --color-rule-invert: rgb(237 234 226 / 0.16);
+  --color-rule-invert-strong: rgb(237 234 226 / 0.3);
+
+  /* --- Type ------------------------------------------------------------- */
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SF Mono", Menlo, monospace;
+  --font-serif: var(--font-instrument-serif), ui-serif, Georgia, serif;
+
+  /* --- Motion: one easing curve everywhere. Consistency reads as craft. -- */
+  --ease-quad: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-quad-in: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* --- Layout ----------------------------------------------------------- */
+  --spacing-gutter: clamp(1.25rem, 4.5vw, 4.5rem);
+  --container-page: 1560px;
+}
+
+/* ==========================================================================
+   BASE
+   ========================================================================== */
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    /* Nav is fixed; anchor targets must clear it. */
+    scroll-padding-top: 6rem;
+  }
+
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+    overflow-x: clip;
+  }
+
+  ::selection {
+    background-color: var(--color-ink);
+    color: var(--color-paper);
+  }
+
+  /* Visible, on-brand focus. Never remove the ring — restyle it. */
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: 1px;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-weight: 400;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Tabular figures everywhere numbers are compared vertically. */
+  .tnum {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* ==========================================================================
+   TYPOGRAPHY SCALE
+   Fluid, but with hand-set tracking per size — large type needs tighter
+   letterspacing than small type. This is the single biggest tell of
+   considered typesetting.
+   ========================================================================== */
+
+@layer components {
+  .type-display {
+    /* Capped so the three hero lines plus the standfirst strip still resolve
+       inside one viewport on a 1080p screen. */
+    font-size: clamp(3rem, 9.3vw, 9rem);
+    line-height: 0.9;
+    letter-spacing: -0.045em;
+    font-weight: 400;
+  }
+
+  /* The anchor line of an act.
+     Sits deliberately between the hero display and h2: large enough to be read
+     across a room and to dominate everything else in its act, but short of the
+     opening claim so the page still has exactly one loudest moment. Weight
+     stays at 400 — the size and the surface do the work, and thickening one
+     heading would make it the only bold type on the site. */
+  .type-h1 {
+    font-size: clamp(2rem, 6.8vw, 6.4rem);
+    line-height: 0.92;
+    letter-spacing: -0.042em;
+    font-weight: 400;
+  }
+
+  .type-h2 {
+    font-size: clamp(2.1rem, 5.6vw, 4.9rem);
+    line-height: 0.98;
+    letter-spacing: -0.038em;
+    font-weight: 400;
+  }
+
+  .type-h3 {
+    font-size: clamp(1.5rem, 2.9vw, 2.4rem);
+    line-height: 1.08;
+    letter-spacing: -0.028em;
+    font-weight: 400;
+  }
+
+  .type-h4 {
+    font-size: clamp(1.15rem, 1.6vw, 1.4rem);
+    line-height: 1.22;
+    letter-spacing: -0.018em;
+    font-weight: 400;
+  }
+
+  .type-lead {
+    font-size: clamp(1.075rem, 1.35vw, 1.35rem);
+    line-height: 1.5;
+    letter-spacing: -0.013em;
+    font-weight: 400;
+  }
+
+  .type-body {
+    font-size: clamp(0.975rem, 1.05vw, 1.0625rem);
+    line-height: 1.62;
+    letter-spacing: -0.006em;
+  }
+
+  .type-small {
+    font-size: 0.875rem;
+    line-height: 1.55;
+    letter-spacing: -0.004em;
+  }
+
+  /* Mono eyebrow — the connective tissue of the whole system. */
+  .type-label {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    line-height: 1;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 400;
+  }
+
+  .type-serif {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.015em;
+  }
+
+  /* --- Layout primitives --------------------------------------------- */
+
+  .container-page {
+    width: 100%;
+    max-width: var(--container-page);
+    margin-inline: auto;
+    padding-inline: var(--spacing-gutter);
+  }
+
+  /* Optimal measure. ~62 characters for lead, ~72 for body. */
+  .measure-lead {
+    max-width: 34ch;
+  }
+  .measure {
+    max-width: 62ch;
+  }
+  .measure-wide {
+    max-width: 74ch;
+  }
+
+  /* --- Link with a rule that draws itself on hover -------------------- */
+
+  .link-rule {
+    position: relative;
+    display: inline-block;
+    padding-bottom: 0.12em;
+  }
+  .link-rule::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    height: 1px;
+    background-color: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.55s var(--ease-quad);
+  }
+  .link-rule:hover::after,
+  .link-rule:focus-visible::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  /* Inverse: rule is present, retracts on hover. Used in the footer. */
+  .link-rule-out::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+  .link-rule-out:hover::after,
+  .link-rule-out:focus-visible::after {
+    transform: scaleX(0);
+    transform-origin: right;
+  }
+}
+
+/* ==========================================================================
+   MOTION
+   ========================================================================== */
+
+/* Masked line reveal. The mask is the parent's overflow; the child slides. */
+@keyframes q-rise {
+  from {
+    transform: translate3d(0, 105%, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes q-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes q-blink {
+  0%,
+  45% {
+    opacity: 1;
+  }
+  55%,
+  100% {
+    opacity: 0.15;
+  }
+}
+
+.animate-marquee {
+  animation: q-marquee var(--marquee-duration, 46s) linear infinite;
+}
+
+.animate-blink {
+  animation: q-blink 2.6s var(--ease-quad) infinite;
+}
+
+/* ==========================================================================
+   REDUCED MOTION
+   Everything resolves to its final state. Nothing is hidden, nothing moves.
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .animate-marquee {
+    animation: none;
+    transform: none;
+  }
+}
+
+/* ==========================================================================
+   SCROLLBAR — quiet, matches the paper
+   ========================================================================== */
+
+@media (pointer: fine) {
+  ::-webkit-scrollbar {
+    width: 11px;
+    height: 11px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-paper-sunk);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-ink-25);
+    border: 3px solid var(--color-paper-sunk);
+    border-radius: 99px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-ink-45);
+  }
+}

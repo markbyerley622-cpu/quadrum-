@@ -1,0 +1,28 @@
+<svg width="280" height="64" viewBox="0 0 280 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Noise">
+  <defs>
+    <!--
+      userSpaceOnUse is required, not stylistic. The mark is built entirely from
+      straight <line> elements, so every shape has a degenerate bounding box —
+      zero width for the vertical bars, zero height for the horizontal tail. A
+      gradient in the default objectBoundingBox units resolves against that box,
+      and the SVG spec says an element with a degenerate box is simply not
+      rendered. The file loads, reports its natural size, and paints nothing.
+    -->
+    <linearGradient id="noise-signal" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="280" y2="0">
+      <stop offset="0%" stop-color="#6d28d9"/>
+      <stop offset="55%" stop-color="#8b5cf6"/>
+      <stop offset="100%" stop-color="#a855f7"/>
+    </linearGradient>
+  </defs>
+  <!-- The Signal mark: many noisy inputs resolving into one steady line. -->
+  <g stroke="url(#noise-signal)" stroke-width="10" stroke-linecap="round">
+    <line x1="10"  y1="6"  x2="10"  y2="58"/>
+    <line x1="34"  y1="16" x2="34"  y2="48"/>
+    <line x1="58"  y1="10" x2="58"  y2="54"/>
+    <line x1="82"  y1="22" x2="82"  y2="42"/>
+    <line x1="106" y1="18" x2="106" y2="46"/>
+    <line x1="130" y1="26" x2="130" y2="38"/>
+    <line x1="154" y1="29" x2="154" y2="35"/>
+    <line x1="178" y1="32" x2="270" y2="32"/>
+  </g>
+</svg>
