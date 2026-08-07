@@ -54,18 +54,34 @@ export type Partner = {
   name: string;
   src: string;
   /**
-   * Optical sizing. Logo walls fail when every mark is forced through one box,
-   * because a horizontal wordmark and a stacked lockup do not read at the same
-   * height. Three shapes, three treatments:
-   *
-   *   default    a square badge or mark — square box
-   *   wide       a horizontal wordmark — same height, much wider box
-   *   stacked    mark above wordmark — needs extra height or the wordmark
-   *              shrinks to an illegible smear beside its neighbours
+   * Width ÷ height of the artwork. Logo walls fail when every mark is forced
+   * through one box, because a horizontal wordmark and a square badge do not
+   * read at the same height. Each mark is set to one shared optical height and
+   * takes its width from this, so the row shares a baseline instead of a box.
    */
-  wide?: boolean;
-  stacked?: boolean;
+  aspect: number;
+  /**
+   * Optical correction, applied to the shared height. A stacked lockup (mark
+   * above wordmark) needs more height than a single-line wordmark before its
+   * type is legible; a mark that fills its artboard edge to edge needs less.
+   */
+  scale?: number;
 };
+
+/**
+ * How a product is shown.
+ *
+ * `plate` is the default: one wide capture, framed. `phones` is reserved for
+ * products whose real surface is a phone — showing those as a desktop rectangle
+ * misrepresents them, and a floating pair of devices is both more honest and the
+ * strongest image in the act.
+ */
+export type Media =
+  | { kind: "plate"; src: string; alt: string }
+  | {
+      kind: "phones";
+      screens: readonly { src: string; alt: string }[];
+    };
 
 export type Project = {
   index: string;
@@ -90,7 +106,14 @@ export type Project = {
   status: string;
   /** One hard number or fact taken from the running product. */
   metric: string;
+  /**
+   * What the product does, in the product's own vocabulary. Six at most — a
+   * seventh pill turns a capability list into a tag cloud, and the reader stops
+   * reading any of them.
+   */
   tags: readonly string[];
+  /** What it is built on. One quiet line; never a second row of pills. */
+  stack: readonly string[];
   logo: {
     src: string;
     alt: string;
@@ -104,87 +127,163 @@ export type Project = {
      */
     aspect?: number;
   };
-  shot: { src: string; alt: string };
+  media: Media;
   partners?: { label: string; items: readonly Partner[] };
 };
 
+/**
+ * Order is an argument, not a catalogue.
+ *
+ * BNBPay leads because it is the only product here we can show as the thing it
+ * actually is — a phone in someone's hand — and because it is the densest piece
+ * of engineering in the set. Noise closes because it is the one still in private
+ * beta, and an act should not end on a claim the reader cannot check.
+ */
 export const projects: readonly Project[] = [
   {
     index: "01",
     kind: "Payments infrastructure",
-    name: "Pepay",
-    pitch: "Pay in any token. Get paid in the one you asked for.",
+    name: "BNBPay",
+    pitch: "Programmable payment rails for businesses that live on the internet.",
     summary:
-      "Crypto payment infrastructure for merchants, AI agents and programmable finance — routing, settlement and reconciliation in one ledger a finance team can read.",
-    href: "https://pepay-merchant-dashboard.vercel.app/home",
+      "Merchants and AI applications accept any supported token and settle in the one they asked for — invoicing, subscriptions, gift cards, programmable payouts and the x402 Flex rails behind a single set of APIs.",
+    href: "https://bnbpayvercel1.vercel.app",
     status: "Live",
-    metric: "$19.9M settled · 75.9K transactions · 26.7K paying wallets",
-    tags: ["Web3", "BNB Chain", "Solana", "React", "TypeScript"],
-    logo: { src: "/work/logos/pepay.png", alt: "Pepay", square: true },
-    shot: {
-      src: "/work/pepay.jpg",
-      alt: "The Pepay dashboard showing settled payment volume, transaction counts, protocol revenue and weekly settlement charts.",
+    metric: "Six accepted tokens, settled gaslessly on BNB Chain",
+    tags: [
+      "Multi-token",
+      "x402 Flex",
+      "Gasless",
+      "Gift cards",
+      "Subscriptions",
+      "Merchant APIs",
+    ],
+    stack: ["Solidity", "TypeScript", "Next.js", "BNB Chain"],
+    logo: { src: "/work/logos/bnbpay-mark.png", alt: "BNBPay", aspect: 854 / 488 },
+    media: {
+      kind: "phones",
+      screens: [
+        {
+          src: "/work/bnbpay-invoice.png",
+          alt: "The BNBPay app on a phone, showing invoice generation, subscription creation and the x402 Flex multi-token acceptance form.",
+        },
+        {
+          src: "/work/bnbpay-cards.png",
+          alt: "The BNBPay gift card screen on a phone, showing a USDC card preview and the four steps of sending a card by shareable link.",
+        },
+      ],
     },
     partners: {
       label: "Accelerated by",
       items: [
-        { name: "Binance Chain", src: "/work/partners/binance-chain.png", wide: true },
-        { name: "YZi Labs", src: "/work/partners/yzi-labs.webp", wide: true },
-        { name: "CoinMarketCap", src: "/work/partners/coinmarketcap.png", stacked: true },
+        { name: "Binance Chain", src: "/work/partners/binance-chain.png", aspect: 1200 / 504 },
+        { name: "YZi Labs", src: "/work/partners/yzi-labs.webp", aspect: 1600 / 533 },
       ],
     },
   },
   {
     index: "02",
-    kind: "Sports media platform",
-    name: "Combat Reviews",
-    pitch: "Every card that matters, in one place.",
+    kind: "Merchant infrastructure",
+    name: "Pepay",
+    pitch: "Pay in any token. Get paid in the one you asked for.",
     summary:
-      "Events, rankings, athlete profiles and community predictions across nine disciplines and every major promotion — full cards, venues, broadcasters and live countdowns.",
-    href: "https://globalfight-p69k.onrender.com/events",
+      "Digital-asset payment infrastructure for merchants — accept, monitor and settle across networks from one system, with treasury, payment links, QR and subscriptions reading off the same ledger.",
+    href: "https://pepay-merchant-dashboard.vercel.app/home",
     status: "Live",
-    metric: "Nine disciplines · Full cards, venues and live countdowns",
-    tags: ["Next.js", "TypeScript", "Postgres", "Prisma", "Search"],
-    logo: { src: "/work/logos/combat-reviews.png", alt: "Combat Reviews", aspect: 507 / 350 },
-    shot: {
-      src: "/work/combat-reviews.jpg",
-      alt: "The Combat Reviews events page showing sport filters, recent event result cards and the official partner strip.",
+    metric: "$19.9M settled · 75.9K transactions · 26.7K paying wallets",
+    tags: [
+      "Cross-chain",
+      "Settlement",
+      "Treasury",
+      "Payment links",
+      "Subscriptions",
+      "AI payments",
+    ],
+    stack: ["React", "TypeScript", "Solana", "BNB Chain"],
+    logo: { src: "/work/logos/pepay.png", alt: "Pepay", square: true },
+    media: {
+      kind: "plate",
+      src: "/work/pepay.jpg",
+      alt: "The Pepay merchant dashboard showing settled payment volume, transaction counts, success rate, auto-settlement and the supported asset and network lists.",
     },
     partners: {
-      label: "Official partners",
+      label: "Accelerated by",
       items: [
-        { name: "BATL Promotions", src: "/work/partners/batl-promotions.png", stacked: true },
-        { name: "Box IQ", src: "/work/partners/box-iq.png" },
-        { name: "Kong Fight Tape", src: "/work/partners/kong-fight-tape.png" },
+        { name: "Binance Chain", src: "/work/partners/binance-chain.png", aspect: 1200 / 504 },
+        { name: "YZi Labs", src: "/work/partners/yzi-labs.webp", aspect: 1600 / 533 },
+        { name: "CoinMarketCap", src: "/work/partners/coinmarketcap.png", aspect: 1, scale: 1.5 },
       ],
     },
   },
   {
     index: "03",
+    kind: "Sports media platform",
+    name: "Combat Reviews",
+    pitch: "Every card that matters, in one place.",
+    summary:
+      "The largest combat-sports platform: events, rankings, athlete profiles and community intelligence across every major promotion and nine disciplines, from the announcement through to the result.",
+    href: "https://globalfight-p69k.onrender.com/events",
+    status: "Live",
+    metric: "Nine disciplines · Full cards, venues and live countdowns",
+    tags: [
+      "Events",
+      "Fight cards",
+      "Rankings",
+      "Predictions",
+      "Athlete profiles",
+      "Community",
+    ],
+    stack: ["Next.js", "TypeScript", "Postgres", "Prisma"],
+    logo: { src: "/work/logos/combat-reviews.png", alt: "Combat Reviews", aspect: 507 / 350 },
+    media: {
+      kind: "plate",
+      src: "/work/combat-reviews.jpg",
+      alt: "The Combat Reviews platform showing the Vargas versus Okoro main event, featured fights, welterweight rankings, live predictions and top discussions.",
+    },
+    partners: {
+      label: "Official partners",
+      items: [
+        { name: "BATL Promotions", src: "/work/partners/batl-promotions.png", aspect: 1, scale: 1.5 },
+        { name: "Box IQ", src: "/work/partners/box-iq.png", aspect: 1, scale: 1.2 },
+        { name: "Kong Fight Tape", src: "/work/partners/kong-fight-tape.png", aspect: 1, scale: 1.2 },
+      ],
+    },
+  },
+  {
+    index: "04",
     kind: "Enterprise AI",
     name: "Noise",
     pitch: "Everything your company has ever said, as one searchable memory.",
     summary:
-      "An AI-native workspace that unifies email, chat, calls and documents across every tool a company already runs — so context belongs to the business, not to whoever happens to remember it.",
+      "An AI-native workspace that turns every conversation into organisational memory — email, chat, calls, meetings and documents indexed into one context engine, so knowledge belongs to the business rather than to whoever happens to remember it.",
     // No public URL yet — access is gated behind a request form, so there is
     // nothing honest to link to. Deliberately left unlinked.
     status: "Private beta",
-    metric: "One workspace across seven connected surfaces",
-    tags: ["AI", "Enterprise", "React", "Fastify", "Postgres"],
+    metric: "Email, chat, calls, documents and calendars in one index",
+    tags: [
+      "Email",
+      "Chat",
+      "Meetings",
+      "Documents",
+      "Knowledge graph",
+      "Context engine",
+    ],
+    stack: ["React", "Fastify", "Postgres", "Vector search"],
     logo: { src: "/work/logos/noise.svg", alt: "Noise", aspect: 280 / 64 },
-    shot: {
+    media: {
+      kind: "plate",
       src: "/work/noise.jpg",
-      alt: "The Noise Executive Cockpit showing company health metrics, revenue at risk, declining accounts and the Noise Brain assistant panel.",
+      alt: "The Noise workspace showing the focus brief, flagged concentration and account risks, conversation and calendar items, and the Noise Brain panel listing connected sources.",
     },
     partners: {
-      label: "Connected surfaces",
+      label: "Connected platforms",
       items: [
-        { name: "Gmail", src: "/work/partners/noise-gmail.webp" },
-        { name: "Outlook", src: "/work/partners/noise-outlook.png" },
-        { name: "Slack", src: "/work/partners/noise-slack.png" },
-        { name: "Microsoft Teams", src: "/work/partners/noise-teams.svg" },
-        { name: "Google Drive", src: "/work/partners/noise-google-drive.png" },
-        { name: "Dropbox", src: "/work/partners/noise-dropbox.png" },
+        { name: "Gmail", src: "/work/partners/noise-gmail.webp", aspect: 4 / 3 },
+        { name: "Outlook", src: "/work/partners/noise-outlook.png", aspect: 960 / 909 },
+        { name: "Slack", src: "/work/partners/noise-slack.png", aspect: 840 / 859 },
+        { name: "Teams", src: "/work/partners/noise-teams.svg", aspect: 1 },
+        { name: "Drive", src: "/work/partners/noise-google-drive.png", aspect: 1 },
+        { name: "Dropbox", src: "/work/partners/noise-dropbox.png", aspect: 2400 / 2232 },
       ],
     },
   },
@@ -330,9 +429,5 @@ export const footerLinks = {
     { label: "Approach", href: "#approach" },
     { label: "Studio", href: "#studio" },
   ],
-  Work: [
-    { label: "Pepay", href: "#work" },
-    { label: "Combat Reviews", href: "#work" },
-    { label: "Noise", href: "#work" },
-  ],
+  Work: projects.map((project) => ({ label: project.name, href: "#work" })),
 } as const;

@@ -14,7 +14,7 @@ import { hinges, projects, site } from "@/lib/content";
  * The page is a five-act narrative, not a stack of sections.
  *
  *   I    Opening      the claim
- *   II   The proof    three products actually in production
+ *   II   The proof    four products actually in production
  *   III  The turn     the thesis, and how the work is done
  *   IV   The studio   who does it, what we refuse, and how an engagement starts
  *   V    The invitation
