@@ -40,11 +40,11 @@ export const nav = [
 export const hero = {
   eyebrow: "Senior product strategy, design and engineering",
   headline: ["Complex", "digital products.", "Built to last."],
-  lead: "Quadrum designs and builds business-critical software — from the first product decision through production, scale and long-term operation.",
+  lead: "Quadrum is a founder-led product studio designing and building high-quality digital products — from initial strategy and product definition through design, engineering, launch and continued development.",
   standfirst: [
-    "Senior practitioners",
+    "Founder-led delivery",
     "Direct collaboration",
-    "Shipped, not slideware",
+    "Working products, not presentations",
   ],
 } as const;
 
@@ -185,9 +185,9 @@ export const projects: readonly Project[] = [
     index: "02",
     kind: "Merchant infrastructure",
     name: "Pepay",
-    pitch: "Pay in any token. Get paid in the one you asked for.",
+    pitch: "Multi-chain payment infrastructure built for modern commerce.",
     summary:
-      "Digital-asset payment infrastructure for merchants — accept, monitor and settle across networks from one system, with treasury, payment links, QR and subscriptions reading off the same ledger.",
+      "Accept digital assets, manage payments and settle across supported networks from one unified system — with invoicing, payment links, QR checkout, subscriptions and financial reconciliation built into the same payment layer.",
     href: "https://pepay-merchant-dashboard.vercel.app/home",
     status: "Live",
     metric: "$19.9M settled · 75.9K transactions · 26.7K paying wallets",
@@ -219,9 +219,9 @@ export const projects: readonly Project[] = [
     index: "03",
     kind: "Sports media platform",
     name: "Combat Reviews",
-    pitch: "Every card that matters, in one place.",
+    pitch: "Every fight that matters, in one place.",
     summary:
-      "The largest combat-sports platform: events, rankings, athlete profiles and community intelligence across every major promotion and nine disciplines, from the announcement through to the result.",
+      "A unified combat-sports platform bringing events, fight cards, rankings, athlete profiles, predictions and community discussion together across major promotions and disciplines — from announcement through to result.",
     href: "https://globalfight-p69k.onrender.com/events",
     status: "Live",
     metric: "Nine disciplines · Full cards, venues and live countdowns",
@@ -253,9 +253,9 @@ export const projects: readonly Project[] = [
     index: "04",
     kind: "Enterprise AI",
     name: "Noise",
-    pitch: "Everything your company has ever said, as one searchable memory.",
+    pitch: "An AI-powered communication and knowledge system for organisations.",
     summary:
-      "An AI-native workspace that turns every conversation into organisational memory — email, chat, calls, meetings and documents indexed into one context engine, so knowledge belongs to the business rather than to whoever happens to remember it.",
+      "Noise connects information from email, messaging, meetings and internal documents into one intelligent workspace. It helps teams recover context, surface important updates and understand what requires attention without manually searching across disconnected systems.",
     // No public URL yet — access is gated behind a request form, so there is
     // nothing honest to link to. Deliberately left unlinked.
     status: "Private beta",
