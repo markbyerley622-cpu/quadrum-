@@ -14,51 +14,18 @@ export function Footer() {
     <footer data-tone="dark" data-lattice="close" className="relative overflow-hidden pb-8 text-bone">
       <div aria-hidden className="absolute inset-0 -z-10 bg-void" />
       <div className="container-page relative z-10">
-        <div className="grid grid-cols-2 gap-x-8 gap-y-12 border-t border-rule-invert pt-14 md:grid-cols-12 md:pt-16">
-          <div className="col-span-2 md:col-span-5">
-            <div className="flex items-center gap-2.5">
-              <Logomark className="size-[18px]" />
-              <span className="text-[0.95rem] font-medium tracking-[-0.03em]">
-                {site.name}
-              </span>
-            </div>
-            <p className="type-small measure mt-6 max-w-[42ch] text-bone-60">
-              {site.description}
-            </p>
+        {/* Identity only. The enquiry section above is the one place the page
+            asks for anything, so no contact details are repeated here. */}
+        <div className="border-t border-rule-invert pt-14 md:pt-16">
+          <div className="flex items-center gap-2.5">
+            <Logomark className="size-[18px]" />
+            <span className="text-[0.95rem] font-medium tracking-[-0.03em]">
+              {site.name}
+            </span>
           </div>
-
-          {Object.entries(footerLinks).map(([heading, links]) => (
-            <nav key={heading} aria-label={heading} className="md:col-span-2">
-              <h2 className="type-label text-bone-60">{heading}</h2>
-              <ul className="mt-6 flex flex-col gap-3">
-                {links.map((link) => (
-                  <li key={link.label}>
-                    <a
-                      href={link.href}
-                      className="link-rule type-small text-bone transition-colors duration-300 hover:text-bone-60"
-                    >
-                      {link.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          ))}
-
-          <div className="col-span-2 md:col-span-3">
-            <h2 className="type-label text-bone-60">Contact</h2>
-            <ul className="mt-6 flex flex-col gap-3">
-              <li>
-                <a
-                  href={`mailto:${site.email}`}
-                  className="link-rule type-small break-all text-bone"
-                >
-                  {site.email}
-                </a>
-              </li>
-              <li className="type-small text-bone-60">{site.location}</li>
-            </ul>
-          </div>
+          <p className="type-small measure mt-6 max-w-[46ch] text-bone-60">
+            {site.description}
+          </p>
         </div>
 
         {/* --- Oversized wordmark ---------------------------------------- */}
@@ -71,10 +38,26 @@ export function Footer() {
           </div>
         </Reveal>
 
-        <div className="mt-10 flex flex-wrap items-center justify-between gap-x-8 gap-y-3 border-t border-rule-invert pt-7">
+        <div className="mt-10 flex flex-wrap items-center justify-between gap-x-10 gap-y-5 border-t border-rule-invert pt-7">
           <p className="type-label text-bone-60">
             © {site.founded} {site.name}. All rights reserved.
           </p>
+
+          <nav aria-label="Footer">
+            <ul className="flex flex-wrap items-center gap-x-8 gap-y-3">
+              {footerLinks.map((link) => (
+                <li key={link.label}>
+                  <a
+                    href={link.href}
+                    className="link-rule type-label text-bone-60 transition-colors duration-300 hover:text-bone"
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
           <a href="#top" className="type-label group flex items-center gap-2.5 text-bone-60 transition-colors hover:text-bone">
             Back to top
             <span

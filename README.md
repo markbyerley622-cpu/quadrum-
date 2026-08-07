@@ -20,7 +20,7 @@ answers, so the reader is handed forward rather than dropped into a new topic.
 | --- | --- | --- |
 | I | Opening — the claim | paper |
 | II | The tension — why software fails, and the four forces behind it | dark |
-| III | The turn — build for what follows launch | dark → paper |
+| III | The turn — build for lasting performance, not launch day | dark → paper |
 | IV | The approach — where you are, then how we work | paper |
 | V | The proof — three problems worked through, and what that covers | paper |
 | VI | The people — who does it, and what we refuse to do | paper |

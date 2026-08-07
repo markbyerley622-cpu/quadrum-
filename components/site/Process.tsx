@@ -32,15 +32,15 @@ export function Process() {
             <TextReveal
               as="h2"
               className="type-h2 mt-7 -ml-[0.04em]"
-              lines={["From uncertainty to", "dependable product"]}
+              lines={["From uncertainty to", "dependable software"]}
             />
           </div>
           <div className="lg:col-span-4 lg:col-start-9 lg:self-end">
             <Reveal delay={0.15}>
               <p className="type-body measure text-ink-70">
                 Four capabilities, applied end to end by one accountable team.
-                No handoff between the people who scope the work and the people
-                who ship it.
+                Strategy, design and engineering stay connected from the first
+                decision through production — no handoffs, no loss of context.
               </p>
             </Reveal>
           </div>

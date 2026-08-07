@@ -142,9 +142,9 @@ export const projects: readonly Project[] = [
     index: "01",
     kind: "Payments infrastructure",
     name: "BNBPay",
-    pitch: "Programmable payment rails for businesses that live on the internet.",
+    pitch: "Programmable payment infrastructure for merchants, platforms and AI agents.",
     summary:
-      "Merchants and AI applications accept any supported token and settle in the one they asked for — invoicing, subscriptions, gift cards, programmable payouts and the x402 Flex rails behind a single set of APIs.",
+      "BNBPay provides gasless, programmable payment infrastructure for merchants, digital platforms and AI agents. Its unified integration supports invoices, subscriptions, gift cards and x402-powered API payments across BNB Chain and opBNB — making on-chain commerce simpler to deploy, operate and scale.",
     href: "https://bnbpayvercel1.vercel.app",
     status: "Live",
     metric: "Six accepted tokens, settled gaslessly on BNB Chain",
@@ -291,8 +291,8 @@ export const projects: readonly Project[] = [
 
 export const turn = {
   act: "III · The turn",
-  headline: "Most software is built for launch. We build for what follows.",
-  body: "Launch is the beginning. Products have to survive real users, changing requirements, operational pressure, new team members and years of iteration. We combine product judgment, design discipline and engineering depth so the software stays valuable after the first release.",
+  headline: "We build digital products for lasting performance — not just launch day.",
+  body: "Real products evolve. Users change, requirements shift and complexity compounds. We combine product judgment, design discipline and engineering depth to build software that performs under pressure and improves with time.",
 } as const;
 
 /**
@@ -308,33 +308,33 @@ export const process = [
     index: "01",
     title: "Define",
     summary:
-      "Clarify the commercial problem, the users, the constraints and what success is measured by.",
+      "Clarify the commercial problem, the users, the constraints and how success will be measured.",
     principle:
-      "The most expensive decisions on a product are made in the first three weeks, by people who do not yet know they are making them.",
+      "The most expensive product decisions are often made before anyone realises they are making them.",
   },
   {
     index: "02",
     title: "Design",
     summary:
-      "Interface, information architecture and system model designed together, not in sequence.",
+      "Shape the interface, information architecture and system model together — not as separate disciplines handed from one team to another.",
     principle:
-      "A design is not finished when it looks right. It is finished when it still works on the day the data is messy and the network is gone.",
+      "A design is not finished when it looks right. It is finished when it still works when the data is messy, the edge cases arrive and the network does not.",
   },
   {
     index: "03",
     title: "Build",
     summary:
-      "Shipped in working increments, under test, observable from the first deploy.",
+      "Ship in working increments, under test and observable from the first deployment.",
     principle:
-      "Write the codebase for the engineer who joins in eighteen months. Often that engineer is you.",
+      "Build the codebase for the engineer who inherits it eighteen months from now. Often, that engineer is you.",
   },
   {
     index: "04",
     title: "Evolve",
     summary:
-      "Improved against evidence from production and the business needs that changed since.",
+      "Improve the product against evidence from production, user behaviour and the needs of the business as they change.",
     principle:
-      "The product you operate will teach you things the product you designed never could. Most teams are not listening by then.",
+      "Production teaches you things the original specification never could. The advantage belongs to teams that keep listening.",
   },
 ] as const;
 
@@ -342,13 +342,13 @@ export const process = [
 
 export const people = {
   act: "IV · The studio",
-  headline: "The people in the first meeting stay on the work",
+  headline: "The people you meet are the people who build",
   body: "Strategy, design and engineering decisions stay close to the people building the product, keeping communication direct and execution accountable.",
   refusals: [
     "No pyramid staffing",
-    "No translation through account managers",
-    "No silent handoff between sales and delivery",
-    "No technology selected for fashion",
+    "No account-management layer",
+    "No sales-to-delivery handoff",
+    "No technology chosen for fashion",
   ],
 } as const;
 
@@ -362,45 +362,87 @@ export const people = {
  */
 export const engagement = {
   label: "How an engagement starts",
-  headline: "Fourteen days, four fixed outputs, and a decision either side can walk away from.",
+  headline: "Fourteen days. Four fixed outputs. Enough clarity to decide what should happen next — without creating dependency.",
   moments: [
     {
       index: "01",
       days: "Day 01 — 02",
       title: "The problem, restated",
-      body: "What the business is actually trying to achieve, in language the whole room agrees with.",
+      body: "A precise definition of what the business is trying to achieve, written in language everyone involved can agree on.",
     },
     {
       index: "02",
       days: "Day 03 — 05",
       title: "The constraint map",
-      body: "What is fixed, what is assumed, what is negotiable — with assumptions labelled as assumptions.",
+      body: "A clear view of what is fixed, what is assumed and what remains open — with every assumption made explicit.",
     },
     {
       index: "03",
       days: "Day 06 — 09",
       title: "The thin slice",
-      body: "One real path through the product, built end to end. Deployed, observable, honest about its gaps.",
+      body: "One meaningful path through the product, built end to end and deployed. Real enough to expose technical, product and operational risk before larger commitments are made.",
     },
     {
       index: "04",
       days: "Day 10 — 14",
       title: "The decision",
-      body: "A written recommendation with the trade-offs visible, and a plan you could hand to another studio.",
+      body: "A written recommendation showing the trade-offs, risks and next steps — with a plan another capable team could execute without us.",
     },
   ],
   ledger: {
-    label: "What you keep",
-    body: "All four outputs are yours either way. No lock-in, and no obligation to continue.",
+    label: "What you leave with",
+    body: "Every output is yours, whether we continue together or not. No lock-in. No dependency. No obligation.",
   },
 } as const;
 
 /* ====================================================== ACT V — invitation */
 
+/**
+ * Act V — the invitation.
+ *
+ * The section asks for exactly one thing, and the form stays behind a click so
+ * the resting state is a question and an action rather than an input grid. Copy
+ * for both states lives here together, because the promise made above the CTA
+ * ("two working days") is the same promise repeated under the send button and
+ * the two must never drift apart.
+ */
 export const contact = {
-  act: "V · The invitation",
-  headline: "Send us the problem, not the specification.",
-  body: "Tell us what the business is trying to achieve, what is currently getting in the way and why the problem matters now.",
+  eyebrow: "Contact",
+  headline: "Have something worth building?",
+  body: "Tell us what you're working on, where things stand and what you need next. We'll review it and respond within two working days.",
+  cta: "Discuss a project",
+  form: {
+    /** Names the revealed region for screen readers. */
+    label: "Project enquiry",
+    name: { label: "Name", placeholder: "Your name" },
+    email: { label: "Work email", placeholder: "you@company.com" },
+    company: { label: "Company", placeholder: "Company or organisation" },
+    brief: {
+      label: "What are you working on?",
+      placeholder: "A short description of the product, problem or opportunity.",
+    },
+    stage: {
+      label: "Where are you currently?",
+      optional: "Optional",
+      placeholder: "Select if useful",
+      options: [
+        "Exploring an idea",
+        "Existing product",
+        "Redesign / rebuild",
+        "Scaling an existing system",
+        "Not sure yet",
+      ],
+    },
+    submit: "Send enquiry",
+    sending: "Sending",
+    assurance: "We review every enquiry directly. Expect a response within two working days.",
+    success: {
+      title: "Enquiry received.",
+      body: "It comes straight to us, unfiltered. Expect a reply within two working days.",
+    },
+    /** Shown when the enquiry could not be delivered. Never swallow a send. */
+    failure: "That did not send. Please email us directly and we will pick it up:",
+  },
 } as const;
 
 /* ========================================================= connective tissue */
@@ -421,11 +463,10 @@ export const hinges = {
   },
 } as const;
 
-export const footerLinks = {
-  Studio: [
-    { label: "Work", href: "#work" },
-    { label: "Approach", href: "#approach" },
-    { label: "Studio", href: "#studio" },
-  ],
-  Work: projects.map((project) => ({ label: project.name, href: "#work" })),
-} as const;
+/**
+ * The footer navigation is the same four anchors as the top nav, rendered once
+ * on the closing legal line. It is deliberately not a sitemap: contact details
+ * are not repeated here, because the enquiry section directly above is the only
+ * place the page asks for anything.
+ */
+export const footerLinks = nav;
