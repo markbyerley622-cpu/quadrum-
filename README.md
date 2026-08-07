@@ -1,6 +1,6 @@
 # Quadrum
 
-Marketing site for a senior product strategy, design and engineering studio.
+Marketing site for a founder-led product strategy, design and engineering studio.
 
 Next.js 16 (App Router) · React 19 · Tailwind CSS v4 · Motion · TypeScript.
 
@@ -159,7 +159,6 @@ Three places state the studio's position rather than inventing social proof:
   URLs, Open Graph, `sitemap.xml` and `robots.txt`.
 - Add `app/opengraph-image.tsx` (or a static `opengraph-image.png`); the
   Twitter card is declared `summary_large_image` and currently has no image.
-- Replace the placeholder phone number.
 
 ## Notes
 

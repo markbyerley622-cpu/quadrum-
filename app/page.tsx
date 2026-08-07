@@ -44,14 +44,10 @@ const jsonLd = {
   name: site.name,
   url: site.url,
   email: site.email,
-  telephone: site.phone,
   description: site.description,
   slogan: site.tagline,
-  address: {
-    "@type": "PostalAddress",
-    addressLocality: "London",
-    addressCountry: "GB",
-  },
+  // No telephone and no postal address: the studio publishes neither, and
+  // asserting either in structured data would be a claim we cannot stand behind.
   areaServed: "Worldwide",
   knowsAbout: projects.flatMap((p) => [p.kind, ...p.tags]),
   serviceType: [

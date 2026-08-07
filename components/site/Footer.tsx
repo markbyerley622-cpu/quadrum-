@@ -56,11 +56,6 @@ export function Footer() {
                   {site.email}
                 </a>
               </li>
-              <li>
-                <a href={`tel:${site.phoneHref}`} className="link-rule type-small text-bone">
-                  {site.phone}
-                </a>
-              </li>
               <li className="type-small text-bone-60">{site.location}</li>
             </ul>
           </div>

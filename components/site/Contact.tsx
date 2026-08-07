@@ -67,9 +67,8 @@ export function Contact() {
             </a>
           </Reveal>
 
-          <div className="mt-14 grid grid-cols-1 gap-y-8 sm:grid-cols-3">
+          <div className="mt-14 grid grid-cols-1 gap-y-8 sm:grid-cols-2">
             {[
-              { label: "Telephone", value: site.phone, href: `tel:${site.phoneHref}` },
               { label: "Studio", value: site.location, href: null },
               { label: "Response", value: "Within two working days", href: null },
             ].map((row, i) => (

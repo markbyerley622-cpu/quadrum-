@@ -37,7 +37,6 @@ export const metadata: Metadata = {
     "software engineering studio",
     "product design",
     "product strategy",
-    "London software studio",
     "platform engineering",
     "digital product development",
   ],

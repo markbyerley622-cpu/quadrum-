@@ -20,11 +20,9 @@ export const site = {
   url: "https://quadrumstudio.com",
   tagline: "Complex digital products. Built to last.",
   description:
-    "Quadrum is a senior product strategy, design and engineering studio for complex digital products. We partner with ambitious founders and established organisations to define, design, build and evolve business-critical software.",
+    "Quadrum is a founder-led product strategy, design and engineering studio focused on turning complex ideas into refined digital products.",
   email: "hello@quadrumstudio.com",
-  phone: "+44 20 7946 0102",
-  phoneHref: "+442079460102",
-  location: "London, United Kingdom",
+  location: "Operating globally",
   founded: 2026,
 } as const;
 
@@ -38,7 +36,7 @@ export const nav = [
 /* =========================================================== ACT I — open */
 
 export const hero = {
-  eyebrow: "Senior product strategy, design and engineering",
+  eyebrow: "Product strategy, design and engineering",
   headline: ["Complex", "digital products.", "Built to last."],
   lead: "Quadrum is a founder-led product studio designing and building high-quality digital products — from initial strategy and product definition through design, engineering, launch and continued development.",
   standfirst: [
@@ -224,7 +222,7 @@ export const projects: readonly Project[] = [
       "A unified combat-sports platform bringing events, fight cards, rankings, athlete profiles, predictions and community discussion together across major promotions and disciplines — from announcement through to result.",
     href: "https://globalfight-p69k.onrender.com/events",
     status: "Live",
-    metric: "Nine disciplines · Full cards, venues and live countdowns",
+    metric: "Events · Full cards · Rankings · Predictions · Community",
     tags: [
       "Events",
       "Fight cards",
@@ -345,7 +343,7 @@ export const process = [
 export const people = {
   act: "IV · The studio",
   headline: "The people in the first meeting stay on the work",
-  body: "Strategy, design and engineering decisions are made by experienced practitioners with direct responsibility for the result.",
+  body: "Strategy, design and engineering decisions stay close to the people building the product, keeping communication direct and execution accountable.",
   refusals: [
     "No pyramid staffing",
     "No translation through account managers",
