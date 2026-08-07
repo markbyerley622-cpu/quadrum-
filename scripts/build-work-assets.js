@@ -47,11 +47,16 @@ const compose = (layers, file) =>
     .png({ compressionLevel: 9 })
     .toFile(file);
 
-/** The three marketing plates: one delivery width, one encoder. */
+/**
+ * The marketing plates: one delivery width, one encoder.
+ *
+ * Combat Reviews is not derived here. Its plate is an approved showcase render
+ * shipped as a fixed asset (`public/work/combat-reviews-showcase-v2.png`), so
+ * re-encoding it from a raw capture would replace the approved composition.
+ */
 async function plates() {
   const jobs = [
     ["pepay.jpeg", "pepay.jpg"],
-    ["combat-reviews.jpeg", "combat-reviews.jpg"],
     ["noise.jpeg", "noise.jpg"],
   ];
 

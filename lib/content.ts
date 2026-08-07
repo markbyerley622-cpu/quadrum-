@@ -237,8 +237,8 @@ export const projects: readonly Project[] = [
     logo: { src: "/work/logos/combat-reviews.png", alt: "Combat Reviews", aspect: 507 / 350 },
     media: {
       kind: "plate",
-      src: "/work/combat-reviews.jpg",
-      alt: "The Combat Reviews platform showing the Vargas versus Okoro main event, featured fights, welterweight rankings, live predictions and top discussions.",
+      src: "/work/combat-reviews-showcase-v2.png",
+      alt: "Combat Reviews platform showing combat-sports event discovery on tablet and event schedule and predictions on mobile.",
     },
     partners: {
       label: "Official partners",
