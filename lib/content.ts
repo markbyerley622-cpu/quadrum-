@@ -45,17 +45,20 @@ export const nav = [
 /**
  * The opening slide.
  *
- * It is a slide, deliberately — one claim, one object, and almost nothing else.
- * The previous hero ran a headline, a lead paragraph, a three-item promise strip
- * and six product screenshots floating at depth behind all of it. Every part was
- * defensible on its own and together they were a collage: six things moving
- * while the reader tried to read a seventh. A visitor could not have told you
- * what the single most important thing on that screen was, because there wasn't
- * one.
+ * It is a slide, deliberately — one claim, five words of range, and nothing
+ * else. The first version ran a headline, a lead paragraph, a three-item
+ * promise strip and six product screenshots floating at depth behind all of it.
+ * Every part was defensible on its own and together they were a collage: six
+ * things moving while the reader tried to read a seventh. A visitor could not
+ * have told you what the single most important thing on that screen was,
+ * because there wasn't one.
  *
- * So the copy here is now four short things and no paragraph. What carries the
- * screen is the core — see `components/site/Core.tsx` — and the copy's job is to
- * say what it is standing next to, then get out of the way.
+ * The fix went one step too far before it landed. The collage was replaced with
+ * a single dimensional object holding the six products, which was the right
+ * principle and the wrong object — the most elaborate thing on the site,
+ * standing next to the sentence that actually makes the argument. The sentence
+ * is the screen now. See `components/site/Hero.tsx` for what must not be added
+ * back to it.
  */
 export const hero = {
   eyebrow: "Product strategy, design and engineering",
@@ -75,16 +78,6 @@ export const hero = {
    * the page — nothing here is aspirational, and nothing is a service list.
    */
   sectors: ["Payments", "Markets", "Sport", "Property", "AI"],
-  /**
-   * The two figures set in the space either side of the core. Both repeat a
-   * number from the count act verbatim, so the opening screen introduces no
-   * claim the page does not later prove. Kept to two: a third would start to
-   * be a statistics row, and the point of this screen is that there isn't one.
-   */
-  facts: [
-    { value: "06", label: "products built" },
-    { value: "04", label: "in production" },
-  ],
 } as const;
 
 /* ========================================================== ACT II — proof */
@@ -572,8 +565,8 @@ export const projects: readonly Project[] = [
      * are being shown, and a marketing surface described as an application is
      * exactly the claim that would cost the other five their credibility.
      *
-     * The workspace still exists as `/work/noise.jpg` if the block ever wants
-     * to show the application again — it is the shot the hero core still uses.
+     * The workspace still exists as `/work/noise.jpg` if this block ever wants
+     * to show the application itself instead.
      */
     media: {
       kind: "film",

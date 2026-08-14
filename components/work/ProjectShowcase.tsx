@@ -148,13 +148,20 @@ export function ProjectShowcase({
 }
 
 /**
- * Index, sector, name, pitch. In that order, at every size, on both grounds.
+ * Mark, index, sector, name, pitch. In that order, at every size, on both
+ * grounds.
  *
- * The mark is dropped on the dark grounds and that is deliberate rather than a
- * fallback: two of the four products shot that way have wordmarks drawn for
- * paper, and more to the point, a logo laid over a running product is the first
- * thing this act said it would not do. The name in type is enough — it is what
- * the product does on its own site.
+ * The mark used to be dropped wherever the header sat on dark, on the theory
+ * that a vendored wordmark drawn for paper would disappear on near-black. That
+ * was a guess and it was wrong for the products it actually applied to: DRK's
+ * is a self-contained tile that carries its own ground, and Noise's is a violet
+ * gradient signal that reads better on void than it does on paper. A product's
+ * own mark beside its own name is not decoration — it is the thing a reader
+ * recognises before they have read a word, and withholding it to avoid a
+ * contrast problem that only two files could have had cost all six.
+ *
+ * If a mark is ever added whose artwork genuinely cannot survive a dark ground,
+ * the fix is an inverted asset for that mark, not the removal of all of them.
  */
 function ProductHeader({
   project,
@@ -192,7 +199,7 @@ function ProductHeader({
 
       <Reveal delay={0.06}>
         <div className="mt-6 flex items-center gap-3.5">
-          {project.logo && !dark ? <Mark logo={project.logo} /> : null}
+          {project.logo ? <Mark logo={project.logo} /> : null}
           <h3 className={`type-h3 ${dark ? "text-bone" : ""}`}>
             {project.href ? (
               // A real link rather than a pseudo-element stretched over the

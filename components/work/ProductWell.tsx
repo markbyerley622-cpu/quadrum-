@@ -80,7 +80,13 @@ export const STAGING: Record<string, { shot: ShotName; frame: FrameName }> = {
   "03": { shot: "travel", frame: "editorial" },
   // Combat Reviews — the most aggressive treatment in the act. A broadcast
   // strip, edge to edge, panning faster than anything around it.
-  "04": { shot: "wall", frame: "overlay" },
+  //
+  // Copy on paper above, for the same reason as DRK and more so. This
+  // recording ends on a fight card, a rankings table and a partner marquee all
+  // at once — the densest, brightest frame any of these six products produces
+  // — and the scrim needed to make a pitch legible over it had to be near
+  // opaque across the bottom half of the strip. The type won and the wall lost.
+  "04": { shot: "wall", frame: "editorial" },
   // Linton — the cinematic reset. The camera is already inside this footage, so
   // the page does almost nothing and lets the drone do the travelling.
   "05": { shot: "aerial", frame: "overlay" },
@@ -190,15 +196,12 @@ export function ProductWell({
        product about fights. */
     case "wall":
       return (
+        // No scrim, because there is no longer any type over the strip to
+        // make legible. The one this carried was near opaque across the bottom
+        // half — enough to read a pitch across a results table, and enough to
+        // take the bottom half of the wall with it.
         <div className="well well--wall">
-          {header}
           <div className="shot shot--wall">{film}</div>
-          {/* The heaviest scrim in the act, and the footage is why: this
-              recording ends on a fight card, a rankings table and a partner
-              marquee all at once, which is the densest, brightest frame any of
-              these six products produces. The standard scrim left the pitch
-              sitting in the middle of a results table. */}
-          <Scrim weight="heavy" />
         </div>
       );
 
