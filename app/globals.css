@@ -132,12 +132,24 @@
    ========================================================================== */
 
 @layer components {
+  /* THE CLAIM, and the only thing on the page set at this size.
+
+     It came down from 9.3vw/9rem, which is a size for three short words —
+     "Complex / digital products. / Built to last." The claim is now a sentence,
+     and at 134px a twenty-character line ran the full width of a 1440 screen
+     and left the opening slide with no margin at all.
+
+     It is now sized to the COLUMN rather than to the viewport, and that is the
+     constraint that actually matters: the claim occupies half the screen beside
+     the core, its longest line is "complicated businesses", and Geist sets that
+     at almost exactly 10x the font size. Anything above ~4.2vw wraps it onto a
+     fifth line and the authored three-line break — which is typesetting, not
+     accident — falls apart. Check that line against the claim column before
+     raising this. */
   .type-display {
-    /* Capped so the three hero lines plus the standfirst strip still resolve
-       inside one viewport on a 1080p screen. */
-    font-size: clamp(3rem, 9.3vw, 9rem);
-    line-height: 0.9;
-    letter-spacing: -0.045em;
+    font-size: clamp(2.35rem, 4.2vw, 4.4rem);
+    line-height: 0.94;
+    letter-spacing: -0.042em;
     font-weight: 400;
   }
 
@@ -322,6 +334,271 @@
   .stage {
     /* -1 as the spread arrives, 0 at rest, 1 as it leaves. */
     --c: calc((var(--p, 0.5) - 0.5) * 2);
+  }
+
+  /* ======================================================================
+     THE CORE — the opening screen's one object.
+
+     See components/site/Core.tsx for what it is and why the six-frame collage
+     it replaced could not be fixed by polishing. This is the geometry.
+
+     Three properties drive everything, all written by one rAF and one scroll
+     subscription: `--cx` / `--cy` are the eased pointer position (-1…1) and
+     `--hp` is the hero's own exit (0 at rest, 1 once the screen has left). Every
+     moving part below is a calc() off those three, so the whole opening screen
+     costs two style writes a frame no matter how many faces it has.
+
+     The one rule that must survive any edit here: THE OBJECT MUST KEEP ITS
+     SIDE. `.core-edge` is a real face rotated 90° out of the front plane, and
+     it is the single detail that makes the slab read as a solid rather than as
+     a rectangle with a picture in it. `transform-style: preserve-3d` on `.core`
+     is what allows it — anything that flattens that (an `overflow`, a `filter`,
+     an `opacity` on `.core` itself) collapses the object back into a card.
+     ====================================================================== */
+
+  /* A column exactly as wide as the object, so the plate beneath it lines up
+     with its edges rather than with the layout grid. `fit-content` is what
+     buys that: the shell's width is derived from its height and aspect, and
+     the column takes its measure from the shell. */
+  .core-stage {
+    position: relative;
+    display: flex;
+    width: fit-content;
+    margin-inline: auto;
+    flex-direction: column;
+    /* The hero's exit fade lives out here, and that placement is load-bearing.
+       It was on `.core` itself, where it worked at rest and then quietly
+       destroyed the object the moment anyone scrolled: an opacity below 1 is a
+       grouping property, a grouped element cannot be `preserve-3d`, and a
+       flattened `.core` renders its side face as a zero-width line. The slab
+       lost its thickness on the first scroll event and nothing errored. */
+    opacity: calc(1 - var(--hp) * 0.9);
+  }
+
+  /* Untransformed, and exactly the size of the object. The registration marks
+     and the ground shadow hang off this rather than off `.core`, so they stay
+     square to the page while the slab turns inside them. */
+  .core-shell {
+    position: relative;
+    height: clamp(15rem, 40vh, 24rem);
+    aspect-ratio: 4 / 5;
+    flex: none;
+    /* Perspective belongs on the DIRECT parent of the transformed element.
+       It was on `.core-stage`, one level further out, where it applied to this
+       shell and stopped — the shell flattens, so `.core` was being rotated
+       orthographically inside it and the turn read as a squash rather than as
+       a turn. Everything about this object being an object depends on this
+       one declaration sitting exactly here.
+
+       2400px and not the 1600 it started on. A shorter perspective is more
+       dramatic on a face-on plane and actively WORSE here: the side face
+       recedes as it widens, so a strong projection shrinks it back almost as
+       fast as the turn opens it. At 1600 a 52px edge at 10deg came out under
+       3px. A longer camera keeps the geometry. */
+    perspective: 2400px;
+  }
+
+  .core {
+    position: absolute;
+    inset: 0;
+    transform-style: preserve-3d;
+    /* Toward the reader and away as the screen leaves: the camera enters the
+       object rather than the object fading out under it. */
+    /* The standing turn, and it turns the way the page is standing. The object
+       sits to the right of centre, so the reader is to its LEFT and the face
+       they should be able to see is its left one — a right-hand face on an
+       object in the right of the frame reads as looking at it from somewhere
+       nobody is.
+
+       The angle has to be this large. The side face projects to roughly
+       `thickness x sin(angle)` and then loses most of that again to perspective,
+       because the far edge of the face is both further out and further back.
+       At 10deg on a 52px edge the result was under 3px and the slab was a
+       rectangle. At 16deg on a 64px edge under a long camera it is around 12px,
+       which reads as thickness.
+
+       The pointer range is deliberately narrower than the base (+-6 on 16) so
+       the turn never passes through zero: an object that periodically flattens
+       into a picture of itself is worse than one that never turned. Moving the
+       pointer right reduces the angle, so the slab turns to face the cursor
+       rather than away from it. */
+    transform: translate3d(0, calc(var(--hp) * -4vh), calc(var(--hp) * 240px))
+      rotateY(calc(16deg + var(--cx) * -6deg))
+      rotateX(calc(var(--cy) * -4.5deg));
+    will-change: transform;
+  }
+
+  .core-face {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    background-color: var(--color-void);
+  }
+
+  /* One shared, very slow breath across all six frames rather than a drift per
+     frame. Six independently animating layers is six composited surfaces to
+     save four seconds of movement each; this is one, and at 28 seconds a cycle
+     it is felt rather than seen. */
+  .core-reel {
+    position: absolute;
+    inset: 0;
+    animation: q-core-breathe 28s ease-in-out infinite;
+    /* Six captures shot by six different products, pulled toward one another
+       so the object has a single surface rather than six moods. Applied here
+       and not on `.core`, which must stay a 3D context — a filter flattens
+       preserve-3d and would take the slab's side off.
+
+       The brightness is what keeps the lighter captures in the object. The
+       veil is a gradient and treats every frame the same; a dark trading
+       console sank under it and a lit payments dashboard sailed straight
+       through and read as a screenshot in a box, which is the one thing this
+       object must not look like. */
+    filter: saturate(0.72) contrast(1.06) brightness(0.86);
+  }
+
+  .core-layer {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    animation: q-core 24s linear infinite;
+  }
+
+  /* Wound down hard, and weighted to the bottom so the slab has a base. At the
+     size this thing is shown, a legible screenshot would answer the question
+     the object exists to ask. */
+  .core-veil {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(
+        96% 76% at 50% 43%,
+        rgb(16 15 13 / 0.2) 0%,
+        rgb(16 15 13 / 0.56) 44%,
+        rgb(16 15 13 / 0.88) 76%,
+        rgb(16 15 13 / 0.97) 100%
+      ),
+      linear-gradient(to top, rgb(16 15 13 / 0.86) 0%, transparent 40%);
+  }
+
+  .core-sheen {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      118deg,
+      rgb(255 255 255 / 0.11) 0%,
+      rgb(255 255 255 / 0.03) 20%,
+      transparent 44%
+    );
+  }
+
+  .core-rim {
+    position: absolute;
+    inset: 0;
+    box-shadow: inset 0 0 0 1px rgb(237 234 226 / 0.16);
+  }
+
+  /* The left-hand face — the thickness. `right: 100%` puts it against the
+     object's left edge and rotating -90deg about that edge swings it backwards
+     in Z, so it is a real face at right angles to the front rather than a
+     drawn bevel. Nearest the front edge it is the lightest, falling away into
+     the slab: a fixed shading, not one lit from the pointer, because a face
+     that re-lights as you move is a rendering effect and this object is meant
+     to look machined. */
+  .core-edge {
+    position: absolute;
+    top: 0;
+    right: 100%;
+    height: 100%;
+    width: 4rem;
+    transform-origin: right center;
+    transform: rotateY(-90deg);
+    background: linear-gradient(
+      to right,
+      #050506 0%,
+      #0d0c0d 46%,
+      var(--color-void-raised) 100%
+    );
+  }
+
+  .core-ground {
+    position: absolute;
+    left: 50%;
+    bottom: -1.75rem;
+    height: 3rem;
+    width: 116%;
+    translate: -50% 0;
+    border-radius: 50%;
+    background: radial-gradient(
+      closest-side,
+      rgb(20 19 15 / 0.34),
+      transparent 78%
+    );
+    filter: blur(10px);
+  }
+
+  /* Corner brackets, 18px outside the object. Hairline, square, and never
+     animated — they are the page measuring the object, and a measurement that
+     moves is not one. */
+  .core-mark {
+    position: absolute;
+    height: 0.75rem;
+    width: 0.75rem;
+  }
+  .core-mark--tl {
+    top: -1.125rem;
+    left: -1.125rem;
+    border-top: 1px solid var(--color-rule-strong);
+    border-left: 1px solid var(--color-rule-strong);
+  }
+  .core-mark--tr {
+    top: -1.125rem;
+    right: -1.125rem;
+    border-top: 1px solid var(--color-rule-strong);
+    border-right: 1px solid var(--color-rule-strong);
+  }
+  .core-mark--bl {
+    bottom: -1.125rem;
+    left: -1.125rem;
+    border-bottom: 1px solid var(--color-rule-strong);
+    border-left: 1px solid var(--color-rule-strong);
+  }
+  .core-mark--br {
+    bottom: -1.125rem;
+    right: -1.125rem;
+    border-bottom: 1px solid var(--color-rule-strong);
+    border-right: 1px solid var(--color-rule-strong);
+  }
+
+  /* The plate: two figures on a hairline, set to the object's own width so it
+     reads as a caption struck into the base of the slab rather than as a stat
+     row that happens to sit underneath it. Both numbers repeat the count act
+     verbatim — see `hero.facts`. */
+  .core-plate {
+    display: flex;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-top: 1.75rem;
+    border-top: 1px solid var(--color-rule);
+    padding-top: 0.85rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1.5;
+    letter-spacing: 0.03em;
+    opacity: calc(1 - var(--hp) * 1.5);
+  }
+  .core-plate > * {
+    display: flex;
+    align-items: baseline;
+    gap: 0.55rem;
+  }
+  .core-plate > *:last-child {
+    text-align: right;
+  }
+
+  @media (min-width: 1024px) {
+    .core-shell {
+      height: clamp(21rem, 60vh, 33rem);
+    }
   }
 
   /* The aperture. Full bleed, dark, and nothing else — every product here is a
@@ -565,6 +842,45 @@
   }
 }
 
+/* The procession inside the core. Six layers share one 24s cycle, each offset
+   by a whole hold, so exactly one is up at a time and the handover is a soft
+   dissolve rather than a cut. `linear` because a cross-fade that eases reads as
+   a slideshow transition; this is meant to read as something passing through.
+
+   The visible window is 0 → 17% (four seconds of twenty-four). Keep the two in
+   step: change the hold in Core.tsx and these percentages have to follow, or
+   two frames end up on screen together. */
+@keyframes q-core {
+  0% {
+    opacity: 0;
+  }
+  2.5% {
+    opacity: 1;
+  }
+  14% {
+    opacity: 1;
+  }
+  17% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* One shared breath, so the interior is never quite still. Under a tenth of a
+   scale over fourteen seconds each way — at the point where a reader notices
+   the object is alive without being able to say what moved. */
+@keyframes q-core-breathe {
+  0%,
+  100% {
+    transform: scale(1.34);
+  }
+  50% {
+    transform: scale(1.19);
+  }
+}
+
 @keyframes q-blink {
   0%,
   45% {
@@ -617,6 +933,26 @@
      constellation are all untouched — only the camera stops. */
   .stage {
     --c: 0;
+  }
+
+  /* The core, held still. The blanket `animation-duration: 0.01ms` above would
+     otherwise run all six layers instantly to their final keyframe — which is
+     `opacity: 0` — and leave the object empty. So the procession stops on its
+     first frame and the object becomes what it is for everyone else, minus the
+     movement: a slab with a product in it. The pointer loop and the scroll
+     subscription are never attached for this reader, so `--cx`, `--cy` and
+     `--hp` all hold the zero they were rendered with and the composition is
+     already at rest. */
+  .core-layer {
+    animation: none;
+    opacity: 0;
+  }
+  .core-layer:first-child {
+    opacity: 1;
+  }
+  .core-reel {
+    animation: none;
+    transform: scale(1.26);
   }
 }
 

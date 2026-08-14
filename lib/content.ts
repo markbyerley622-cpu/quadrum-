@@ -35,18 +35,48 @@ export const nav = [
 
 /* =========================================================== ACT I — open */
 
+/**
+ * The opening slide.
+ *
+ * It is a slide, deliberately — one claim, one object, and almost nothing else.
+ * The previous hero ran a headline, a lead paragraph, a three-item promise strip
+ * and six product screenshots floating at depth behind all of it. Every part was
+ * defensible on its own and together they were a collage: six things moving
+ * while the reader tried to read a seventh. A visitor could not have told you
+ * what the single most important thing on that screen was, because there wasn't
+ * one.
+ *
+ * So the copy here is now four short things and no paragraph. What carries the
+ * screen is the core — see `components/site/Core.tsx` — and the copy's job is to
+ * say what it is standing next to, then get out of the way.
+ */
 export const hero = {
   eyebrow: "Product strategy, design and engineering",
-  headline: ["Complex", "digital products.", "Built to last."],
-  // Half the length it was. The old lead listed the phases of an engagement —
-  // strategy, definition, design, engineering, launch, continued development —
-  // to a reader who has not yet been given a reason to care about any of them,
-  // and the six products below make that case far better than the sentence did.
-  lead: "A founder-led product studio. Complicated businesses, turned into products people can actually use.",
-  standfirst: [
-    "Founder-led delivery",
-    "Direct collaboration",
-    "Working products, not presentations",
+  /**
+   * THE CLAIM. Authored as three lines because `TextReveal` masks and raises
+   * one at a time, so the break is typesetting rather than wrapping.
+   *
+   * "Complex digital products. Built to last." described the output. This
+   * describes the job, which is the thing a prospective client is actually
+   * trying to work out on the first screen: not what we make, but whether we
+   * make the kind of thing they need.
+   */
+  headline: ["We build the products", "complicated businesses", "need next."],
+  /**
+   * The range, as five words, in place of the paragraph that used to sit here.
+   * Every one of these is a sector with a shipped product behind it lower down
+   * the page — nothing here is aspirational, and nothing is a service list.
+   */
+  sectors: ["Payments", "Markets", "Sport", "Property", "AI"],
+  /**
+   * The two figures set in the space either side of the core. Both repeat a
+   * number from the count act verbatim, so the opening screen introduces no
+   * claim the page does not later prove. Kept to two: a third would start to
+   * be a statistics row, and the point of this screen is that there isn't one.
+   */
+  facts: [
+    { value: "06", label: "products built" },
+    { value: "04", label: "in production" },
   ],
 } as const;
 
@@ -469,7 +499,12 @@ export const projects: readonly Project[] = [
     index: "05",
     kind: "Property development",
     name: "Linton Villas",
-    pitch: "The investment case for thirty-eight villas, built to close a buyer who will never visit.",
+    // "…built to close a buyer who will never visit" was the sales brief, not
+    // the product. It described what the client wanted the thing to DO to
+    // someone, which is the one register this act cannot afford — every other
+    // pitch here says what the product IS. It also put the reader in the
+    // position of the mark.
+    pitch: "Thirty-eight villas on the South Lombok coast, understood without going there.",
     summary:
       "Masterplan, four villa types, floor plans, financial projections, an eight-minute film and the full prospectus, as one guided narrative.",
     href: "https://lintonvillas.vercel.app",

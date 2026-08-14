@@ -177,8 +177,17 @@ export type Placement = {
  *     hold continuity, far too faint to compete.
  */
 export const PLACEMENTS = {
-  /** Opening: upper right, clear of the headline and the lead below it. */
-  hero: { cx: 0.8, cy: 0.36, s: 0.19, a: 0.62 },
+  /**
+   * Opening: small, high, and almost gone.
+   *
+   * It used to be the largest and brightest placement on the page — a cloud at
+   * 0.19 scale and 0.62 alpha filling the upper right, which was correct while
+   * that half of the screen was empty. The opening screen now has ONE object
+   * standing exactly there, and the whole argument of that screen is restraint;
+   * a chaotic dot cloud beside the subject is the collage arriving by a
+   * different door. Reduced to texture in the corner.
+   */
+  hero: { cx: 0.88, cy: 0.13, s: 0.085, a: 0.16 },
   /** Between acts. Nothing to read, so the object gets the moment. */
   hinge: { cx: 0.79, cy: 0.43, s: 0.21, a: 0.85 },
   /** Text on the left, object high on the right. */
