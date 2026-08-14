@@ -4,6 +4,7 @@ import { motion, useScroll, useTransform } from "motion/react";
 import { useRef } from "react";
 import { GridLines } from "@/components/primitives/GridLines";
 import { TextReveal } from "@/components/primitives/TextReveal";
+import { ProductCanvas } from "@/components/site/ProductCanvas";
 import { hero, site } from "@/lib/content";
 import { EASE } from "@/lib/motion";
 
@@ -30,6 +31,11 @@ export function Hero() {
       {/* Column rules sit below the lattice canvas; everything else above it.
           See the layering contract in components/primitives/Section.tsx. */}
       <GridLines columns={6} className="-z-10 hidden md:block" />
+
+      {/* The evidence, behind the claim. Six real product frames at depth — see
+          ProductCanvas for why the opening screen shows the work rather than an
+          abstraction, and how the composition stays out of the headline's way. */}
+      <ProductCanvas />
 
       <motion.div style={{ y, opacity }} className="container-page relative z-10">
         {/* --- Top line: who we are / where we are ----------------------- */}

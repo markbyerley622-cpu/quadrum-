@@ -277,6 +277,20 @@
   }
 }
 
+/* The hero fragments arriving.
+
+   OPACITY ONLY, deliberately. Each fragment's `transform` is its parallax — it
+   is rewritten every frame from the pointer and scroll custom properties — and
+   an animation that also touched transform would take ownership of the property
+   and hold whatever it finished on, freezing the composition the moment the
+   intro completed. The one-keyframe form lets each fragment fade to its OWN
+   resting opacity, which differs per fragment, without naming a value here. */
+@keyframes q-settle {
+  from {
+    opacity: 0;
+  }
+}
+
 @keyframes q-blink {
   0%,
   45% {
