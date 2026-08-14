@@ -31,11 +31,17 @@ export function Plate({
   return (
     <Parallax distance={26} tilt={tilt}>
       <figure
-        className="group/plate relative aspect-[4/3] overflow-hidden border border-rule bg-void
-                   shadow-[0_1px_2px_rgb(20_19_15/0.05),0_30px_60px_-30px_rgb(20_19_15/0.30),0_70px_120px_-60px_rgb(20_19_15/0.30)]
-                   transition-[border-color,box-shadow] duration-[0.9s] ease-quad
-                   group-hover:border-rule-strong
-                   group-hover:shadow-[0_1px_2px_rgb(20_19_15/0.06),0_40px_80px_-30px_rgb(20_19_15/0.38),0_90px_150px_-60px_rgb(20_19_15/0.34)]"
+        // Full bleed below `lg`, matching the films: on a phone the plate is the
+        // one thing on the screen rather than a card inside a gutter. It also
+        // takes a wider crop there — 4:3 is a desktop-column shape, and a
+        // dashboard squeezed into it on a 390px screen is unreadable either way,
+        // so the shorter crop at least buys back the vertical space.
+        className="group/plate relative -mx-gutter aspect-[16/10] overflow-hidden border-y border-rule bg-void
+                   lg:mx-0 lg:aspect-[4/3] lg:border
+                   lg:shadow-[0_1px_2px_rgb(20_19_15/0.05),0_30px_60px_-30px_rgb(20_19_15/0.30),0_70px_120px_-60px_rgb(20_19_15/0.30)]
+                   lg:transition-[border-color,box-shadow] lg:duration-[0.9s] lg:ease-quad
+                   lg:group-hover:border-rule-strong
+                   lg:group-hover:shadow-[0_1px_2px_rgb(20_19_15/0.06),0_40px_80px_-30px_rgb(20_19_15/0.38),0_90px_150px_-60px_rgb(20_19_15/0.34)]"
       >
         <Image
           src={src}

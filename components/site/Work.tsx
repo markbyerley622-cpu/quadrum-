@@ -7,7 +7,7 @@ import { ProjectShowcase } from "@/components/work/ProjectShowcase";
 import { projects } from "@/lib/content";
 
 /**
- * Act II — the proof. Four products that are actually in production.
+ * Act II — the proof. Six products, five of them shown as film.
  *
  * This act sits second on the page, immediately after the claim, because it is
  * the only thing on the site that cannot be written by anyone. Everything after
@@ -24,14 +24,22 @@ import { projects } from "@/lib/content";
  *     away sharply: pitch, then paragraph, then hairline facts.
  *  2. THE COPY HOLDS, THE EVIDENCE MOVES. The text column is sticky and the
  *     media scrolls past it, so each product introduces itself once and then
- *     shows its work. This is also what hands the reader forward — a spread
- *     releases only when the next one has already begun.
+ *     shows its work. Five of the six show it as film, already playing by the
+ *     time the reader arrives — no control bar, nothing to press. This is also
+ *     what hands the reader forward: a spread releases only when the next one
+ *     has already begun.
  *  3. NOTHING IS DECORATIVE. Every number, capability and partner mark is taken
- *     from the running product. The accent is spent on the index rule, the
- *     metric marker and the link, and nowhere else in the act.
+ *     from the running product, and every film is an unedited capture of it. The
+ *     accent is spent on the index rule, the metric marker and the link, and
+ *     nowhere else in the act.
  *
- * Blocks alternate side — copy left, then copy right — because four spreads in
- * one direction read as a list rather than as four separate arrivals.
+ * Blocks alternate side — copy left, then copy right — because five spreads in
+ * one direction read as a list rather than as five separate arrivals.
+ *
+ * ON A PHONE the spread reorders itself so there is exactly one focal point: the
+ * name and the pitch, then the film full bleed edge to edge, and only then the
+ * detail that supports it. See `ProjectShowcase` for how, and why the two
+ * columns dissolve rather than reflow.
  */
 export function Work() {
   return (
@@ -51,9 +59,10 @@ export function Work() {
           <div className="lg:col-span-4 lg:col-start-9 lg:self-end">
             <Reveal delay={0.15}>
               <p className="type-body max-w-[42ch] text-ink-70">
-                Two payment platforms, a combat-sports network and an
-                enterprise AI workspace. Four products, one standard — every one
-                of them running against real users and real money.
+                Institutional liquidity infrastructure, two payment platforms, a
+                combat-sports network, a thirty-eight villa development and an
+                enterprise AI workspace. Six products, one standard — and five of
+                them recorded running, rather than described.
               </p>
             </Reveal>
           </div>

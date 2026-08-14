@@ -2,6 +2,12 @@ node_modules
 .next
 out
 build
+
+# Raw product recordings. 40-100MB each straight off a screen capture, and
+# `scripts/build-work-video.js` derives everything the page serves from them
+# into public/work/video, which IS committed. Keep the originals local.
+assets/source/video
+
 .DS_Store
 *.pem
 npm-debug.log*

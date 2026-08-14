@@ -29,7 +29,7 @@ export function ProjectMetrics({ project }: { project: Project }) {
           rel="noreferrer noopener"
           className="type-label mt-7 inline-flex items-center gap-2.5 text-ink-45 transition-colors duration-500 ease-quad hover:text-ink group-hover:text-ink"
         >
-          Visit the live product
+          {project.linkLabel ?? "Visit the live product"}
           <span
             aria-hidden
             className="block text-accent transition-transform duration-[0.7s] ease-quad motion-safe:group-hover:translate-x-1.5"

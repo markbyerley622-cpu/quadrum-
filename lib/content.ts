@@ -69,17 +69,60 @@ export type Partner = {
 /**
  * How a product is shown.
  *
- * `plate` is the default: one wide capture, framed. `phones` is reserved for
- * products whose real surface is a phone — showing those as a desktop rectangle
- * misrepresents them, and a floating pair of devices is both more honest and the
- * strongest image in the act.
+ * `film` is the strongest of the three and the default wherever a recording
+ * exists: a screenshot proves a product exists, a recording proves it works.
+ * `plate` is the fallback for a product with no capture. `phones` is reserved
+ * for products whose real surface is a phone — showing those as a desktop
+ * rectangle misrepresents them, and a floating pair of devices is both more
+ * honest and the strongest still image in the act.
  */
 export type Media =
   | { kind: "plate"; src: string; alt: string }
   | {
       kind: "phones";
       screens: readonly { src: string; alt: string }[];
+    }
+  | {
+      kind: "film";
+      src: string;
+      /**
+       * The film's OWN first frame, shown while the file downloads. It has to be
+       * the first frame and not a nicer one: on a slow connection the poster is
+       * up for over a second, so anything else visibly jumps the moment playback
+       * starts. Generated as `<name>-open.jpg`.
+       */
+      poster: string;
+      /**
+       * A populated frame from the middle, which replaces the film entirely
+       * under `prefers-reduced-motion`. That reader gets one image and it has to
+       * be the product running, not whatever the recording happened to open on.
+       * Generated as `<name>.jpg`.
+       */
+      still: string;
+      alt: string;
+      /** Width ÷ height of the encode, so the frame reserves its exact space. */
+      aspect: number;
+      /**
+       * Device shots shown under the film. For a product whose real surface is
+       * a phone but whose recording is of the desktop app — the film carries the
+       * flow, the devices carry the form factor.
+       */
+      screens?: readonly { src: string; alt: string }[];
     };
+
+/**
+ * A sibling product in the same family, shown as a small marked row under the
+ * spread. Only used where a product is genuinely one app of several — inventing
+ * a family out of features would be the worst kind of padding.
+ */
+export type App = {
+  name: string;
+  /** What it is, in four or five words. Longer and the row stops scanning. */
+  summary: string;
+  src: string;
+  /** Unreleased. Renders the name quieter and adds the marker. */
+  soon?: boolean;
+};
 
 export type Project = {
   index: string;
@@ -100,6 +143,12 @@ export type Project = {
    * genuinely no public URL. Never point this at something unverified.
    */
   href?: string;
+  /**
+   * Overrides the link's wording. Set it wherever `href` does not point at the
+   * running product itself — a reader who clicks "visit the live product" and
+   * lands on something else has been misled, and this act cannot afford that.
+   */
+  linkLabel?: string;
   /** Shown where the link would be. Says why, when there is no link. */
   status: string;
   /** One hard number or fact taken from the running product. */
@@ -112,7 +161,13 @@ export type Project = {
   tags: readonly string[];
   /** What it is built on. One quiet line; never a second row of pills. */
   stack: readonly string[];
-  logo: {
+  /**
+   * The product's own mark. Optional, and omitted rather than approximated:
+   * some of these products set their name in type and have no mark to vendor,
+   * and drawing one for them would be inventing a logo. Where it is absent the
+   * name simply carries itself, which is what the product does too.
+   */
+  logo?: {
     src: string;
     alt: string;
     /** App-icon marks get a rounded square box rather than a free-standing one. */
@@ -126,20 +181,61 @@ export type Project = {
     aspect?: number;
   };
   media: Media;
+  apps?: { label: string; items: readonly App[] };
   partners?: { label: string; items: readonly Partner[] };
 };
 
 /**
  * Order is an argument, not a catalogue.
  *
- * BNBPay leads because it is the only product here we can show as the thing it
- * actually is — a phone in someone's hand — and because it is the densest piece
- * of engineering in the set. Noise closes because it is the one still in private
- * beta, and an act should not end on a claim the reader cannot check.
+ * DRK leads. It is the hardest problem in the set and the only one that is a
+ * category rather than a product — infrastructure for assets that are legally
+ * forbidden from using the rails the rest of this industry runs on. It is also
+ * the best film we have: a working institutional console, and the spread the
+ * reader spends longest inside. BNBPay follows because it is the densest piece
+ * of engineering here and the only product shown as both film and the thing it
+ * actually is, a phone in someone's hand. Noise closes because it is the one
+ * product with nothing public to open.
  */
 export const projects: readonly Project[] = [
   {
     index: "01",
+    kind: "Institutional liquidity infrastructure",
+    name: "DRK",
+    pitch: "Market infrastructure for making real-world assets liquid.",
+    summary:
+      "Tokenisation solved issuance. It did not solve liquidity. DRK is building the operating layer between tokenised assets and institutional markets — bringing fair value, liquidity, risk, execution and settlement into one system designed to determine how an asset should be priced, traded and made liquid.",
+    href: "https://drk-deck.vercel.app/",
+    // The product itself is pre-release. What is public is the investor
+    // experience we built for it, so the link says so rather than implying the
+    // reader is about to open a trading console.
+    linkLabel: "View the DRK product story",
+    status: "In development",
+    metric: "Wallets · Pools · Execution · Reconciliation · Reporting",
+    tags: [
+      "Fair value",
+      "Liquidity",
+      "Risk",
+      "Execution",
+      "Settlement",
+      "Reporting",
+    ],
+    stack: ["TypeScript", "React", "EVM", "Trading infrastructure"],
+    logo: { src: "/work/logos/drk.svg", alt: "DRK", square: true },
+    media: {
+      kind: "film",
+      src: "/work/video/drk-demo.mp4",
+      poster: "/work/video/drk-demo-open.jpg",
+      still: "/work/video/drk-demo.jpg",
+      alt: "A recording of the DRK console: the monitoring pipeline, rolling market state, participants and concentration, cross-pool comparison and the managed trade chart.",
+      aspect: 16 / 9,
+    },
+    // No partner strip. The one organisation the work names is a mapped
+    // deployment target with no mandate or agreement in place, and a logo under
+    // a product reads as an endorsement whatever the caption says.
+  },
+  {
+    index: "02",
     kind: "Payments infrastructure",
     name: "BNBPay",
     pitch: "Programmable payment infrastructure for merchants, platforms and AI agents.",
@@ -159,7 +255,14 @@ export const projects: readonly Project[] = [
     stack: ["Solidity", "TypeScript", "Next.js", "BNB Chain"],
     logo: { src: "/work/logos/bnbpay-mark.png", alt: "BNBPay", aspect: 854 / 488 },
     media: {
-      kind: "phones",
+      kind: "film",
+      src: "/work/video/bnbpay-demo.mp4",
+      poster: "/work/video/bnbpay-demo-open.jpg",
+      still: "/work/video/bnbpay-demo.jpg",
+      alt: "A recording of BNBPay: a gift card is configured, funded and issued, ending on a created card with its QR code and shareable claim link.",
+      aspect: 1280 / 958,
+      // The recording is of the desktop app; the product's real surface is a
+      // phone. The film carries the flow, the devices carry the form factor.
       screens: [
         {
           src: "/work/bnbpay-invoice.png",
@@ -180,7 +283,7 @@ export const projects: readonly Project[] = [
     },
   },
   {
-    index: "02",
+    index: "03",
     kind: "Merchant infrastructure",
     name: "Pepay",
     pitch: "Multi-chain payment infrastructure built for modern commerce.",
@@ -200,9 +303,45 @@ export const projects: readonly Project[] = [
     stack: ["React", "TypeScript", "Solana", "BNB Chain"],
     logo: { src: "/work/logos/pepay.png", alt: "Pepay", square: true },
     media: {
-      kind: "plate",
-      src: "/work/pepay.jpg",
-      alt: "The Pepay merchant dashboard showing settled payment volume, transaction counts, success rate, auto-settlement and the supported asset and network lists.",
+      kind: "film",
+      src: "/work/video/pepay-reel.mp4",
+      poster: "/work/video/pepay-reel-open.jpg",
+      still: "/work/video/pepay-reel.jpg",
+      alt: "The Pepay product reel: the mark resolves out of light, the supported networks assemble around it and the line 'USD1 lives on-chain' lands.",
+      aspect: 16 / 9,
+    },
+    apps: {
+      label: "The Pepay ecosystem",
+      items: [
+        {
+          name: "Pepay Merchants",
+          summary: "Business dashboard",
+          src: "/work/apps/app-logo-pepay-merchants.png",
+        },
+        {
+          name: "Pepay API",
+          summary: "Developer tools",
+          src: "/work/apps/app-logo-pepay-api.png",
+        },
+        {
+          name: "Pepay Commerce",
+          summary: "Buy Amazon products with crypto",
+          src: "/work/apps/app-logo-pepay-commerce1.png",
+          soon: true,
+        },
+        {
+          name: "Pepay Commerce 5",
+          summary: "Shop with AI, pay with crypto",
+          src: "/work/apps/app-logo-pepay-commerce-5.png",
+          soon: true,
+        },
+        {
+          name: "Grab Me a Slice",
+          summary: "Support creators",
+          src: "/work/apps/app-logo-pepay-grab.png",
+          soon: true,
+        },
+      ],
     },
     partners: {
       label: "Accelerated by",
@@ -214,7 +353,7 @@ export const projects: readonly Project[] = [
     },
   },
   {
-    index: "03",
+    index: "04",
     kind: "Sports media platform",
     name: "Combat Reviews",
     pitch: "Every fight that matters, in one place.",
@@ -234,9 +373,12 @@ export const projects: readonly Project[] = [
     stack: ["Next.js", "TypeScript", "Postgres", "Prisma"],
     logo: { src: "/work/logos/combat-reviews.png", alt: "Combat Reviews", aspect: 507 / 350 },
     media: {
-      kind: "plate",
-      src: "/work/combat-reviews-showcase-v2.png",
-      alt: "Combat Reviews platform showing combat-sports event discovery on tablet and event schedule and predictions on mobile.",
+      kind: "film",
+      src: "/work/video/combat-demo.mp4",
+      poster: "/work/video/combat-demo-open.jpg",
+      still: "/work/video/combat-demo.jpg",
+      alt: "A recording of Combat Reviews: the event feed, a full fight card and the rankings moving past under the main event.",
+      aspect: 1280 / 592,
     },
     partners: {
       label: "Official partners",
@@ -248,7 +390,36 @@ export const projects: readonly Project[] = [
     },
   },
   {
-    index: "04",
+    index: "05",
+    kind: "Property development",
+    name: "Linton Villas",
+    pitch: "An investment platform for 38 private villas in South Lombok.",
+    summary:
+      "A digital sales experience built to turn a property development into an investable proposition for overseas buyers — combining the masterplan, four villa types, floor plans, financial projections, facilities, an eight-minute film and the full prospectus into one guided narrative designed to build conviction before an investor ever visits the site.",
+    href: "https://lintonvillas.vercel.app",
+    status: "Live",
+    metric: "38 villas · four types · delivery scheduled for early 2028",
+    tags: [
+      "38-villa development",
+      "Investment presentation",
+      "Masterplan & villa types",
+      "Financial projections",
+      "Interactive property experience",
+      "Investor prospectus",
+    ],
+    stack: ["Strategy", "UX/UI", "Next.js", "Interactive media"],
+    // Linton sets its name in type and has no mark. See the `logo` field.
+    media: {
+      kind: "film",
+      src: "/work/video/linton-hero.mp4",
+      poster: "/work/video/linton-hero-open.jpg",
+      still: "/work/video/linton-hero.jpg",
+      alt: "An aerial pass over Linton Villas: the villa rows, the communal pool and the gardens, with the South Lombok coast beyond the development.",
+      aspect: 16 / 9,
+    },
+  },
+  {
+    index: "06",
     kind: "Enterprise AI",
     name: "Noise",
     pitch: "An AI-powered communication and knowledge system for organisations.",
