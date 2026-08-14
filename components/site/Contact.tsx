@@ -56,7 +56,7 @@ export function Contact() {
             <TextReveal
               as="h2"
               className="type-h2 mt-8 -ml-[0.04em] max-w-[16ch]"
-              lines={["Have something", "worth building?"]}
+              lines={[...contact.headline]}
             />
           </div>
 

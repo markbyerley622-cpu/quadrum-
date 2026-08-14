@@ -590,7 +590,7 @@ export const process = [
 
 export const people = {
   act: "IV · The studio",
-  headline: "The people you meet are the people who build",
+  headline: ["The people you meet", "are the people", "who build"],
   body: "Strategy, design and engineering decisions stay close to the people building the product, keeping communication direct and execution accountable.",
   refusals: [
     "No pyramid staffing",
@@ -667,7 +667,13 @@ export const contact = {
   // which is a strange thing to make someone do at the point of contact. This
   // asks about the work instead, and answers the question the whole page has
   // been arguing: complicated is the qualification, not a disqualification.
-  headline: "Something complicated?",
+  // An array because `TextReveal` masks and raises one line at a time, and the
+  // break has to be authored rather than left to wrapping. Kept here rather than
+  // in the component: this file claims to be the single source of site copy, and
+  // a headline that lives in the markup is a headline nobody finds when they
+  // come here to change it. That is not hypothetical — the previous wording sat
+  // in `Contact.tsx` while a different, unused string sat in this file.
+  headline: ["Something", "complicated?"],
   body: "Tell us what you're building, where it stands and what you need next. We read every enquiry ourselves and respond within two working days.",
   cta: "Discuss a project",
   form: {

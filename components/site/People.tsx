@@ -42,7 +42,7 @@ export function People() {
             <TextReveal
               as="h2"
               className="type-h2 mt-7 -ml-[0.04em] max-w-[20ch]"
-              lines={["The people you meet", "are the people", "who build"]}
+              lines={[...people.headline]}
             />
             <Reveal delay={0.2}>
               <p className="type-body measure mt-8 text-ink-70">{people.body}</p>
