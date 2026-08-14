@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { PhoneMockup } from "@/components/work/PhoneMockup";
 import { PhonePair } from "@/components/work/PhonePair";
 import { ProductFilm } from "@/components/work/ProductFilm";
 import type { Project } from "@/lib/content";
@@ -28,7 +29,7 @@ import type { ReactNode } from "react";
  *     Pepay      the camera dollies past a floating interface
  *     DRK        and pushes into a console wider than the window
  *     BNBPay     which opens out — desktop and devices separating across frame
- *     Combat     panning hard along a broadcast wall
+ *     Combat     narrowing to a single phone standing in the dark
  *     Linton     until the aerial takes the whole window and absorbs the motion
  *     Noise      and everything comes to rest on one quiet surface
  *
@@ -41,17 +42,31 @@ export type ShotName =
   | "float"
   | "console"
   | "travel"
-  | "wall"
+  | "handset"
   | "aerial"
   | "surface";
 
-/** Where the product's name and pitch sit relative to its shot. */
+/**
+ * Where the product's name and pitch sit relative to its shot.
+ *
+ * There was a third, `overlay`, which set the pitch in bone across the foot of
+ * the footage itself under a scrim. It is gone, and the order it went in is the
+ * argument against it: DRK first, because its console is the densest frame in
+ * the act and the scrim needed to carry type across it buried the product; then
+ * Combat, whose recording ends on a fight card, a rankings table and a partner
+ * marquee at once and needed a near-opaque lower third; then Linton, which
+ * genuinely worked and lost the composition its overlay depended on when the
+ * shots stopped bleeding to the window.
+ *
+ * Three products, three separate reasons, one conclusion: type over a running
+ * product is a fight between the two things the block exists to show. If it is
+ * ever reintroduced, it needs footage with somewhere quiet to put a sentence —
+ * and none of these six has one.
+ */
 export type FrameName =
   /** On paper above the well. The film is the answer to a question already asked. */
   | "editorial"
-  /** In bone at the foot of the shot itself, over the footage. */
-  | "overlay"
-  /** In a column of dark beside the shot, which runs off the far edge. */
+  /** In a column of dark beside the shot. */
   | "sidebar";
 
 /**
@@ -78,18 +93,25 @@ export const STAGING: Record<string, { shot: ShotName; frame: FrameName }> = {
   "02": { shot: "console", frame: "editorial" },
   // BNBPay — money moving. Two objects cross the frame in opposite directions.
   "03": { shot: "travel", frame: "editorial" },
-  // Combat Reviews — the most aggressive treatment in the act. A broadcast
-  // strip, edge to edge, panning faster than anything around it.
+  // Combat Reviews — one phone, standing in the dark.
   //
-  // Copy on paper above, for the same reason as DRK and more so. This
-  // recording ends on a fight card, a rankings table and a partner marquee all
-  // at once — the densest, brightest frame any of these six products produces
-  // — and the scrim needed to make a pitch legible over it had to be near
-  // opaque across the bottom half of the strip. The type won and the wall lost.
-  "04": { shot: "wall", frame: "editorial" },
+  // This was a broadcast wall: a 2.16:1 strip of the desktop site running past
+  // both edges of the window, and it was the boldest composition in the act.
+  // It was also showing the wrong thing. The product's real surface is the app,
+  // the capture that exists is of the app, and it is portrait — so the honest
+  // presentation is the device it was recorded on. It is now the only vertical
+  // shot on the page, which does more for the act's variety than the widest
+  // horizontal one did.
+  "04": { shot: "handset", frame: "editorial" },
   // Linton — the cinematic reset. The camera is already inside this footage, so
   // the page does almost nothing and lets the drone do the travelling.
-  "05": { shot: "aerial", frame: "overlay" },
+  //
+  // This was the last overlaid header in the act and it was the one that
+  // worked: a dark canopy under a soft scrim carries bone type comfortably. It
+  // moved to paper for a structural reason rather than a legibility one — the
+  // aerial no longer fills the window, and a pitch pinned to the bottom of a
+  // well whose film stops short of it is copy floating in void.
+  "05": { shot: "aerial", frame: "editorial" },
   // Noise — an operating environment. A desktop surface running off the edge of
   // the window, and the one shot in the act that comes to rest.
   "06": { shot: "surface", frame: "sidebar" },
@@ -98,7 +120,7 @@ export const STAGING: Record<string, { shot: ShotName; frame: FrameName }> = {
 export function ProductWell({
   project,
   shot,
-  /** Rendered inside the well for `overlay` and `sidebar` frames; null otherwise. */
+  /** Rendered inside the well for the `sidebar` frame; null otherwise. */
   header,
   priority = false,
 }: {
@@ -189,19 +211,44 @@ export function ProductWell({
         </div>
       );
 
-    /* ------------------------------------------------------------- 04 · wall
-       A broadcast strip. No frame, no inset, no softening and no margin: the
-       edges of the window are the edges of the film. It pans harder and faster
-       than anything else in the act, which is the correct register for a
-       product about fights. */
-    case "wall":
+    /* ---------------------------------------------------------- 04 · handset
+       One phone, lit from behind, running the app. The narrowest shot in an act
+       of very wide ones, and the contrast is the point: after a console that
+       fills the window and a payments scene that crosses it, a single device
+       standing on its own reads as a change of subject before a word is read.
+
+       No plate treatment on this one — see `.shot--handset`. The device draws
+       its own frame, and putting a rounded border round a phone is a border
+       round a border. */
+    case "handset":
       return (
-        // No scrim, because there is no longer any type over the strip to
-        // make legible. The one this carried was near opaque across the bottom
-        // half — enough to read a pitch across a results table, and enough to
-        // take the bottom half of the wall with it.
-        <div className="well well--wall">
-          <div className="shot shot--wall">{film}</div>
+        <div className="well well--handset">
+          <div className="shot shot--handset">
+            {/* Ambient light behind the device. The only place on the page that
+                hints at the product's own colour, and the reason the phone reads
+                as standing in a space rather than pasted onto a dark band. */}
+            <span
+              aria-hidden
+              className="pointer-events-none absolute left-1/2 top-1/2 h-[72%] w-[190%] -translate-x-1/2 -translate-y-1/2
+                         rounded-[50%] bg-[radial-gradient(closest-side,rgb(176_73_42/0.16),transparent_70%)] blur-2xl"
+            />
+            {media.kind === "film" ? (
+              <PhoneMockup
+                film={{
+                  src: media.src,
+                  poster: media.poster,
+                  still: media.still,
+                }}
+                alt={media.alt}
+                // No idle bob. The shot already moves with the scroll, and a
+                // device floating on its own under a travelling camera reads as
+                // a widget rather than as a thing in the scene.
+                drift={0}
+                priority={priority}
+                className="relative z-[1] w-[var(--handset)]"
+              />
+            ) : null}
+          </div>
         </div>
       );
 
@@ -214,9 +261,7 @@ export function ProductWell({
     case "aerial":
       return (
         <div className="well well--aerial">
-          {header}
           <div className="shot shot--aerial">{film}</div>
-          <Scrim weight="soft" />
         </div>
       );
 
@@ -239,36 +284,4 @@ export function ProductWell({
         </div>
       );
   }
-}
-
-/**
- * The ground the overlaid copy stands on.
- *
- * Only above `lg`, and only where the copy is actually over the footage. Below
- * that the name and pitch sit above the film in the dark band rather than on
- * top of it — a scrim exists to make type legible over a picture, and darkening
- * a 393px-wide film to make room for type that is not there any more is just
- * losing the picture.
- *
- * Three weights, because a scrim is sized to the frame it has to survive, not
- * to a house style. Linton's aerial is a dark canopy and needs almost nothing;
- * Combat's recording ends on a lit results table and needs almost everything.
- * A single weight tuned for the average would be too heavy for one and too
- * light for the other — and too light is not a stylistic miss, it is a pitch
- * the reader cannot read.
- */
-function Scrim({ weight = "base" }: { weight?: "soft" | "base" | "heavy" }) {
-  const grounds = {
-    soft: "bg-[linear-gradient(to_top,rgb(16_15_13/0.78)_0%,rgb(16_15_13/0.34)_20%,transparent_50%)]",
-    base: "bg-[linear-gradient(to_top,rgb(16_15_13/0.92)_0%,rgb(16_15_13/0.55)_22%,rgb(16_15_13/0.12)_44%,transparent_64%)]",
-    heavy:
-      "bg-[linear-gradient(to_top,rgb(16_15_13/0.98)_0%,rgb(16_15_13/0.95)_24%,rgb(16_15_13/0.78)_38%,rgb(16_15_13/0.3)_54%,transparent_74%)]",
-  } as const;
-
-  return (
-    <span
-      aria-hidden
-      className={`pointer-events-none absolute inset-0 z-[1] hidden lg:block ${grounds[weight]}`}
-    />
-  );
 }

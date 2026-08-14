@@ -478,13 +478,18 @@ export const projects: readonly Project[] = [
     ],
     stack: ["Next.js", "TypeScript", "Postgres", "Prisma"],
     logo: { src: "/work/logos/combat-reviews.png", alt: "Combat Reviews", aspect: 507 / 350 },
+    /**
+     * The only portrait capture in the act, and the only product shown inside a
+     * device. It replaced a landscape recording of the desktop site — which was
+     * a good-looking shot of the wrong surface. This product is used on a phone.
+     */
     media: {
       kind: "film",
       src: "/work/video/combat-demo.mp4",
       poster: "/work/video/combat-demo-open.jpg",
       still: "/work/video/combat-demo.jpg",
-      alt: "A recording of Combat Reviews: the event feed, a full fight card and the rankings moving past under the main event.",
-      aspect: 1280 / 592,
+      alt: "The Combat Reviews app running on a phone: the upcoming events feed, then an ONE Championship fight night with its card, odds and a locked quick pick on the main event.",
+      aspect: 258 / 560,
     },
     partners: {
       label: "Official partners",

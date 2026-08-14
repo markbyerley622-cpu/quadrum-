@@ -351,41 +351,51 @@
     padding-block-end: var(--spacing-gutter);
   }
 
-  /* The moving object inside it.
+  /* The moving object inside it — a framed plate, at every size.
 
-     BELOW `lg` THIS IS THE WHOLE COMPOSITION, and it is framed rather than
-     bled. The films used to run edge to edge on a phone, which sounds like the
-     bolder choice and was not: a dark capture meeting a dark band with no edge
-     between them has no boundary at all, so the film stopped being an object
-     and became a patch of the page that happened to move. Inset by the page
-     gutter with a hairline round it, each one reads as a plate on a dark
-     ground — the same object the desktop compositions are made of, at the only
-     size a 393px screen has for it.
+     THE SHOTS USED TO BLEED. Each one was an aperture cut through the paper,
+     running past the window on at least one side: the console at 112vw, the
+     broadcast wall at 122vw, the aerial filling the viewport outright. It made
+     the films enormous and it made them edgeless, and edgeless is what
+     eventually reads as a hole in the page rather than as a thing on it.
 
-     Above `lg` the inset and the border are both dropped: those shots are
-     apertures cut through the page and bleed past the window on at least one
-     side, so a border would be drawn somewhere nobody can see it. Three of them
-     re-earn a hairline individually, where the shot genuinely floats. */
+     Every shot now sits inside the window with a soft corner and a hairline,
+     which costs a few percent of scale and buys an object. Two consequences
+     worth knowing before editing any of the geometry below:
+
+      1. NOTHING MAY EXCEED THE VIEWPORT. A radius on a corner that is clipped
+         off-screen is a radius nobody sees, and the shot ends up rounded on one
+         side and guillotined on the other. Every width below is bounded so the
+         whole plate is visible.
+      2. THE RADIUS NEEDS THE OVERFLOW. `border-radius` alone rounds the box;
+         the film inside is an absolutely-positioned `<video>` that will happily
+         paint over the corners without `overflow: hidden`.
+
+     The border is an inset shadow rather than a real border because a border
+     would join the box model and change every width above by two pixels, and
+     rather than an `outline` because an inset shadow is the one of the three
+     that follows the radius identically everywhere. */
   .shot {
     position: relative;
     width: auto;
     margin-inline: var(--spacing-gutter);
-    outline: 1px solid var(--color-rule-invert);
-    outline-offset: -1px;
+    overflow: hidden;
+    border-radius: clamp(0.875rem, 1.5vw, 1.625rem);
+    box-shadow: inset 0 0 0 1px rgb(237 234 226 / 0.22);
   }
 
-  /* Phone crops. Two of the six are re-framed rather than shrunk, because a
-     recording that is legible at 1440px is not automatically legible at 393px
-     and "the same shot, smaller" is the failure this whole act is a response
-     to. Combat's recording is 2.16:1 — full width on a phone it is a 182px
-     letterbox band in which a fight card is four millimetres tall — so it is
-     cropped to 16:9 and the reader gets the centre of the card at nearly twice
-     the size. Linton's aerial goes to 4:3 for the opposite reason: nothing in
-     it needs to be read, so the extra height is pure presence.
+  /* Phone crops. Linton's aerial is re-framed rather than shrunk, because a
+     recording legible at 1440px is not automatically legible at 393px and "the
+     same shot, smaller" is the failure this whole act is a response to. It goes
+     to 4:3 because nothing in it needs to be READ, so the extra height on a
+     phone is pure presence.
 
      DRK is deliberately NOT cropped. Cutting the sides off a trading console
      removes the panels that make it a trading console, and a smaller honest
-     frame beats a larger misleading one. */
+     frame beats a larger misleading one.
+
+     Combat is not in this list at all. Its capture is portrait and it renders
+     inside a device, which is the same object at every width. */
   .shot--float,
   .shot--console {
     aspect-ratio: 16 / 9;
@@ -393,11 +403,24 @@
   .shot--travel {
     aspect-ratio: 1280 / 958;
   }
-  .shot--wall {
-    aspect-ratio: 16 / 9;
-  }
   .shot--aerial {
     aspect-ratio: 4 / 3;
+  }
+
+  /* The handset is the one shot that is not a plate. It is a device: it draws
+     its own frame, so a rounded border round it would be a border round a
+     border, and it must not clip, because the mockup's rim, side buttons and
+     drop shadow all live outside its own box. */
+  .shot--handset {
+    display: flex;
+    justify-content: center;
+    aspect-ratio: auto;
+    margin-inline: 0;
+    overflow: visible;
+    border-radius: 0;
+    box-shadow: none;
+    padding-block: 2.75rem;
+    --handset: min(15rem, 62vw);
   }
   .shot--surface {
     aspect-ratio: 1280 / 612;
@@ -419,13 +442,11 @@
     }
 
     .shot {
-      /* The phone's frame comes off. Every composition below bleeds past the
-         window on at least one side, so an inset and a border would be drawn
-         where nobody can see them. Only the shots that genuinely float — float,
-         travel, surface — take an edge back, individually. */
+      /* The phone's gutter margin comes off — every composition below sets its
+         own width — but the radius and the hairline stay. They are the frame,
+         at every size. */
       width: 100%;
       margin-inline: 0;
-      outline: none;
       /* Six composited layers, promoted once rather than on first scroll. */
       will-change: transform;
     }
@@ -455,14 +476,6 @@
       flex: none;
       transform: translate3d(0, calc(var(--c) * -2.6rem), 0)
         scale(calc(1 + var(--c) * 0.05));
-      /* The one framed object in the act, and it needs the hairline: Pepay's
-         reel opens on near-black, so a black film floating on a black ground
-         has no edge and the composition disappears — the reader sees an empty
-         well rather than a product held in space. A drop shadow does nothing
-         here for the same reason. One pixel of bone, no radius: a frame, not a
-         card. Every other shot bleeds to the window and needs no edge. */
-      outline: 1px solid var(--color-rule-invert);
-      outline-offset: -1px;
     }
 
     /* 02 · CONSOLE — DRK.
@@ -473,15 +486,15 @@
        console takes before the crop starts eating its chrome. */
     .well--console {
       display: flex;
-      /* Fixed, not `min-height`: the console has to be able to run off the top
-         and bottom of the window as well as the sides, and a well that grows
-         to fit its shot can only ever letterbox it. */
       height: 100vh;
       align-items: center;
       justify-content: center;
     }
     .shot--console {
-      width: 112vw;
+      /* Was 112vw, running off both edges. Still the widest plate in the act
+         and still the one that only ever pushes further in — it just stops at
+         the window now, because a corner clipped off-screen cannot be round. */
+      width: min(94vw, 92rem);
       flex: none;
       transform: translate3d(0, calc(var(--c) * -2.2rem), 0)
         scale(calc(1.02 + var(--c) * 0.06));
@@ -502,8 +515,6 @@
     .shot--travel {
       width: min(54vw, 60rem);
       flex: none;
-      outline: 1px solid var(--color-rule-invert);
-      outline-offset: -1px;
       transform: translate3d(calc(var(--c) * -3.5rem), calc(var(--c) * -1.5rem), 0)
         scale(calc(1 + var(--c) * 0.03));
     }
@@ -514,27 +525,33 @@
       transform: translate3d(calc(var(--c) * 6rem), calc(var(--c) * -4rem), 0);
     }
 
-    /* 04 · WALL — Combat Reviews.
-       A broadcast strip: no inset, no softening, no margin. The edges of the
-       window are the edges of the film, and it pans harder and faster than
-       anything else in the act — which is the correct register for a product
-       about fights, and the reason it must not be shot like DRK. */
-    .well--wall {
+    /* 04 · HANDSET — Combat Reviews.
+       One phone, lit from behind, running the app. The narrowest shot in an act
+       of very wide ones, and the contrast is the whole point: after a console
+       that fills the window and a payments scene that crosses it, a single
+       device standing on its own is a change of subject read before a word.
+
+       This was a broadcast strip at 122vw, clipped on all four sides, and it
+       was the boldest composition here. It was also a capture of the desktop
+       site, and this product is used on a phone. */
+    .well--handset {
       display: flex;
-      height: 82vh;
+      min-height: 92vh;
       align-items: center;
       justify-content: center;
     }
-    .shot--wall {
-      flex: none;
-      /* Back to the recording's own 2.16:1 — the phone crop above exists only
-         because 393px cannot carry it. Sized so the strip is TALLER than the
-         well it sits in: a broadcast wall has no top or bottom edge, and a
-         narrower shot left bands of void that read as letterboxing. */
-      aspect-ratio: 1280 / 592;
-      width: 122vw;
-      transform: translate3d(calc(var(--c) * 5rem), 0, 0)
-        scale(calc(1.02 + var(--c) * 0.05));
+    .shot--handset {
+      /* Sized to the CAPTURE, not to the window. The source is 258px across, so
+         a device much wider than that is showing an upscale — and a phone this
+         size against a screen-wide well is exactly the change of scale the shot
+         exists for. */
+      --handset: min(17.5rem, 26vw);
+      padding-block: 0;
+      /* Still the fastest gesture in the act, which is the right register for a
+         product about fights. It is carried by one small object crossing a
+         large frame now, instead of a huge one panning inside it. */
+      transform: translate3d(calc(var(--c) * 4.5rem), calc(var(--c) * -3rem), 0)
+        scale(calc(1 + var(--c) * 0.05));
     }
 
     /* 05 · AERIAL — Linton Villas.
@@ -543,14 +560,19 @@
        add, so the page adds one slow settle and gets out of the way. It is
        also the act's reset: after four interfaces, a landscape. */
     .well--aerial {
+      display: flex;
       height: 100vh;
+      align-items: center;
+      justify-content: center;
     }
     .shot--aerial {
-      position: absolute;
-      inset: 0;
-      width: auto;
-      aspect-ratio: auto;
-      transform: scale(calc(1.05 - var(--c) * 0.03));
+      /* Filled the window edge to edge, which was the most cinematic moment on
+         the page and the one shot that could not take a frame. As a plate it
+         keeps the slow settle and the footage keeps doing the travelling. */
+      width: min(94vw, 92rem);
+      aspect-ratio: 16 / 9;
+      flex: none;
+      transform: scale(calc(1.02 - var(--c) * 0.025));
     }
 
     /* 06 · SURFACE — Noise.
@@ -577,13 +599,15 @@
          constant as the window narrowed while the bleed beside it shrank with
          it — so the gap between the surface and the copy closed to 24px at
          1280 and would have crossed it below that. A vw basis makes the film
-         and the space it leaves shrink together. */
-      width: min(74vw, 76rem);
+         and the space it leaves shrink together.
+
+         It used to run off the right edge of the window. It now stops at the
+         gutter like everything else, and the copy still has the dark to its
+         left — the composition was never the bleed, it was the asymmetry. */
+      width: min(56vw, 52rem);
       height: auto;
-      margin-inline: auto -13vw;
+      margin-inline: auto var(--spacing-gutter);
       flex: none;
-      outline: 1px solid var(--color-rule-invert);
-      outline-offset: -1px;
       transform: translate3d(calc(var(--c) * -2rem), 0, 0)
         scale(calc(1 + var(--c) * 0.012));
     }

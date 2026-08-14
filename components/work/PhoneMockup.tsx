@@ -2,9 +2,12 @@
 
 import Image from "next/image";
 import { motion } from "motion/react";
+import { ProductFilm } from "@/components/work/ProductFilm";
 
 /**
  * A phone, drawn in CSS rather than shipped as a PNG bezel.
+ *
+ * Holds either a screenshot or a running film — see `film` below.
  *
  * Drawing it means the frame scales with the layout, stays crisp on every
  * display, and costs nothing to download. The construction is four nested
@@ -28,14 +31,24 @@ const FLOAT = { duration: 9, ease: "easeInOut" as const, repeat: Infinity };
 export function PhoneMockup({
   src,
   alt,
+  /**
+   * A recording to run in the screen instead of a still.
+   *
+   * The frame was built for screenshots and this is the one product whose
+   * capture is of the app itself, on a phone, in portrait — so the honest way
+   * to show it is running inside the device it was recorded on rather than
+   * letterboxed into a landscape plate. When present, `src` is ignored.
+   */
+  film,
   /** Travel of the idle float, in px. Under 12 or it stops reading as "floating". */
   drift = 8,
   delay = 0,
   priority = false,
   className = "",
 }: {
-  src: string;
+  src?: string;
   alt: string;
+  film?: { src: string; poster: string; still: string };
   drift?: number;
   delay?: number;
   priority?: boolean;
@@ -75,15 +88,28 @@ export function PhoneMockup({
           <div className="relative rounded-[2.4rem] bg-[#070709] p-[5px]">
             {/* Screen */}
             <div className="relative aspect-[9/19.5] w-full overflow-hidden rounded-[2.1rem] bg-void">
-              <Image
-                src={src}
-                alt={alt}
-                fill
-                sizes="(min-width: 1024px) 280px, 45vw"
-                priority={priority}
-                quality={92}
-                className="object-cover object-top"
-              />
+              {film ? (
+                <ProductFilm
+                  src={film.src}
+                  poster={film.poster}
+                  still={film.still}
+                  alt={alt}
+                  priority={priority}
+                  // The capture is 258px across and the screen is about 262 —
+                  // asking for a larger source would be asking for an upscale.
+                  sizes="280px"
+                />
+              ) : src ? (
+                <Image
+                  src={src}
+                  alt={alt}
+                  fill
+                  sizes="(min-width: 1024px) 280px, 45vw"
+                  priority={priority}
+                  quality={92}
+                  className="object-cover object-top"
+                />
+              ) : null}
 
               {/* Dynamic island. Inside the screen, as it is on the device. */}
               <span

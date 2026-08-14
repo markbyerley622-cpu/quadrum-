@@ -68,13 +68,11 @@ export function ProjectShowcase({
       project={project}
       tone={overlaid ? "void" : "paper"}
       className={
-        frame === "overlay"
+        frame === "sidebar"
           ? // Inside the well: stacked at the top of the dark band on a phone,
-            // lifted onto the footage itself above `lg`.
-            "container-page relative z-[2] pt-11 pb-9 lg:absolute lg:inset-x-0 lg:bottom-0 lg:pt-0 lg:pb-[clamp(2.5rem,5vh,4.5rem)]"
-          : frame === "sidebar"
-            ? "container-page relative z-[2] pt-11 pb-9 lg:absolute lg:inset-y-0 lg:left-0 lg:flex lg:max-w-[min(32vw,26rem)] lg:flex-col lg:justify-center lg:pt-0 lg:pb-0"
-            : ""
+            // held in the dark beside the shot above `lg`.
+            "container-page relative z-[2] pt-11 pb-9 lg:absolute lg:inset-y-0 lg:left-0 lg:flex lg:max-w-[min(32vw,26rem)] lg:flex-col lg:justify-center lg:pt-0 lg:pb-0"
+          : ""
       }
     />
   );

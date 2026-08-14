@@ -81,16 +81,24 @@ const jobs = [
     crop: { w: 1250, h: 936, x: 330, y: 0 },
   },
   {
-    from: "combat-demo.mp4",
+    from: "combat-vertical.mp4",
     to: "combat-demo",
-    // Nine seconds, so almost any frame is representative. This one has the
-    // card list populated rather than mid-transition.
+    // The only PORTRAIT source in the set, and the reason the whole spread
+    // changed shape: this is a capture of the Combat Reviews app on a phone,
+    // 258x560, which is 9:19.5 to within a pixel. It replaced a landscape
+    // recording of the desktop site — the product's real surface is the app,
+    // and a desktop capture of it was showing the wrong thing beautifully.
+    //
+    // Ten seconds, and this frame has the main event, the odds and a locked
+    // pick all populated rather than mid-transition.
     poster: 5,
-    crf: 29,
-    // Twenty-two rows off the bottom: the capture caught the browser's link
-    // status bar, and a stray localhost-looking URL across the corner of a
-    // product shot is the sort of detail that makes the rest look unchecked.
-    crop: { w: 1918, h: 888, x: 0, y: 0 },
+    crf: 26,
+    // NATIVE WIDTH, deliberately. The source is 258px across; every other job
+    // here scales DOWN to 1280 from a capture two or three times that. Scaling
+    // this one up would add nothing but bytes, so the delivery width is the
+    // capture width and the phone it renders inside is sized to match — see
+    // `--phone` in PhonePair and the handset shot in globals.css.
+    width: 258,
   },
   {
     from: "linton-hero.mp4",
@@ -201,15 +209,19 @@ function encode({ from, to, crf, crop, start, duration, width = WIDTH }) {
  *
  * Only one of the two is ever fetched by any given reader.
  */
-function stills({ from, to, poster: at, crop }) {
+function stills({ from, to, poster: at, crop, width = WIDTH }) {
   const input = path.join(SRC, from);
 
   // -ss before -i seeks on keyframes, which is fast and accurate enough for a
   // still. 1600 wide because a still is the LCP candidate on these spreads, and
-  // through the same crop as the film so the two cannot disagree.
+  // through the same crop as the film so the two cannot disagree — but never
+  // WIDER than the film itself. The vertical Combat capture is 258px across,
+  // and blowing its stills up to 1600 produced 178KB of upscaled blur to stand
+  // in for a 254KB video.
+  const stillWidth = Math.min(1600, width);
   const grab = (seconds, suffix) => {
     const output = path.join(OUT, `${to}${suffix}.jpg`);
-    ffmpeg(["-ss", String(seconds), "-i", input, "-frames:v", "1", "-vf", filter(crop, 1600), "-q:v", "4", output]);
+    ffmpeg(["-ss", String(seconds), "-i", input, "-frames:v", "1", "-vf", filter(crop, stillWidth), "-q:v", "4", output]);
     console.log(`still  ${to}${suffix}.jpg  t=${seconds}s  ${size(output)}`);
   };
 
