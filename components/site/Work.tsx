@@ -59,7 +59,7 @@ export function Work() {
           <div className="lg:col-span-4 lg:col-start-9 lg:self-end">
             <Reveal delay={0.15}>
               <p className="type-body max-w-[42ch] text-ink-70">
-                Institutional liquidity infrastructure, two payment platforms, a
+                Two payment platforms, institutional liquidity infrastructure, a
                 combat-sports network, a thirty-eight villa development and an
                 enterprise AI workspace. Six products, one standard — and five of
                 them recorded running, rather than described.

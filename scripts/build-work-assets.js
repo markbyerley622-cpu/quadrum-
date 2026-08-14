@@ -13,12 +13,13 @@
  * Requires `sharp`, which Next already installs.
  */
 
+const fs = require("fs");
 const path = require("path");
 const sharp = require(path.join(process.cwd(), "node_modules", "sharp"));
 
 const SRC = path.join(process.cwd(), "assets", "source");
 const OUT = path.join(process.cwd(), "public", "work");
-const src = (name) => path.join(SRC, name);
+const src = (...parts) => path.join(SRC, ...parts);
 const out = (...parts) => path.join(OUT, ...parts);
 
 /**
@@ -174,9 +175,136 @@ async function inkify(from, to, rgb = [20, 19, 15]) {
   console.log("logo   ", to, `${m.width}x${m.height}`, `aspect ${(m.width / m.height).toFixed(3)}`);
 }
 
+/**
+ * Remove an editor's transparency checkerboard that has been exported INTO the
+ * artwork.
+ *
+ * Google's Drive mark arrived with the grey-and-white chequer baked in as a
+ * semi-transparent layer — 95,000 pixels of it, all at about 63% alpha and all
+ * completely desaturated. It went unnoticed for as long as the partner marks
+ * were rendered in greyscale at reduced opacity; the moment they were shown at
+ * full colour and twice the size, the mark had a visible chessboard behind it.
+ *
+ * The test is saturation, not alpha. The chequer is grey by definition and the
+ * logo is not, so any partially-transparent pixel with almost no colour in it is
+ * chequer and is cleared. In this file that is 95,050 pixels against 71 genuinely
+ * low-saturation edge pixels, which is about as clean a separation as an image
+ * ever offers.
+ *
+ * CLEARING ALPHA IS NOT ENOUGH, and this is the part that costs an hour if you
+ * do not know it. A pixel at alpha 0 still carries RGB, and this file's were the
+ * chequer's own 238/255 greys alternating in a seven-pixel grid. Every measure
+ * of the file then says it is clean — the alpha is zero, the histogram is clean
+ * — and the chequer still appears in the browser at about 4% contrast, because
+ * the RGB under transparent pixels survives resizing and re-encoding and gets
+ * averaged back in. Measured against its neighbours: Drive's rendered background
+ * varied by 10 levels of luminance where Slack, Teams and Dropbox varied by 0.
+ *
+ * So the alpha goes entirely. The mark is composited onto white and written with
+ * no alpha channel at all, which makes the whole class of bug impossible — there
+ * is no longer anything hidden to leak. Nothing is lost: every mark in this row
+ * renders under `mix-blend-multiply`, which is precisely the operation that
+ * drops a white ground into the surface beneath it.
+ */
+async function dechequer(name, { alpha = 250, saturation = 12 } = {}) {
+  const { data, info } = await sharp(src("partners", name))
+    .ensureAlpha()
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+
+  let cleared = 0;
+  let flattened = 0;
+
+  for (let i = 0; i < data.length; i += 4) {
+    if (data[i + 3] > 0 && data[i + 3] < alpha) {
+      const max = Math.max(data[i], data[i + 1], data[i + 2]);
+      const min = Math.min(data[i], data[i + 1], data[i + 2]);
+      if (max - min < saturation) {
+        data[i + 3] = 0;
+        cleared++;
+      }
+    }
+
+    if (data[i + 3] === 0) {
+      data[i] = 255;
+      data[i + 1] = 255;
+      data[i + 2] = 255;
+      flattened++;
+    }
+  }
+
+  await sharp(data, { raw: { width: info.width, height: info.height, channels: 4 } })
+    .flatten({ background: "#ffffff" })
+    .png({ compressionLevel: 9 })
+    .toFile(out("partners", name));
+
+  console.log(
+    "partner",
+    name,
+    `cleared ${cleared} chequer px, flattened ${flattened} transparent px, alpha dropped`,
+  );
+}
+
+/**
+ * Right-size every partner mark, so none of them needs the image optimizer.
+ *
+ * They are shown at about 50–90px and two of them arrived as 300KB PNGs, which
+ * is most of a megabyte of logo on a page whose entire film budget is seven. At
+ * 320px they cover the largest display size at 3x and cost a few kilobytes each,
+ * and at that point running them through `/_next/image` at request time buys
+ * nothing — so the components render them `unoptimized` and what is committed is
+ * exactly what the browser receives.
+ *
+ * That last part is the real reason for this step. Every transform between the
+ * file and the screen is somewhere an artifact can be introduced or a stale
+ * variant cached, and `noise-google-drive.png` proved it: the chequer survived
+ * three correct fixes to the source because the optimizer kept serving a cached
+ * encode of the old one. Removing the transform removes the question.
+ *
+ * SVG is passed through untouched — a vector has no size to reduce.
+ */
+async function partnerMarks({ edge = 320 } = {}) {
+  const dir = path.join(SRC, "partners");
+  if (!fs.existsSync(dir)) return;
+
+  for (const name of fs.readdirSync(dir)) {
+    if (name.endsWith(".svg")) continue;
+
+    const image = sharp(src("partners", name));
+    const meta = await image.metadata();
+
+    // Flatten onto white for the same reason as `dechequer`: these render under
+    // `mix-blend-multiply`, so a white ground is invisible, and an alpha channel
+    // is a place for invisible colour to hide.
+    let pipeline = image
+      .resize({ width: edge, height: edge, fit: "inside", withoutEnlargement: true })
+      .flatten({ background: "#ffffff" });
+
+    pipeline = name.endsWith(".webp")
+      ? pipeline.webp({ quality: 90 })
+      : pipeline.png({ compressionLevel: 9 });
+
+    const buffer = await pipeline.toBuffer();
+    fs.writeFileSync(out("partners", name), buffer);
+
+    const after = await sharp(buffer).metadata();
+    console.log(
+      "partner",
+      name.padEnd(24),
+      `${meta.width}x${meta.height} -> ${after.width}x${after.height}`,
+      `${(buffer.length / 1024).toFixed(0)}KB`,
+    );
+  }
+}
+
 (async () => {
   await plates();
   await invoicePhone();
   await giftCardPhone();
   await inkify("bnbpay-mark.png", "bnbpay-mark.png");
+  // Runs before the resize: it works on the full-resolution mark, where the
+  // chequer is unambiguous, and writes back into the source pipeline.
+  await dechequer("noise-google-drive.png");
+  fs.copyFileSync(out("partners", "noise-google-drive.png"), src("partners", "noise-google-drive.png"));
+  await partnerMarks();
 })();

@@ -149,6 +149,13 @@ export type Project = {
    * lands on something else has been misled, and this act cannot afford that.
    */
   linkLabel?: string;
+  /**
+   * A second link, for a product with somewhere else public worth going — its
+   * own account, usually. It renders as an outline beside the filled primary,
+   * never instead of it: the live product is the claim this act is making, and
+   * a social account is a place to go once you already believe it.
+   */
+  secondary?: { label: string; href: string };
   /** Shown where the link would be. Says why, when there is no link. */
   status: string;
   /** One hard number or fact taken from the running product. */
@@ -188,108 +195,29 @@ export type Project = {
 /**
  * Order is an argument, not a catalogue.
  *
- * DRK leads. It is the hardest problem in the set and the only one that is a
- * category rather than a product — infrastructure for assets that are legally
- * forbidden from using the rails the rest of this industry runs on. It is also
- * the best film we have: a working institutional console, and the spread the
- * reader spends longest inside. BNBPay follows because it is the densest piece
- * of engineering here and the only product shown as both film and the thing it
- * actually is, a phone in someone's hand. Noise closes because it is the one
- * product with nothing public to open.
+ * Pepay leads because it is the most checkable thing here. It is the only
+ * product carrying settled volume, transaction counts and paying wallets — real
+ * numbers from a running system — and it arrives with three accelerator marks
+ * and five sibling apps on the same infrastructure. A reader who believes one
+ * spread in this act will believe that one, and everything after it is argued
+ * to someone who already has.
+ *
+ * DRK follows as the hardest problem in the set and the only one that is a
+ * category rather than a product. BNBPay is the densest piece of engineering
+ * here and the only product shown as both film and the thing it actually is, a
+ * phone in someone's hand. Noise closes because it is the one product with
+ * nothing public to open.
  */
 export const projects: readonly Project[] = [
   {
     index: "01",
-    kind: "Institutional liquidity infrastructure",
-    name: "DRK",
-    pitch: "Market infrastructure for making real-world assets liquid.",
-    summary:
-      "Tokenisation solved issuance. It did not solve liquidity. DRK is building the operating layer between tokenised assets and institutional markets — bringing fair value, liquidity, risk, execution and settlement into one system designed to determine how an asset should be priced, traded and made liquid.",
-    href: "https://drk-deck.vercel.app/",
-    // The product itself is pre-release. What is public is the investor
-    // experience we built for it, so the link says so rather than implying the
-    // reader is about to open a trading console.
-    linkLabel: "View the DRK product story",
-    status: "In development",
-    metric: "Wallets · Pools · Execution · Reconciliation · Reporting",
-    tags: [
-      "Fair value",
-      "Liquidity",
-      "Risk",
-      "Execution",
-      "Settlement",
-      "Reporting",
-    ],
-    stack: ["TypeScript", "React", "EVM", "Trading infrastructure"],
-    logo: { src: "/work/logos/drk.svg", alt: "DRK", square: true },
-    media: {
-      kind: "film",
-      src: "/work/video/drk-demo.mp4",
-      poster: "/work/video/drk-demo-open.jpg",
-      still: "/work/video/drk-demo.jpg",
-      alt: "A recording of the DRK console: the monitoring pipeline, rolling market state, participants and concentration, cross-pool comparison and the managed trade chart.",
-      aspect: 16 / 9,
-    },
-    // No partner strip. The one organisation the work names is a mapped
-    // deployment target with no mandate or agreement in place, and a logo under
-    // a product reads as an endorsement whatever the caption says.
-  },
-  {
-    index: "02",
-    kind: "Payments infrastructure",
-    name: "BNBPay",
-    pitch: "Programmable payment infrastructure for merchants, platforms and AI agents.",
-    summary:
-      "BNBPay provides gasless, programmable payment infrastructure for merchants, digital platforms and AI agents. Its unified integration supports invoices, subscriptions, gift cards and x402-powered API payments across BNB Chain and opBNB — making on-chain commerce simpler to deploy, operate and scale.",
-    href: "https://bnbpayvercel1.vercel.app",
-    status: "Live",
-    metric: "Six accepted tokens, settled gaslessly on BNB Chain",
-    tags: [
-      "Multi-token",
-      "x402 Flex",
-      "Gasless",
-      "Gift cards",
-      "Subscriptions",
-      "Merchant APIs",
-    ],
-    stack: ["Solidity", "TypeScript", "Next.js", "BNB Chain"],
-    logo: { src: "/work/logos/bnbpay-mark.png", alt: "BNBPay", aspect: 854 / 488 },
-    media: {
-      kind: "film",
-      src: "/work/video/bnbpay-demo.mp4",
-      poster: "/work/video/bnbpay-demo-open.jpg",
-      still: "/work/video/bnbpay-demo.jpg",
-      alt: "A recording of BNBPay: a gift card is configured, funded and issued, ending on a created card with its QR code and shareable claim link.",
-      aspect: 1280 / 958,
-      // The recording is of the desktop app; the product's real surface is a
-      // phone. The film carries the flow, the devices carry the form factor.
-      screens: [
-        {
-          src: "/work/bnbpay-invoice.png",
-          alt: "The BNBPay app on a phone, showing invoice generation, subscription creation and the x402 Flex multi-token acceptance form.",
-        },
-        {
-          src: "/work/bnbpay-cards.png",
-          alt: "The BNBPay gift card screen on a phone, showing a USDC card preview and the four steps of sending a card by shareable link.",
-        },
-      ],
-    },
-    partners: {
-      label: "Accelerated by",
-      items: [
-        { name: "Binance Chain", src: "/work/partners/binance-chain.png", aspect: 1200 / 504 },
-        { name: "YZi Labs", src: "/work/partners/yzi-labs.webp", aspect: 1600 / 533 },
-      ],
-    },
-  },
-  {
-    index: "03",
     kind: "Merchant infrastructure",
     name: "Pepay",
     pitch: "Multi-chain payment infrastructure built for modern commerce.",
     summary:
       "Accept digital assets, manage payments and settle across supported networks from one unified system — with invoicing, payment links, QR checkout, subscriptions and financial reconciliation built into the same payment layer.",
     href: "https://pepay-merchant-dashboard.vercel.app/home",
+    secondary: { label: "@pepaylabs", href: "https://x.com/pepaylabs" },
     status: "Live",
     metric: "$19.9M settled · 75.9K transactions · 26.7K paying wallets",
     tags: [
@@ -349,6 +277,90 @@ export const projects: readonly Project[] = [
         { name: "Binance Chain", src: "/work/partners/binance-chain.png", aspect: 1200 / 504 },
         { name: "YZi Labs", src: "/work/partners/yzi-labs.webp", aspect: 1600 / 533 },
         { name: "CoinMarketCap", src: "/work/partners/coinmarketcap.png", aspect: 1, scale: 1.5 },
+      ],
+    },
+  },
+  {
+    index: "02",
+    kind: "Institutional liquidity infrastructure",
+    name: "DRK",
+    pitch: "Market infrastructure for making real-world assets liquid.",
+    summary:
+      "Tokenisation solved issuance. It did not solve liquidity. DRK is building the operating layer between tokenised assets and institutional markets — bringing fair value, liquidity, risk, execution and settlement into one system designed to determine how an asset should be priced, traded and made liquid.",
+    href: "https://drk-deck.vercel.app/",
+    // The product itself is pre-release. What is public is the investor
+    // experience we built for it, so the link says so rather than implying the
+    // reader is about to open a trading console.
+    linkLabel: "View the DRK product story",
+    status: "In development",
+    metric: "Wallets · Pools · Execution · Reconciliation · Reporting",
+    tags: [
+      "Fair value",
+      "Liquidity",
+      "Risk",
+      "Execution",
+      "Settlement",
+      "Reporting",
+    ],
+    stack: ["TypeScript", "React", "EVM", "Trading infrastructure"],
+    logo: { src: "/work/logos/drk.svg", alt: "DRK", square: true },
+    media: {
+      kind: "film",
+      src: "/work/video/drk-demo.mp4",
+      poster: "/work/video/drk-demo-open.jpg",
+      still: "/work/video/drk-demo.jpg",
+      alt: "A recording of the DRK console: the monitoring pipeline, rolling market state, participants and concentration, cross-pool comparison and the managed trade chart.",
+      aspect: 16 / 9,
+    },
+    // No partner strip. The one organisation the work names is a mapped
+    // deployment target with no mandate or agreement in place, and a logo under
+    // a product reads as an endorsement whatever the caption says.
+  },
+  {
+    index: "03",
+    kind: "Payments infrastructure",
+    name: "BNBPay",
+    pitch: "Programmable payment infrastructure for merchants, platforms and AI agents.",
+    summary:
+      "BNBPay provides gasless, programmable payment infrastructure for merchants, digital platforms and AI agents. Its unified integration supports invoices, subscriptions, gift cards and x402-powered API payments across BNB Chain and opBNB — making on-chain commerce simpler to deploy, operate and scale.",
+    href: "https://bnbpayvercel1.vercel.app",
+    status: "Live",
+    metric: "Six accepted tokens, settled gaslessly on BNB Chain",
+    tags: [
+      "Multi-token",
+      "x402 Flex",
+      "Gasless",
+      "Gift cards",
+      "Subscriptions",
+      "Merchant APIs",
+    ],
+    stack: ["Solidity", "TypeScript", "Next.js", "BNB Chain"],
+    logo: { src: "/work/logos/bnbpay-mark.png", alt: "BNBPay", aspect: 854 / 488 },
+    media: {
+      kind: "film",
+      src: "/work/video/bnbpay-demo.mp4",
+      poster: "/work/video/bnbpay-demo-open.jpg",
+      still: "/work/video/bnbpay-demo.jpg",
+      alt: "A recording of BNBPay: a gift card is configured, funded and issued, ending on a created card with its QR code and shareable claim link.",
+      aspect: 1280 / 958,
+      // The recording is of the desktop app; the product's real surface is a
+      // phone. The film carries the flow, the devices carry the form factor.
+      screens: [
+        {
+          src: "/work/bnbpay-invoice.png",
+          alt: "The BNBPay app on a phone, showing invoice generation, subscription creation and the x402 Flex multi-token acceptance form.",
+        },
+        {
+          src: "/work/bnbpay-cards.png",
+          alt: "The BNBPay gift card screen on a phone, showing a USDC card preview and the four steps of sending a card by shareable link.",
+        },
+      ],
+    },
+    partners: {
+      label: "Accelerated by",
+      items: [
+        { name: "Binance Chain", src: "/work/partners/binance-chain.png", aspect: 1200 / 504 },
+        { name: "YZi Labs", src: "/work/partners/yzi-labs.webp", aspect: 1600 / 533 },
       ],
     },
   },
