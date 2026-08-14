@@ -120,7 +120,16 @@ export type App = {
   /** What it is, in four or five words. Longer and the row stops scanning. */
   summary: string;
   src: string;
-  /** Unreleased. Renders the name quieter and adds the marker. */
+  /**
+   * Where the app lives, if it is out. Makes the whole tile a link, which is
+   * the only way this row is worth more than a picture of five icons.
+   */
+  href?: string;
+  /**
+   * Unreleased. Renders the mark quieter and adds the marker. Never set this
+   * alongside an `href` that works — a "Soon" badge on something the reader can
+   * open and use is a claim contradicted by one click.
+   */
   soon?: boolean;
 };
 
@@ -265,9 +274,13 @@ export const projects: readonly Project[] = [
         },
         {
           name: "Grab Me a Slice",
-          summary: "Support creators",
+          // The product's own line. Pepay's app list says "support creators",
+          // which undersells it — this one takes AI agent payments too.
+          summary: "Payment links for creators",
           src: "/work/apps/app-logo-pepay-grab.png",
-          soon: true,
+          href: "https://gmasvirtual.vercel.app",
+          // Deliberately not `soon`, unlike the two Commerce apps: this one is
+          // live and complete at the link above, so the marker would be wrong.
         },
       ],
     },
