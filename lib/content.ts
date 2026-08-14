@@ -243,8 +243,8 @@ export type Project = {
  * DRK follows as the hardest problem in the set and the only one that is a
  * category rather than a product. BNBPay is the densest piece of engineering
  * here and the only product shown as both film and the thing it actually is, a
- * phone in someone's hand. Noise closes because it is the one product with
- * nothing public to open.
+ * phone in someone's hand. Noise closes because it is the one product a reader
+ * still cannot use: the product page is public, the product is not.
  */
 export const projects: readonly Project[] = [
   {
@@ -501,8 +501,12 @@ export const projects: readonly Project[] = [
     pitch: "An operating system for turning fragmented work into decisions.",
     summary:
       "Email, chat, meetings and documents indexed into one workspace, so context is recovered rather than hunted for across disconnected systems.",
-    // No public URL yet — access is gated behind a request form, so there is
-    // nothing honest to link to. Deliberately left unlinked.
+    href: "https://noiselanding.vercel.app/",
+    // The product itself is still gated — access goes through a request form —
+    // so this points at what IS public, and the label says exactly that. A
+    // reader who clicks "visit the live product" and lands on a marketing page
+    // has been misled, and this act cannot afford that on any of the six.
+    linkLabel: "View the Noise product page",
     status: "Private beta",
     metric: "Email, chat, calls, documents and calendars in one index",
     tags: [
