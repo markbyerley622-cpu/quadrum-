@@ -52,6 +52,13 @@ export type Partner = {
   name: string;
   src: string;
   /**
+   * Where the mark goes when clicked. Point it at the thing that makes the
+   * association checkable — the accelerator's own programme page, not the
+   * accelerator's homepage — since the whole value of a borrowed mark is that
+   * a sceptical reader can go and confirm it.
+   */
+  href?: string;
+  /**
    * Width ÷ height of the artwork. Logo walls fail when every mark is forced
    * through one box, because a horizontal wordmark and a square badge do not
    * read at the same height. Each mark is set to one shared optical height and
@@ -64,6 +71,14 @@ export type Partner = {
    * type is legible; a mark that fills its artboard edge to edge needs less.
    */
   scale?: number;
+  /**
+   * The artwork is a full-bleed disc or tile carrying its own coloured ground,
+   * rather than a mark floating on white. Those two want opposite handling:
+   * `mix-blend-multiply` exists to drop a white ground into the paper, and
+   * applied to a solid brand field it just muddies it. A bleed mark is shown
+   * unblended in a rounded box, which is the shape the artwork was drawn for.
+   */
+  bleed?: boolean;
 };
 
 /**
@@ -287,8 +302,8 @@ export const projects: readonly Project[] = [
     partners: {
       label: "Accelerated by",
       items: [
-        { name: "Binance Chain", src: "/work/partners/binance-chain.png", aspect: 1200 / 504 },
-        { name: "YZi Labs", src: "/work/partners/yzi-labs.webp", aspect: 1600 / 533 },
+        { name: "Binance Chain", src: "/work/partners/binance-chain.png", aspect: 1200 / 504, href: "https://www.bnbchain.org/en/programs/mvb" },
+        { name: "YZi Labs", src: "/work/partners/yzi-labs.webp", aspect: 1600 / 533, href: "https://www.bnbchain.org/en/programs/mvb" },
         { name: "CoinMarketCap", src: "/work/partners/coinmarketcap.png", aspect: 1, scale: 1.5 },
       ],
     },
@@ -325,9 +340,31 @@ export const projects: readonly Project[] = [
       alt: "A recording of the DRK console: the monitoring pipeline, rolling market state, participants and concentration, cross-pool comparison and the managed trade chart.",
       aspect: 16 / 9,
     },
-    // No partner strip. The one organisation the work names is a mapped
-    // deployment target with no mandate or agreement in place, and a logo under
-    // a product reads as an endorsement whatever the caption says.
+    /**
+     * The networks and assets the product runs against, using the marks DRK's
+     * own repository vendors.
+     *
+     * The label says "integrated" and not "partners" deliberately, and the two
+     * are not interchangeable here: DRK's asset manifest is explicit that these
+     * marks are the chains and assets its work names, and are NOT presented as
+     * partnerships, clients or endorsements. Putting them under an "Accelerated
+     * by" or "Partners" heading would make a claim its own documentation
+     * refuses to make. Every mark is the official artwork, vendored unaltered —
+     * except Aptos, which publishes black-on-transparent and was inverted to
+     * white for DRK's dark deck, and is inverted back here for paper.
+     */
+    partners: {
+      label: "Networks and assets integrated",
+      items: [
+        { name: "Ethereum", src: "/work/chains/ethereum.png", aspect: 1, bleed: true },
+        { name: "Solana", src: "/work/chains/solana.png", aspect: 1, bleed: true },
+        { name: "Aptos", src: "/work/chains/aptos.png", aspect: 1, bleed: true },
+        { name: "Sui", src: "/work/chains/sui.png", aspect: 1, bleed: true },
+        { name: "USDC", src: "/work/chains/usdc.png", aspect: 1, bleed: true },
+        { name: "Robinhood", src: "/work/chains/robinhood.png", aspect: 1, bleed: true },
+        { name: "Cantor", src: "/work/chains/cantor.png", aspect: 1, bleed: true },
+      ],
+    },
   },
   {
     index: "03",
@@ -372,8 +409,8 @@ export const projects: readonly Project[] = [
     partners: {
       label: "Accelerated by",
       items: [
-        { name: "Binance Chain", src: "/work/partners/binance-chain.png", aspect: 1200 / 504 },
-        { name: "YZi Labs", src: "/work/partners/yzi-labs.webp", aspect: 1600 / 533 },
+        { name: "Binance Chain", src: "/work/partners/binance-chain.png", aspect: 1200 / 504, href: "https://www.bnbchain.org/en/programs/mvb" },
+        { name: "YZi Labs", src: "/work/partners/yzi-labs.webp", aspect: 1600 / 533, href: "https://www.bnbchain.org/en/programs/mvb" },
       ],
     },
   },
@@ -521,7 +558,12 @@ export const figures: {
     { value: 19.9, decimals: 1, prefix: "$", suffix: "M", label: "settled", from: "Pepay" },
     { value: 75.9, decimals: 1, suffix: "K", label: "transactions", from: "Pepay" },
     { value: 26.7, decimals: 1, suffix: "K", label: "paying wallets", from: "Pepay" },
-    { value: 38, label: "villas sold from one site", from: "Linton Villas" },
+    // "Sold" is the word this must never say. Delivery is scheduled for early
+    // 2028 and the development is being taken to market, not cleared — the site
+    // presents thirty-eight villas, it has not shifted them, and a count of
+    // sales is a claim nobody has made. What is true is the size of the thing
+    // the product had to carry.
+    { value: 38, label: "villas in one development", from: "Linton Villas" },
     { value: 6, label: "tokens accepted, gaslessly", from: "BNBPay" },
     { value: 6, label: "products built" },
     // Live means a public URL a reader can open right now. DRK is pre-release

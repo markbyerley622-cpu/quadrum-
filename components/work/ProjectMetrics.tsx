@@ -18,15 +18,24 @@ import type { Project } from "@/lib/content";
  */
 export function ProjectMetrics({ project }: { project: Project }) {
   return (
-    <div className="border-t border-rule pt-6">
-      <p className="type-label tnum flex items-start gap-3 text-ink-45">
-        <span aria-hidden className="mt-[0.3em] size-[5px] shrink-0 bg-accent" />
-        <span className="leading-[1.7]">{project.metric}</span>
+    <div className="border-t border-rule pt-7">
+      {/* The metric is a fact from the running product and the loudest line in
+          this band. It used to be set in the same 11px tracked mono as the stack
+          below it, which made "$19.9M settled · 75.9K transactions" — the best
+          sentence on the page — the same weight as a list of frameworks. It is
+          now body size with the figures in tabular numerals. */}
+      <p className="type-body tnum flex items-start gap-3.5 text-ink">
+        <span aria-hidden className="mt-[0.55em] size-[6px] shrink-0 bg-accent" />
+        <span className="leading-[1.5]">{project.metric}</span>
       </p>
 
-      <p className="type-label mt-4 flex items-start gap-3 text-ink-25">
-        <span aria-hidden className="mt-[0.3em] size-[5px] shrink-0 border border-rule-strong" />
-        <span className="leading-[1.7]">{project.stack.join("  ·  ")}</span>
+      {/* The stack stays quiet and stays mono — it is the one place where the
+          typewriter voice is doing real work, because these are literally the
+          names of tools. But it loses the uppercasing, which was turning
+          "Next.js" into "NEXT.JS" and "UX/UI" into a shout. */}
+      <p className="type-small mt-4 flex items-start gap-3.5 font-mono text-ink-45">
+        <span aria-hidden className="mt-[0.5em] size-[6px] shrink-0 border border-rule-strong" />
+        <span className="leading-[1.6] tracking-[0.01em]">{project.stack.join("  ·  ")}</span>
       </p>
 
       {/* The button band wraps rather than squeezing: the copy column is four of
@@ -39,8 +48,13 @@ export function ProjectMetrics({ project }: { project: Project }) {
             href={project.href}
             target="_blank"
             rel="noreferrer noopener"
-            className="type-label group/cta inline-flex w-full items-center justify-between gap-6
-                       whitespace-nowrap border border-ink bg-ink px-7 py-5 text-paper
+            // Sentence case at body-small rather than 11px tracked caps. A
+            // button is the one piece of type on a page that has to be read
+            // instantly and correctly, and "VIEW THE DRK PRODUCT STORY" spaced
+            // out to 0.16em is read as a texture before it is read as an
+            // instruction.
+            className="type-small group/cta inline-flex w-full items-center justify-between gap-6
+                       whitespace-nowrap border border-ink bg-ink px-7 py-5 font-medium text-paper
                        transition-[background-color,border-color] duration-[0.42s] ease-quad
                        hover:border-accent hover:bg-accent
                        sm:w-auto sm:justify-start"
@@ -62,7 +76,7 @@ export function ProjectMetrics({ project }: { project: Project }) {
               target="_blank"
               rel="noreferrer noopener"
               aria-label={`${project.name} on X — ${project.secondary.label}, opens in a new tab`}
-              className="type-label inline-flex w-full items-center justify-center gap-2.5
+              className="type-small inline-flex w-full items-center justify-center gap-2.5
                          whitespace-nowrap border border-rule-strong px-7 py-5 text-ink-45
                          transition-colors duration-[0.42s] ease-quad
                          hover:border-ink hover:text-ink
@@ -83,7 +97,7 @@ export function ProjectMetrics({ project }: { project: Project }) {
            without leaving the state looking like an afterthought beneath the
            products that do have one. */
         <p
-          className="type-label mt-8 inline-flex w-full items-center gap-3 border border-rule-strong
+          className="type-small mt-8 inline-flex w-full items-center gap-3 border border-rule-strong
                      px-7 py-5 text-ink-45 sm:w-auto"
         >
           <span aria-hidden className="size-[5px] shrink-0 rounded-full bg-accent animate-blink" />

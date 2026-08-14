@@ -263,14 +263,31 @@ async function dechequer(name, { alpha = 250, saturation = 12 } = {}) {
  *
  * SVG is passed through untouched — a vector has no size to reduce.
  */
-async function partnerMarks({ edge = 320 } = {}) {
-  const dir = path.join(SRC, "partners");
+/**
+ * Marks vendored for a DARK ground, which have to be flipped for paper.
+ *
+ * DRK's asset manifest is explicit that its Aptos file is the official
+ * black-on-transparent artwork inverted to white, because the deck it was made
+ * for is near-black. Dropped onto this site's paper unaltered it is white on
+ * white — a mark that occupies its box and paints nothing, which is the failure
+ * mode that looks like a layout bug rather than a missing file. Inverting
+ * returns it to the artwork Aptos actually publishes.
+ */
+const INVERT_FOR_PAPER = new Set(["aptos.png"]);
+
+async function partnerMarks({ folder = "partners", edge = 320 } = {}) {
+  const dir = path.join(SRC, folder);
   if (!fs.existsSync(dir)) return;
+  fs.mkdirSync(out(folder), { recursive: true });
 
   for (const name of fs.readdirSync(dir)) {
     if (name.endsWith(".svg")) continue;
 
-    const image = sharp(src("partners", name));
+    const image = INVERT_FOR_PAPER.has(name)
+      ? // Negate the colour and put the alpha back: `negate` would otherwise
+        // invert transparency too and fill the whole artboard.
+        sharp(src(folder, name)).negate({ alpha: false })
+      : sharp(src(folder, name));
     const meta = await image.metadata();
 
     // Flatten onto white for the same reason as `dechequer`: these render under
@@ -285,11 +302,13 @@ async function partnerMarks({ edge = 320 } = {}) {
       : pipeline.png({ compressionLevel: 9 });
 
     const buffer = await pipeline.toBuffer();
-    fs.writeFileSync(out("partners", name), buffer);
+    // JPEG sources are rewritten as PNG so the whole row is one format and the
+    // components do not have to care which mark came from where.
+    fs.writeFileSync(out(folder, name.replace(/\.jpe?g$/i, ".png")), buffer);
 
     const after = await sharp(buffer).metadata();
     console.log(
-      "partner",
+      folder.slice(0, 7).padEnd(7),
       name.padEnd(24),
       `${meta.width}x${meta.height} -> ${after.width}x${after.height}`,
       `${(buffer.length / 1024).toFixed(0)}KB`,
@@ -307,4 +326,6 @@ async function partnerMarks({ edge = 320 } = {}) {
   await dechequer("noise-google-drive.png");
   fs.copyFileSync(out("partners", "noise-google-drive.png"), src("partners", "noise-google-drive.png"));
   await partnerMarks();
+  // The chain and asset marks DRK's own deck vendors, normalised the same way.
+  await partnerMarks({ folder: "chains" });
 })();

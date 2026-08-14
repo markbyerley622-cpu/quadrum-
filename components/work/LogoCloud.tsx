@@ -71,17 +71,32 @@ export function LogoCloud({
         {items.map((partner) => {
           const height = `calc(${named ? HEIGHT.named : HEIGHT.bare} * ${partner.scale ?? 1})`;
 
+          // A linked mark is the whole tile, for the same reason as the app row:
+          // at this size there is nowhere to put a separate affordance, and a
+          // logo that looks clickable and is not is worse than one that plainly
+          // is not.
+          const Tile = partner.href ? "a" : "div";
+          const link = partner.href
+            ? {
+                href: partner.href,
+                target: "_blank" as const,
+                rel: "noreferrer noopener",
+                "aria-label": `${partner.name} — opens in a new tab`,
+              }
+            : {};
+
           return (
-            <li
-              key={partner.name}
-              className="group/mark relative isolate flex flex-col items-center justify-center gap-3
+            <li key={partner.name} className="contents">
+              <Tile
+                {...link}
+                className="group/mark relative isolate flex flex-col items-center justify-center gap-3
                          border border-rule bg-paper-raised px-5 py-5 sm:px-6
                          shadow-[0_1px_2px_rgb(20_19_15/0.04)]
                          transition-[border-color,box-shadow,transform] duration-[0.6s] ease-quad
                          hover:border-rule-strong
                          hover:shadow-[0_2px_4px_rgb(20_19_15/0.05),0_14px_28px_-16px_rgb(20_19_15/0.28)]
                          motion-safe:hover:-translate-y-0.5"
-            >
+              >
               {/* The single accent, drawn across the top edge on hover — the same
                   gesture the plates and films use, so a partner tile and a
                   product frame answer to the reader in the same way. */}
@@ -91,7 +106,9 @@ export function LogoCloud({
               />
 
               <span
-                className="relative block max-w-full"
+                className={`relative block max-w-full ${
+                  partner.bleed ? "overflow-hidden rounded-[12px]" : ""
+                }`}
                 style={{ height, width: `calc(${height} * ${partner.aspect})` }}
               >
                 <Image
@@ -117,15 +134,26 @@ export function LogoCloud({
                   // three times kept rendering, because one cached width of the
                   // optimized encode still held the old one.
                   unoptimized
-                  className="object-contain object-center mix-blend-multiply"
+                  className={`object-center ${
+                    // A bleed mark carries its own ground, so it fills its box
+                    // and skips the blend — multiplying a solid brand field into
+                    // warm paper only makes it muddy.
+                    partner.bleed
+                      ? "object-cover"
+                      : "object-contain mix-blend-multiply"
+                  }`}
                 />
               </span>
 
               {named ? (
-                <span className="type-label text-center leading-[1.3] text-ink-45">
+                // Set in the marks' own casing rather than the eyebrow's caps:
+                // these are proper nouns, and uppercasing turns YZi Labs into
+                // YZILABS and USDC's siblings into a row that reads as shouting.
+                <span className="type-small text-center leading-[1.3] text-ink-45">
                   {partner.name}
                 </span>
               ) : null}
+              </Tile>
             </li>
           );
         })}

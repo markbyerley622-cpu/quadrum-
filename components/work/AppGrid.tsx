@@ -98,8 +98,11 @@ function Tile({ app }: { app: App }) {
       </span>
 
       <span className="min-w-0">
-        <span className="type-small block leading-[1.25] text-ink">{app.name}</span>
-        <span className="type-label mt-2 block leading-[1.5] text-ink-25">{app.summary}</span>
+        <span className="type-body block font-medium leading-[1.25] text-ink">{app.name}</span>
+        {/* Sentence case, body size. "BUY AMAZON PRODUCTS WITH CRYPTO" in 11px
+            tracked caps wrapped to three lines on a phone, which is a sentence
+            rendered as a pattern. */}
+        <span className="type-small mt-2 block leading-[1.45] text-ink-45">{app.summary}</span>
         {app.soon ? (
           <span className="type-label mt-3 inline-flex items-center gap-1.5 text-accent">
             <span aria-hidden className="size-[4px] shrink-0 rounded-full bg-accent" />
