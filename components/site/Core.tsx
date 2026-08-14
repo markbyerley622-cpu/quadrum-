@@ -189,10 +189,13 @@ export function Core({
                 legible screenshot here would give the game away before the
                 object has had a chance to be an object. */}
             <span aria-hidden className="core-veil" />
-            {/* One diagonal fall of light, so the front has a surface. */}
+            {/* One diagonal fall of light, so the front has a surface. There
+                was an inset hairline in here too, drawn round the inside of the
+                front face. On a slab that already has a lit edge and a real
+                side it read as a border stuck on a photograph — the object
+                stopped looking machined and started looking framed. The
+                thickness is the edge treatment; it does not need a second one. */}
             <span aria-hidden className="core-sheen" />
-            {/* The inner edge, so the capture never meets the frame flat. */}
-            <span aria-hidden className="core-rim" />
           </div>
 
           {/* The thickness. A real face at 90° to the front — this is what makes

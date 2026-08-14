@@ -15,18 +15,18 @@ import { hinges, projects, site } from "@/lib/content";
 /**
  * The page is a five-act narrative, not a stack of sections.
  *
- *   I    Opening      the claim
- *   II   The proof    six products, five of them shown running
- *   II½  The count    what those products have actually done, set large
+ *   I    Opening      the claim, and one object
+ *   II   The count    what the work has actually done, set large
+ *   II   The proof    six products, all six shown running
  *   III  The turn     the thesis, and how the work is done
  *   IV   The studio   who does it, what we refuse, and how an engagement starts
  *   V    The invitation
  *
- * The count is a half-act rather than an act of its own because it introduces
- * nothing: every figure on it is repeated verbatim from a product block above.
- * It exists because a reader who skims the work never registers that one of
- * these things has settled nineteen million dollars, and because it is the only
- * screen on the site whose claims cannot be written.
+ * The count and the proof share act II because the count introduces nothing:
+ * every figure on it is repeated verbatim in a product block below. It leads
+ * because it is the only screen on the site whose claims cannot be written —
+ * somebody either settled nineteen million dollars or they did not — and a
+ * screen that convincing should not be the one fewest readers reach.
  *
  * THE PROOF COMES SECOND, and that ordering is the most important decision on
  * the page. An earlier version ran eight acts and put three invented concept
@@ -100,9 +100,17 @@ export default function Home() {
         <Hero />
         <Hinge {...hinges.toProof} />
 
-        {/* II */}
-        <Work />
+        {/* II — the count answers the hinge above it in eight figures, then the
+            products that produced them. It used to sit the other way round, on
+            the reasoning that numbers mean more once you have seen the things
+            behind them. That was true and it cost too much: the count sat
+            fifteen thousand pixels down, past six full-screen films, so the one
+            screen on this site whose claims cannot be written was the one
+            fewest readers ever reached. Its body copy now points DOWN to the
+            blocks that repeat each figure — see `figures.body`, which has to
+            stay in step with this ordering. */}
         <Count />
+        <Work />
         <Hinge {...hinges.toTurn} />
 
         {/* III */}

@@ -491,12 +491,6 @@
     );
   }
 
-  .core-rim {
-    position: absolute;
-    inset: 0;
-    box-shadow: inset 0 0 0 1px rgb(237 234 226 / 0.16);
-  }
-
   /* The left-hand face — the thickness. `right: 100%` puts it against the
      object's left edge and rotating -90deg about that edge swings it backwards
      in Z, so it is a real face at right angles to the front rather than a
@@ -609,13 +603,32 @@
     overflow: hidden;
     background-color: var(--color-void);
     color: var(--color-bone);
+    /* Air under the framed film on a phone. Removed above `lg`, where the
+       shots bleed and any padding would be a visible band of void. */
+    padding-block-end: var(--spacing-gutter);
   }
 
-  /* The moving object inside it. On a phone this is the entire composition: the
-     film, full width, at its own aspect. Every shot sets that aspect below. */
+  /* The moving object inside it.
+
+     BELOW `lg` THIS IS THE WHOLE COMPOSITION, and it is framed rather than
+     bled. The films used to run edge to edge on a phone, which sounds like the
+     bolder choice and was not: a dark capture meeting a dark band with no edge
+     between them has no boundary at all, so the film stopped being an object
+     and became a patch of the page that happened to move. Inset by the page
+     gutter with a hairline round it, each one reads as a plate on a dark
+     ground — the same object the desktop compositions are made of, at the only
+     size a 393px screen has for it.
+
+     Above `lg` the inset and the border are both dropped: those shots are
+     apertures cut through the page and bleed past the window on at least one
+     side, so a border would be drawn somewhere nobody can see it. Three of them
+     re-earn a hairline individually, where the shot genuinely floats. */
   .shot {
     position: relative;
-    width: 100%;
+    width: auto;
+    margin-inline: var(--spacing-gutter);
+    outline: 1px solid var(--color-rule-invert);
+    outline-offset: -1px;
   }
 
   /* Phone crops. Two of the six are re-framed rather than shrunk, because a
@@ -644,7 +657,7 @@
     aspect-ratio: 4 / 3;
   }
   .shot--surface {
-    aspect-ratio: 1448 / 1086;
+    aspect-ratio: 1280 / 612;
   }
 
   /* The devices in the travel shot. Below `lg` they sit under the film with
@@ -658,7 +671,18 @@
   /* --- The compositions. Desktop only, by design. --------------------- */
 
   @media (min-width: 1024px) {
+    .well {
+      padding-block-end: 0;
+    }
+
     .shot {
+      /* The phone's frame comes off. Every composition below bleeds past the
+         window on at least one side, so an inset and a border would be drawn
+         where nobody can see them. Only the shots that genuinely float — float,
+         travel, surface — take an edge back, individually. */
+      width: 100%;
+      margin-inline: 0;
+      outline: none;
       /* Six composited layers, promoted once rather than on first scroll. */
       will-change: transform;
     }
@@ -735,6 +759,8 @@
     .shot--travel {
       width: min(54vw, 60rem);
       flex: none;
+      outline: 1px solid var(--color-rule-invert);
+      outline-offset: -1px;
       transform: translate3d(calc(var(--c) * -3.5rem), calc(var(--c) * -1.5rem), 0)
         scale(calc(1 + var(--c) * 0.03));
     }
@@ -785,20 +811,36 @@
     }
 
     /* 06 · SURFACE — Noise.
-       A desktop that runs off the right edge of the window and keeps going,
-       with the copy held in the dark it leaves behind. The only still in the
-       act and the only shot that comes to rest: the act ends by stopping,
-       which is what makes the five before it read as travel. */
+       A surface that runs off the right edge of the window and keeps going,
+       with the copy held in the dark it leaves behind. The shot that comes to
+       rest: the act ends by stopping moving, which is what makes the five
+       before it read as travel. */
     .well--surface {
       display: flex;
-      min-height: 90vh;
+      min-height: 84vh;
       align-items: center;
     }
     .shot--surface {
-      height: min(84vh, 58rem);
-      width: auto;
-      margin-inline: auto -8vw;
+      /* Re-fitted when Noise stopped being a 4:3 screenshot and became a
+         2.09:1 film. This shot is sized by HEIGHT and takes its width from the
+         aspect, so the numbers that framed the old plate put the new one nearly
+         six hundred pixels wider — straight through the copy column beside it.
+         Height down, bleed up: the surface still runs off the right edge, and
+         the dark it leaves behind is still wide enough to set a pitch in. 1280
+         is the width where the film and the copy meet first; check there before
+         changing either number. */
+      /* Sized by WIDTH, not height, and that is the fix rather than a
+         preference. Driven off the viewport height, the film's width stayed
+         constant as the window narrowed while the bleed beside it shrank with
+         it — so the gap between the surface and the copy closed to 24px at
+         1280 and would have crossed it below that. A vw basis makes the film
+         and the space it leaves shrink together. */
+      width: min(74vw, 76rem);
+      height: auto;
+      margin-inline: auto -13vw;
       flex: none;
+      outline: 1px solid var(--color-rule-invert);
+      outline-offset: -1px;
       transform: translate3d(calc(var(--c) * -2rem), 0, 0)
         scale(calc(1 + var(--c) * 0.012));
     }

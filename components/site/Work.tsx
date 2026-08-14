@@ -7,7 +7,7 @@ import { ProjectShowcase } from "@/components/work/ProjectShowcase";
 import { projects } from "@/lib/content";
 
 /**
- * Act II — the proof. Six products, five of them shown as film, each one shot
+ * Act II — the proof. Six products, every one of them shown as film, each shot
  * at roughly the size of the window.
  *
  * This act sits second on the page, immediately after the claim, because it is
@@ -24,8 +24,10 @@ import { projects } from "@/lib/content";
  *     words before pictures when the two are the same size, and in an act whose
  *     only job is proof that is exactly backwards.
  *  2. ONE MESSAGE PER SHOT. Exactly one sentence is set large enough to be the
- *     only thing you read, and for three of the six it is set over the footage
- *     rather than beside it. Everything else — summary, capabilities, the
+ *     only thing you read. For two of the six it is set over the footage and
+ *     for one beside it in the dark; the other three carry it on paper above,
+ *     because their recordings are too dense to read type across. Everything
+ *     else — summary, capabilities, the
  *     number, the link, the marks — waits on paper underneath, where a reader
  *     who wants to verify will find it and nobody else has to step over it.
  *  3. NO TWO PRODUCTS ARE SHOT THE SAME WAY. A console that runs wider than the
@@ -80,7 +82,7 @@ export function Work() {
                   sentence doing the demonstration's job badly. */}
               <p className="type-body max-w-[40ch] text-ink-70">
                 Payments, institutional liquidity, combat sports, property
-                investment and enterprise AI. Five of the six are shown running.
+                investment and enterprise AI. All six are shown running.
               </p>
             </Reveal>
           </div>

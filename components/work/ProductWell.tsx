@@ -67,7 +67,15 @@ export const STAGING: Record<string, { shot: ShotName; frame: FrameName }> = {
   "01": { shot: "float", frame: "editorial" },
   // DRK — institutional. The console runs wider than the window and the camera
   // only ever pushes further in. Nothing about this shot pulls back.
-  "02": { shot: "console", frame: "overlay" },
+  //
+  // The copy is NOT overlaid, and this is the one place in the act where that
+  // was tried and reversed. DRK's recording is the densest frame here — a
+  // monitoring pipeline, a rolling market state, a participants table and a
+  // managed-trade chart, all lit — and a pitch set over it was legible only
+  // because the scrim was heavy enough to bury the console underneath. Two
+  // things fighting, both losing. On paper above, the sentence reads in one
+  // pass and the console is unobstructed.
+  "02": { shot: "console", frame: "editorial" },
   // BNBPay — money moving. Two objects cross the frame in opposite directions.
   "03": { shot: "travel", frame: "editorial" },
   // Combat Reviews — the most aggressive treatment in the act. A broadcast
@@ -149,10 +157,11 @@ export function ProductWell({
         // absolutely positioned so the order is invisible; below it, this is
         // what puts the name and the pitch ABOVE the film instead of under it,
         // which is the difference between a caption and a label.
+        // No scrim. A scrim exists to make overlaid type legible, and there is
+        // no type over this shot — darkening the bottom third of a console
+        // nobody is reading across is just losing a third of the console.
         <div className="well well--console">
-          {header}
           <div className="shot shot--console">{film}</div>
-          <Scrim />
         </div>
       );
 

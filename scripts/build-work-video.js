@@ -106,6 +106,23 @@ const jobs = [
     width: 1152,
   },
   {
+    from: "noise.mp4",
+    to: "noise-demo",
+    // The shortest source in the set at under five seconds, and the only one
+    // that is a capture of a marketing surface rather than of an application.
+    // See the note on Noise's `media` in lib/content.ts for why that is stated
+    // in the alt text rather than glossed over.
+    //
+    // No crop. The column of dots down the right edge looks like a scrollbar at
+    // thumbnail size and is the page's own section indicator — cropping it out
+    // would be removing part of the design.
+    poster: 2.5,
+    // Near-static: a slow gradient, a handful of drifting icons and no camera
+    // movement at all, so it holds the best picture in the set at a size the
+    // aerial could not manage in twice the bytes.
+    crf: 27,
+  },
+  {
     from: "pepay-reel.mp4",
     to: "pepay-reel",
     // A twelve-second cut motion piece rather than a capture, and the shortest

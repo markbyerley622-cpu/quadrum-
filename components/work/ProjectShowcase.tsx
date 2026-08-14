@@ -20,8 +20,8 @@ import type { Project } from "@/lib/content";
  *
  * So the spread is now three bands, in this order and never another:
  *
- *     PITCH        one sentence, and for three of the six it is set over the
- *                  footage rather than beside it
+ *     PITCH        one sentence, set over the footage where the recording is
+ *                  quiet enough to carry it and on paper above where it is not
  *     THE SHOT     the product running, at 80–100% of the window
  *     THE PROOF    summary, capabilities, the number, the link, the marks —
  *                  everything a sceptic needs and nobody else reads first
@@ -73,7 +73,7 @@ export function ProjectShowcase({
             // lifted onto the footage itself above `lg`.
             "container-page relative z-[2] pt-11 pb-9 lg:absolute lg:inset-x-0 lg:bottom-0 lg:pt-0 lg:pb-[clamp(2.5rem,5vh,4.5rem)]"
           : frame === "sidebar"
-            ? "container-page relative z-[2] pt-11 pb-9 lg:absolute lg:inset-y-0 lg:left-0 lg:flex lg:max-w-[min(38vw,30rem)] lg:flex-col lg:justify-center lg:pt-0 lg:pb-0"
+            ? "container-page relative z-[2] pt-11 pb-9 lg:absolute lg:inset-y-0 lg:left-0 lg:flex lg:max-w-[min(32vw,26rem)] lg:flex-col lg:justify-center lg:pt-0 lg:pb-0"
             : ""
       }
     />

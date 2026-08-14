@@ -554,10 +554,27 @@ export const projects: readonly Project[] = [
     ],
     stack: ["React", "Fastify", "Postgres", "Vector search"],
     logo: { src: "/work/logos/noise.svg", alt: "Noise", aspect: 280 / 64 },
+    /**
+     * The one film in the act that is NOT a capture of the running product.
+     *
+     * Noise is in private beta and its workspace is gated; what is public is
+     * the product page, which is the thing linked above and the thing recorded
+     * here. That is a real artefact the studio built and it is shown as one —
+     * but the alt text says "product page" and not "workspace", because the
+     * whole premise of this act is that a sceptical reader can check what they
+     * are being shown, and a marketing surface described as an application is
+     * exactly the claim that would cost the other five their credibility.
+     *
+     * The workspace still exists as `/work/noise.jpg` if the block ever wants
+     * to show the application again — it is the shot the hero core still uses.
+     */
     media: {
-      kind: "plate",
-      src: "/work/noise.jpg",
-      alt: "The Noise workspace showing the focus brief, flagged concentration and account risks, conversation and calendar items, and the Noise Brain panel listing connected sources.",
+      kind: "film",
+      src: "/work/video/noise-demo.mp4",
+      poster: "/work/video/noise-demo-open.jpg",
+      still: "/work/video/noise-demo.jpg",
+      alt: "The Noise product page: the connected sources — Gmail, Slack, Drive, Notion and the rest — orbiting the memory layer, beside the line 'Your company should know everything.'",
+      aspect: 1280 / 612,
     },
     partners: {
       label: "Connected platforms",
@@ -573,18 +590,27 @@ export const projects: readonly Project[] = [
   },
 ] as const;
 
-/* ========================================================= ACT II½ — the count
+/* ========================================================== ACT II — the count
 
-   The proof act carries its numbers as hairline captions under each product,
-   which is the right weight while you are looking at the product they belong to
-   and the wrong weight for the page as a whole. Pulled together and set large,
-   the same figures stop being footnotes and become the single most convincing
-   screen on the site — because unlike everything else here, they cannot be
-   written. Somebody either settled nineteen million dollars or they did not.
+   THE NUMBERS COME FIRST, and that ordering is deliberate.
 
-   Nothing on this screen is rounded up, aggregated across products to look
-   larger, or projected. Every figure traces to one product and is repeated
-   verbatim in that product's own block. */
+   This screen used to sit after all six product spreads, roughly fifteen
+   thousand pixels down, on the reasoning that figures mean more once you have
+   seen the things that produced them. In practice it meant the single most
+   convincing screen on the site was the one fewest people reached — and it is
+   the most convincing precisely because, unlike every other claim here, it
+   cannot be written. Somebody either settled nineteen million dollars or they
+   did not.
+
+   So it now opens the proof: the numbers, then the products that produced them.
+   The hinge above it asks what we have actually built, and this answers it in
+   eight figures before the reader has scrolled a single film.
+
+   That reordering makes the body copy load-bearing. Every figure is repeated
+   verbatim in its own product's block BELOW — which is what the reader has to
+   be told, because a number presented before its evidence is an assertion until
+   they know where to go and check it. Nothing here is rounded up, aggregated
+   across products to look larger, or projected. */
 
 export type Figure = {
   /** The number itself, so it can be counted up rather than faded in. */
@@ -606,7 +632,7 @@ export const figures: {
 } = {
   act: "II · The count",
   headline: ["Numbers we", "can be held to"],
-  body: "Every figure here is taken from a running product and repeats one that appears in its own block above. Nothing is aggregated across products, projected, or rounded up to look larger.",
+  body: "Every figure here is taken from a running product, and every one of them appears again in that product's own block below. Nothing is aggregated across products, projected, or rounded up to look larger.",
   items: [
     { value: 19.9, decimals: 1, prefix: "$", suffix: "M", label: "settled", from: "Pepay" },
     { value: 75.9, decimals: 1, suffix: "K", label: "transactions", from: "Pepay" },
