@@ -1,3 +1,5 @@
+import { site } from "@/lib/content";
+
 /**
  * Logomark: a square with the corner cut and re-drawn as a tail — a Q reduced
  * to structure. Drawn with strokes so it stays crisp at every size and
@@ -31,7 +33,10 @@ export function Wordmark({ className = "" }: { className?: string }) {
     <span
       className={`text-[0.95rem] font-medium tracking-[-0.03em] ${className}`}
     >
-      Quadrum
+      {/* Read from `site` rather than set here. The studio name appeared as a
+          literal in four separate components, which is three too many places
+          to remember on the day it changes — and it did change. */}
+      {site.name}
     </span>
   );
 }

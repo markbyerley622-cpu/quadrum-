@@ -1,206 +1,138 @@
 import Image from "next/image";
 import { Reveal } from "@/components/primitives/Reveal";
+import { ScrollStage } from "@/components/primitives/ScrollStage";
 import { AppGrid } from "@/components/work/AppGrid";
 import { FeaturePills } from "@/components/work/FeaturePills";
-import { FilmPlate } from "@/components/work/FilmPlate";
 import { LogoCloud } from "@/components/work/LogoCloud";
-import { Plate } from "@/components/work/Plate";
-import { PhonePair } from "@/components/work/PhonePair";
+import { ProductWell, STAGING } from "@/components/work/ProductWell";
 import { ProjectMetrics } from "@/components/work/ProjectMetrics";
 import type { Project } from "@/lib/content";
 
 /**
- * One product, as a spread.
+ * One product, as a shot.
  *
- * The layout is a 12-column spread — copy in four, media in eight, running off
- * the outer edge of the page — and it alternates side every block. The
- * alternation is the rhythm of the act: without it, six products in a row read
- * as one long list and the reader stops arriving at each new one.
+ * The spread used to be a twelve-column grid — copy in four, media in eight,
+ * sticky text beside a travelling plate — and it was the right structure for an
+ * act that was arguing in words. It is the wrong structure for an act whose
+ * entire argument is that these things exist and run, because it made the film
+ * a column-width illustration ALONGSIDE the paragraph about it. A reader looked
+ * at the words first every time.
  *
- * The media takes eight columns and bleeds past the gutter because it has to be
- * bigger than the words about it. An earlier version gave it seven and kept a
- * full empty column between the halves; it was better typography and worse
- * argument — a 16:9 film came out SHORTER than its own copy block, so the
- * description of the evidence was the larger object on screen. In an act whose
- * only job is proof, the proof wins the space.
+ * So the spread is now three bands, in this order and never another:
  *
- * Two decisions carry most of the feel:
+ *     PITCH        one sentence, and for three of the six it is set over the
+ *                  footage rather than beside it
+ *     THE SHOT     the product running, at 80–100% of the window
+ *     THE PROOF    summary, capabilities, the number, the link, the marks —
+ *                  everything a sceptic needs and nobody else reads first
  *
- *  1. THE COPY IS STICKY, THE MEDIA IS NOT. The text column pins just under the
- *     nav while the plate or the devices travel past it. That is what produces
- *     the "cinematic" progression — the reader is held on one message while the
- *     evidence for it moves — and it costs one `position: sticky`, no scroll
- *     listener and no pinned-section library.
+ * That ordering is the whole change. The film is no longer competing with the
+ * copy for the same horizontal space; it has the page to itself for a screen,
+ * and the copy is what you find on either side of it. The hierarchy the act
+ * already had — PITCH → DESCRIPTION → PROOF — is unchanged. It is now expressed
+ * in scale and sequence instead of in three sizes of type inside one column.
  *
- *     Which of the two columns is taller varies by product, and that is why the
- *     media is centred rather than top-aligned. A spread carrying devices, an
- *     app row and a partner strip runs far past its copy and the copy sticks
- *     through it; a spread that is one 16:9 film is SHORTER than its own copy,
- *     and top-aligning that leaves a third of the spread as dead paper under the
- *     film. Centred, the same difference reads as margin.
- *  2. DOM ORDER NEVER CHANGES. Copy always comes first in the markup, so the
- *     reading and tab order stay identical on every block and on every screen.
- *     The visual side is set with `col-start`, which reorders nothing.
+ * DOM ORDER NEVER CHANGES, on any product or any screen. Name, pitch, film,
+ * detail. Where a pitch is rendered over its footage it is still the same
+ * element in the same place in the document, absolutely positioned at `lg` and
+ * nowhere else — so reading order, tab order and the phone layout are identical
+ * across all six.
  *
- * Below `lg` the spread collapses to a single column in that same order and the
- * sticky is dropped. Copy stays first there on purpose: a plate arriving before
- * its name is a picture of nothing, and every one of these captures is dense
- * enough to need the sentence above it.
+ * ON A PHONE none of the compositions are attempted. See the stylesheet: every
+ * shot resolves to the film full bleed at its own aspect on a dark band, which
+ * is the only art direction a 393px screen has room for. The desktop
+ * compositions are all built out of overflowing the window, and a window that
+ * narrow has nothing to overflow.
  */
 export function ProjectShowcase({
   project,
-  /** Even blocks put the media on the right; odd blocks flip it. */
-  flipped = false,
-  /** Only the first block is above the fold. Everything else defers. */
+  /** Only the first shot is anywhere near the fold. Everything else defers. */
   priority = false,
 }: {
   project: Project;
-  flipped?: boolean;
   priority?: boolean;
 }) {
-  // The plate leans away from the page edge it sits nearest, so both sides of
-  // the spread appear to open towards the reader rather than in one direction.
-  const tilt = flipped ? 2 : -2;
+  const { shot, frame } = STAGING[project.index] ?? {
+    shot: "float" as const,
+    frame: "editorial" as const,
+  };
 
-  const media =
-    project.media.kind === "film" ? (
-      <FilmPlate
-        src={project.media.src}
-        poster={project.media.poster}
-        still={project.media.still}
-        alt={project.media.alt}
-        aspect={project.media.aspect}
-        tilt={tilt}
-        priority={priority}
-      />
-    ) : project.media.kind === "phones" ? (
-      <PhonePair screens={project.media.screens} tilt={tilt} priority={priority} />
-    ) : (
-      <Plate
-        src={project.media.src}
-        alt={project.media.alt}
-        tilt={tilt}
-        priority={priority}
-      />
-    );
+  const overlaid = frame !== "editorial";
 
-  /* Devices under a film, for a product whose recording is of the desktop app
-     but whose real surface is a phone. Never shown beside a `phones` block —
-     that would be the same evidence twice. */
-  const devices = project.media.kind === "film" ? project.media.screens : undefined;
+  /* The name and pitch. One element, three homes: on paper above the well, at
+     the foot of the shot, or in the dark column beside it. Rendered once and
+     positioned by the frame, so there is never a second copy of the pitch in
+     the document for a screen reader to read twice. */
+  const header = (
+    <ProductHeader
+      project={project}
+      tone={overlaid ? "void" : "paper"}
+      className={
+        frame === "overlay"
+          ? // Inside the well: stacked at the top of the dark band on a phone,
+            // lifted onto the footage itself above `lg`.
+            "container-page relative z-[2] pt-11 pb-9 lg:absolute lg:inset-x-0 lg:bottom-0 lg:pt-0 lg:pb-[clamp(2.5rem,5vh,4.5rem)]"
+          : frame === "sidebar"
+            ? "container-page relative z-[2] pt-11 pb-9 lg:absolute lg:inset-y-0 lg:left-0 lg:flex lg:max-w-[min(38vw,30rem)] lg:flex-col lg:justify-center lg:pt-0 lg:pb-0"
+            : ""
+      }
+    />
+  );
 
   return (
-    <article className="group relative">
-      <div className="flex flex-col gap-y-11 lg:grid lg:grid-cols-12 lg:gap-x-8 lg:gap-y-0">
-        {/* ---------------------------------------------------------- copy
-            `contents` on small screens dissolves this wrapper so that its two
-            halves become siblings of the media and can be ordered around it —
-            name and pitch, then the film, then everything else. On a phone that
-            is the whole point: the reader gets ONE thing to look at, and the
-            supporting detail waits until after they have looked at it.
+    <ScrollStage className="relative">
+      <article>
+        {frame === "editorial" ? (
+          <div className="container-page pb-11 md:pb-14">{header}</div>
+        ) : null}
 
-            Above `lg` the wrapper reassembles into the sticky column it has
-            always been, holding both halves together while the media travels. */}
-        <div
-          className={`contents lg:block lg:col-span-4 lg:row-start-1 lg:self-start lg:sticky lg:top-[7.5rem] ${
-            flipped ? "lg:col-start-9" : "lg:col-start-1"
-          }`}
-        >
-          <div className="order-1">
-            <Reveal>
-              <div className="flex items-center gap-4">
-                <span className="type-label tnum text-ink-25">{project.index}</span>
-                <span aria-hidden className="h-px w-7 bg-rule-strong" />
-                <span className="type-label text-accent">{project.kind}</span>
-              </div>
-            </Reveal>
+        <ProductWell
+          project={project}
+          shot={shot}
+          header={overlaid ? header : undefined}
+          priority={priority}
+        />
 
-            <Reveal delay={0.06}>
-              <div className="mt-7 flex items-center gap-3.5">
-                {project.logo ? <Mark logo={project.logo} /> : null}
-                <h3 className="type-h3">
-                  {project.href ? (
-                    // A real link rather than a pseudo-element stretched over
-                    // the block. The sticky column is a positioned ancestor, so
-                    // a stretched link would cover the copy anyway — and
-                    // covering your own paragraph to make a card clickable costs
-                    // the reader the ability to select the text on it.
-                    <a
-                      href={project.href}
-                      target="_blank"
-                      rel="noreferrer noopener"
-                      aria-label={`${project.name} — ${
-                        project.linkLabel ?? "visit the live product"
-                      }, opens in a new tab`}
-                      className="link-rule"
-                    >
-                      {project.name}
-                    </a>
-                  ) : (
-                    project.name
-                  )}
-                </h3>
-              </div>
-            </Reveal>
+        {/* ------------------------------------------------------- the proof
+            Everything that makes the shot above checkable, set deliberately
+            quieter than it used to be. It is not less important — the link is
+            still the single most valuable control in the act — it is that a
+            reader who has just watched the product run does not need to be
+            sold, they need to be able to verify. */}
+        <div className="container-page pt-12 md:pt-16">
+          <div className="grid grid-cols-1 gap-y-10 lg:grid-cols-12 lg:gap-x-8">
+            <div className="lg:col-span-5">
+              <Reveal>
+                <p className="type-body max-w-[52ch] text-ink-70">
+                  {project.summary}
+                </p>
+              </Reveal>
 
-            <Reveal delay={0.12}>
-              <p className="type-pitch mt-8 max-w-[17ch] text-ink">
-                {project.pitch}
-              </p>
-            </Reveal>
-          </div>
+              <Reveal delay={0.08}>
+                <div className="mt-8">
+                  <FeaturePills items={project.tags} />
+                </div>
+              </Reveal>
+            </div>
 
-          <div className="order-3 lg:mt-7">
-            <Reveal delay={0.18}>
-              <p className="type-body max-w-[46ch] text-ink-70">{project.summary}</p>
-            </Reveal>
-
-            <Reveal delay={0.24}>
-              <div className="mt-9">
-                <FeaturePills items={project.tags} />
-              </div>
-            </Reveal>
-
-            <Reveal delay={0.3}>
-              <div className="mt-10">
+            <div className="lg:col-span-6 lg:col-start-7">
+              <Reveal delay={0.12}>
                 <ProjectMetrics project={project} />
-              </div>
-            </Reveal>
+              </Reveal>
+            </div>
           </div>
-        </div>
-
-        {/* --------------------------------------------------------- media
-            Dissolved on small screens for the same reason as the copy column:
-            the film has to land directly under the pitch, while the evidence
-            that supports it — devices, sibling apps, partner marks — waits until
-            after the reader has been told what they are looking at. Above `lg`
-            the four stack in one column beside the sticky copy, as before. */}
-        <div
-          className={`contents lg:block lg:col-span-8 lg:row-start-1 lg:self-center ${
-            flipped ? "lg:col-start-1 lg:-ml-gutter" : "lg:col-start-5 lg:-mr-gutter"
-          }`}
-        >
-          <Reveal className="order-2" y={30} duration={1}>
-            {media}
-          </Reveal>
-
-          {devices ? (
-            <Reveal className="order-4 lg:mt-16" delay={0.1} y={30} duration={1}>
-              <PhonePair screens={devices} tilt={-tilt} />
-            </Reveal>
-          ) : null}
 
           {project.apps ? (
-            <Reveal className="order-5 lg:mt-14" delay={0.16}>
-              <div className="border-t border-rule pt-8">
+            <Reveal delay={0.06}>
+              <div className="mt-12 border-t border-rule pt-8 md:mt-14">
                 <AppGrid label={project.apps.label} items={project.apps.items} />
               </div>
             </Reveal>
           ) : null}
 
           {project.partners ? (
-            <Reveal className="order-6 lg:mt-14" delay={0.16}>
-              <div className="border-t border-rule pt-8">
+            <Reveal delay={0.06}>
+              <div className="mt-12 border-t border-rule pt-8 md:mt-14">
                 <LogoCloud
                   label={project.partners.label}
                   items={project.partners.items}
@@ -210,8 +142,93 @@ export function ProjectShowcase({
             </Reveal>
           ) : null}
         </div>
-      </div>
-    </article>
+      </article>
+    </ScrollStage>
+  );
+}
+
+/**
+ * Index, sector, name, pitch. In that order, at every size, on both grounds.
+ *
+ * The mark is dropped on the dark grounds and that is deliberate rather than a
+ * fallback: two of the four products shot that way have wordmarks drawn for
+ * paper, and more to the point, a logo laid over a running product is the first
+ * thing this act said it would not do. The name in type is enough — it is what
+ * the product does on its own site.
+ */
+function ProductHeader({
+  project,
+  tone,
+  className = "",
+}: {
+  project: Project;
+  tone: "paper" | "void";
+  className?: string;
+}) {
+  const dark = tone === "void";
+
+  return (
+    <div className={className}>
+      <Reveal>
+        <div className="flex items-center gap-4">
+          <span
+            className={`type-label tnum ${dark ? "text-bone-60" : "text-ink-25"}`}
+          >
+            {project.index}
+          </span>
+          <span
+            aria-hidden
+            className={`h-px w-7 ${dark ? "bg-rule-invert-strong" : "bg-rule-strong"}`}
+          />
+          {/* Burnt sienna sits at the edge of legibility on near-black, so the
+              dark ground takes the softened tint. Same accent, one step up. */}
+          <span
+            className={`type-label ${dark ? "text-accent-soft" : "text-accent"}`}
+          >
+            {project.kind}
+          </span>
+        </div>
+      </Reveal>
+
+      <Reveal delay={0.06}>
+        <div className="mt-6 flex items-center gap-3.5">
+          {project.logo && !dark ? <Mark logo={project.logo} /> : null}
+          <h3 className={`type-h3 ${dark ? "text-bone" : ""}`}>
+            {project.href ? (
+              // A real link rather than a pseudo-element stretched over the
+              // block. Covering your own pitch to make a section clickable costs
+              // the reader the ability to select the text on it, and on the
+              // overlaid frames it would also cover the film.
+              <a
+                href={project.href}
+                target="_blank"
+                rel="noreferrer noopener"
+                aria-label={`${project.name} — ${
+                  project.linkLabel ?? "visit the live product"
+                }, opens in a new tab`}
+                className="link-rule"
+              >
+                {project.name}
+              </a>
+            ) : (
+              project.name
+            )}
+          </h3>
+        </div>
+      </Reveal>
+
+      <Reveal delay={0.12}>
+        {/* The one line a visitor is meant to be able to repeat after five
+            seconds. Wider measure than it had in the old four-column layout,
+            because it is no longer a column of copy — it is a caption on a
+            screen-sized picture, and it should read in one pass. */}
+        <p
+          className={`type-pitch mt-7 max-w-[24ch] ${dark ? "text-bone" : "text-ink"}`}
+        >
+          {project.pitch}
+        </p>
+      </Reveal>
+    </div>
   );
 }
 

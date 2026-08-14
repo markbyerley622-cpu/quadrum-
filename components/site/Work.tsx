@@ -7,43 +7,53 @@ import { ProjectShowcase } from "@/components/work/ProjectShowcase";
 import { projects } from "@/lib/content";
 
 /**
- * Act II — the proof. Six products, five of them shown as film.
+ * Act II — the proof. Six products, five of them shown as film, each one shot
+ * at roughly the size of the window.
  *
  * This act sits second on the page, immediately after the claim, because it is
  * the only thing on the site that cannot be written by anyone. Everything after
  * it — the thesis, the method, the studio — is argued to a reader who has
  * already seen the receipts.
  *
- * Three rules hold it together:
+ * Four rules hold it together:
  *
- *  1. ONE MESSAGE PER SPREAD. Each product gets a full spread with exactly one
- *     sentence set large enough to be the only thing you read. An earlier
- *     version stacked a pitch, a summary, a metric row, a tag row, a status and
- *     a partner strip at the same visual weight under a full-bleed plate — six
- *     things competing, so a reader took none of them. The hierarchy now falls
- *     away sharply: pitch, then paragraph, then hairline facts.
- *  2. THE COPY HOLDS, THE EVIDENCE MOVES. The text column is sticky and the
- *     media scrolls past it, so each product introduces itself once and then
- *     shows its work. Five of the six show it as film, already playing by the
- *     time the reader arrives — no control bar, nothing to press. This is also
- *     what hands the reader forward: a spread releases only when the next one
- *     has already begun.
- *  3. NOTHING IS DECORATIVE. Every number, capability and partner mark is taken
- *     from the running product, and every film is an unedited capture of it. The
- *     accent is spent on the index rule, the metric marker and the link, and
- *     nowhere else in the act.
+ *  1. THE FILM IS THE PAGE. Each product gets a full-bleed aperture cut through
+ *     the paper, 84–100% of the viewport tall, with the product running inside
+ *     it. The previous layout gave the film eight of twelve columns beside a
+ *     sticky paragraph, and the paragraph won every time — a reader looks at
+ *     words before pictures when the two are the same size, and in an act whose
+ *     only job is proof that is exactly backwards.
+ *  2. ONE MESSAGE PER SHOT. Exactly one sentence is set large enough to be the
+ *     only thing you read, and for three of the six it is set over the footage
+ *     rather than beside it. Everything else — summary, capabilities, the
+ *     number, the link, the marks — waits on paper underneath, where a reader
+ *     who wants to verify will find it and nobody else has to step over it.
+ *  3. NO TWO PRODUCTS ARE SHOT THE SAME WAY. A console that runs wider than the
+ *     window, a broadcast strip panning edge to edge, an aerial that takes the
+ *     whole screen, a desktop surface running off it. Six identical rounded
+ *     rectangles is what this act exists instead of; see `ProductWell` for
+ *     which composition each product gets and why its own footage chose it.
+ *  4. NOTHING IS DECORATIVE. Every number, capability and partner mark is taken
+ *     from the running product, and every film is an unedited capture of it.
+ *     Nothing here is a mockup, a render or a device that does not exist.
  *
- * Blocks alternate side — copy left, then copy right — because five spreads in
- * one direction read as a list rather than as five separate arrivals.
+ * THE CAMERA IS WHAT JOINS THEM. Every shot is still moving as the next one
+ * cuts in, and the gestures hand off down the act — dolly, push in, open out,
+ * pan, reset, rest. That is one CSS custom property per product and no
+ * animation architecture at all; the stylesheet's "THE PROOF ACT'S CAMERA"
+ * block is the whole implementation.
  *
- * ON A PHONE the spread reorders itself so there is exactly one focal point: the
- * name and the pitch, then the film full bleed edge to edge, and only then the
- * detail that supports it. See `ProjectShowcase` for how, and why the two
- * columns dissolve rather than reflow.
+ * ON A PHONE none of the compositions are attempted, because all six are built
+ * out of overflowing the window. The reader gets the name, the pitch, and then
+ * the film full bleed at its own aspect on a dark band — one focal point, no
+ * overlapping type, and no desktop composition squeezed into 393px.
  */
 export function Work() {
   return (
     <Section id="work" lattice="farRight" className="scroll-mt-24 pt-10 pb-24 md:pb-32">
+      {/* The header is the last thing in this act that sits inside the page
+          container. Everything below the rule is full bleed, because a shot
+          that stops at the gutter is a card. */}
       <div className="container-page">
         <div className="grid grid-cols-1 gap-y-8 lg:grid-cols-12 lg:gap-x-8">
           <div className="lg:col-span-7">
@@ -77,20 +87,22 @@ export function Work() {
         </div>
 
         <Rule className="mt-16 md:mt-24" />
+      </div>
 
-        {/* The gap is the act's most important number. Each spread has to clear
-            the viewport before the next begins, or the sticky copy of one
-            product ends up on screen beside the plate of the next. */}
-        <div className="mt-20 flex flex-col gap-32 md:mt-28 md:gap-48 lg:gap-56">
-          {projects.map((project, i) => (
-            <ProjectShowcase
-              key={project.index}
-              project={project}
-              flipped={i % 2 === 1}
-              priority={i === 0}
-            />
-          ))}
-        </div>
+      {/* The gap between products, and it is the act's most important number in
+          both directions. Too small and the proof of one product runs into the
+          pitch of the next; too large and the paper between the shots becomes
+          the page, which puts the reader back in a list. It is deliberately
+          tighter than it was — the shots are now near a screen tall each, so
+          the paper is a caption between them rather than a section break. */}
+      <div className="mt-16 flex flex-col gap-16 md:mt-20 md:gap-24">
+        {projects.map((project, i) => (
+          <ProjectShowcase
+            key={project.index}
+            project={project}
+            priority={i === 0}
+          />
+        ))}
       </div>
     </Section>
   );

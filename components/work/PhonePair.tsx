@@ -17,15 +17,23 @@ export function PhonePair({
   screens,
   tilt = 0,
   priority = false,
+  /**
+   * The idle bob. On by default, and turned OFF wherever the pair is already
+   * being moved by something else — inside a scroll-driven shot the two motions
+   * fight each other, and a device that floats on its own while the camera is
+   * travelling past it reads as a widget rather than as a thing in the scene.
+   */
+  float = true,
 }: {
   screens: readonly { src: string; alt: string }[];
   tilt?: number;
   priority?: boolean;
+  float?: boolean;
 }) {
   const [front, back] = screens;
 
   return (
-    <Parallax distance={30} tilt={tilt}>
+    <Parallax distance={float ? 30 : 0} tilt={tilt}>
       <div
         className="relative mx-auto flex w-fit items-start justify-center"
         style={{ ["--phone" as string]: "min(17.5rem, 41vw)" }}
@@ -40,12 +48,22 @@ export function PhonePair({
         />
 
         <div className="relative z-20 w-[var(--phone)] translate-y-[3%]">
-          <PhoneMockup src={front.src} alt={front.alt} drift={9} priority={priority} />
+          <PhoneMockup
+            src={front.src}
+            alt={front.alt}
+            drift={float ? 9 : 0}
+            priority={priority}
+          />
         </div>
 
         {back ? (
           <div className="relative z-10 -ml-[calc(var(--phone)*0.2)] w-[calc(var(--phone)*0.88)] -translate-y-[5%]">
-            <PhoneMockup src={back.src} alt={back.alt} drift={6} delay={1.4} />
+            <PhoneMockup
+              src={back.src}
+              alt={back.alt}
+              drift={float ? 6 : 0}
+              delay={1.4}
+            />
           </div>
         ) : null}
       </div>

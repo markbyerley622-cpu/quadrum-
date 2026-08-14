@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /* ==========================================================================
-   QUADRUM — DESIGN SYSTEM
+   QUANTAR — DESIGN SYSTEM
    A single committed "paper & ink" palette with full-bleed dark inversions
    used to break the vertical rhythm. Typography carries the design; colour
    is deliberately withheld so the one accent means something when it lands.
@@ -287,6 +287,245 @@
     transform: scaleX(0);
     transform-origin: right;
   }
+
+  /* ======================================================================
+     THE PROOF ACT'S CAMERA
+
+     Six products, six shots, one camera. `ScrollStage` publishes exactly one
+     custom property per product — `--p`, that spread's pass through the
+     viewport, 0 below to 1 above — and every moving part in the act is a
+     `calc()` off it. One scroll subscription and one style write per spread,
+     no React state on any frame, and nothing animated but `transform`.
+
+     `--c` re-centres that to -1 … 0 … 1 WITH ZERO AT REST, which is the whole
+     reduced-motion story: the subscription is never attached, `--p` holds the
+     0.5 it was rendered with, every `--c` term falls out of every expression,
+     and the act resolves to six still compositions. Nothing is disabled and
+     there is no second code path — the camera simply does not move. Keep that
+     property: any shot written so that its resting state is at `--c: -1` or
+     `--c: 1` will render wrong for that reader and right for everyone else,
+     which is the worst kind of bug to notice.
+
+     Two more rules the shots must hold to:
+
+      1. THE CAMERA NEVER PARKS. Each expression is still changing as the shot
+         leaves, and the next shot is already moving as it arrives. A transform
+         that reaches its final value at the centre of the screen and holds is
+         what makes a scroll page read as a stack of cards settling, which is
+         the exact impression this act exists to avoid.
+      2. NO SHOT IS A CARD. No radius, no border, no drop shadow on the well,
+         no gutter. A well is an aperture cut through the paper, and every one
+         of these compositions is built out of overflowing the window — which
+         is also why none of them are attempted below `lg`.
+     ====================================================================== */
+
+  .stage {
+    /* -1 as the spread arrives, 0 at rest, 1 as it leaves. */
+    --c: calc((var(--p, 0.5) - 0.5) * 2);
+  }
+
+  /* The aperture. Full bleed, dark, and nothing else — every product here is a
+     dark interface, so the well is also what the film loads into rather than
+     flashing a paper rectangle and then going black. */
+  .well {
+    position: relative;
+    overflow: hidden;
+    background-color: var(--color-void);
+    color: var(--color-bone);
+  }
+
+  /* The moving object inside it. On a phone this is the entire composition: the
+     film, full width, at its own aspect. Every shot sets that aspect below. */
+  .shot {
+    position: relative;
+    width: 100%;
+  }
+
+  /* Phone crops. Two of the six are re-framed rather than shrunk, because a
+     recording that is legible at 1440px is not automatically legible at 393px
+     and "the same shot, smaller" is the failure this whole act is a response
+     to. Combat's recording is 2.16:1 — full width on a phone it is a 182px
+     letterbox band in which a fight card is four millimetres tall — so it is
+     cropped to 16:9 and the reader gets the centre of the card at nearly twice
+     the size. Linton's aerial goes to 4:3 for the opposite reason: nothing in
+     it needs to be read, so the extra height is pure presence.
+
+     DRK is deliberately NOT cropped. Cutting the sides off a trading console
+     removes the panels that make it a trading console, and a smaller honest
+     frame beats a larger misleading one. */
+  .shot--float,
+  .shot--console {
+    aspect-ratio: 16 / 9;
+  }
+  .shot--travel {
+    aspect-ratio: 1280 / 958;
+  }
+  .shot--wall {
+    aspect-ratio: 16 / 9;
+  }
+  .shot--aerial {
+    aspect-ratio: 4 / 3;
+  }
+  .shot--surface {
+    aspect-ratio: 1448 / 1086;
+  }
+
+  /* The devices in the travel shot. Below `lg` they sit under the film with
+     breathing room rather than crossing it — overlapping two objects on a
+     393px screen produces one unreadable object. */
+  .drift {
+    position: relative;
+    padding-block: 2.5rem 0.5rem;
+  }
+
+  /* --- The compositions. Desktop only, by design. --------------------- */
+
+  @media (min-width: 1024px) {
+    .shot {
+      /* Six composited layers, promoted once rather than on first scroll. */
+      will-change: transform;
+    }
+
+    /* 01 · FLOAT — Pepay.
+       Held clear of every edge with the dark running past it in all
+       directions, because an object with space around it reads as an object
+       and an object bled to the window edges reads as a background. The camera
+       dollies past: it arrives a little short of full size, settles, and keeps
+       coming as the reader leaves. */
+    /* Every well centres with FLEX rather than grid, and that is load-bearing
+       rather than taste. A grid column sized `auto` grows to fit an item wider
+       than the container and then starts at the container's left edge, so a
+       106vw shot bled 86px off the right and nothing off the left — a
+       composition that is supposed to be symmetrically wider than the window
+       arriving visibly off-centre. A centred flex line overflows equally in
+       both directions, which is exactly what a clipped shot wants. */
+    .well--float {
+      display: flex;
+      min-height: 92vh;
+      align-items: center;
+      justify-content: center;
+      padding-block: clamp(3rem, 7vh, 6rem);
+    }
+    .shot--float {
+      width: min(82vw, 86rem);
+      flex: none;
+      transform: translate3d(0, calc(var(--c) * -2.6rem), 0)
+        scale(calc(1 + var(--c) * 0.05));
+      /* The one framed object in the act, and it needs the hairline: Pepay's
+         reel opens on near-black, so a black film floating on a black ground
+         has no edge and the composition disappears — the reader sees an empty
+         well rather than a product held in space. A drop shadow does nothing
+         here for the same reason. One pixel of bone, no radius: a frame, not a
+         card. Every other shot bleeds to the window and needs no edge. */
+      outline: 1px solid var(--color-rule-invert);
+      outline-offset: -1px;
+    }
+
+    /* 02 · CONSOLE — DRK.
+       Wider than the window on both sides and clipped top and bottom, so the
+       reader is inside the interface rather than looking at a picture of one.
+       The scale only ever increases across the pass — this is the shot that
+       pushes in, and it hands the act on mid-push. 106vw is the largest the
+       console takes before the crop starts eating its chrome. */
+    .well--console {
+      display: flex;
+      /* Fixed, not `min-height`: the console has to be able to run off the top
+         and bottom of the window as well as the sides, and a well that grows
+         to fit its shot can only ever letterbox it. */
+      height: 100vh;
+      align-items: center;
+      justify-content: center;
+    }
+    .shot--console {
+      width: 112vw;
+      flex: none;
+      transform: translate3d(0, calc(var(--c) * -2.2rem), 0)
+        scale(calc(1.02 + var(--c) * 0.06));
+    }
+
+    /* 03 · TRAVEL — BNBPay.
+       The desktop recording and the devices cross the frame in opposite
+       directions and separate as the reader passes, which is the shot doing
+       what the product does: value leaving one place and arriving in another.
+       They start overlapped, so it is one scene rather than two exhibits. */
+    .well--travel {
+      display: flex;
+      min-height: 96vh;
+      align-items: center;
+      justify-content: center;
+      padding-inline: 3vw;
+    }
+    .shot--travel {
+      width: min(54vw, 60rem);
+      flex: none;
+      transform: translate3d(calc(var(--c) * -3.5rem), calc(var(--c) * -1.5rem), 0)
+        scale(calc(1 + var(--c) * 0.03));
+    }
+    .drift--travel {
+      z-index: 1;
+      margin-left: -7vw;
+      padding-block: 0;
+      transform: translate3d(calc(var(--c) * 6rem), calc(var(--c) * -4rem), 0);
+    }
+
+    /* 04 · WALL — Combat Reviews.
+       A broadcast strip: no inset, no softening, no margin. The edges of the
+       window are the edges of the film, and it pans harder and faster than
+       anything else in the act — which is the correct register for a product
+       about fights, and the reason it must not be shot like DRK. */
+    .well--wall {
+      display: flex;
+      height: 82vh;
+      align-items: center;
+      justify-content: center;
+    }
+    .shot--wall {
+      flex: none;
+      /* Back to the recording's own 2.16:1 — the phone crop above exists only
+         because 393px cannot carry it. Sized so the strip is TALLER than the
+         well it sits in: a broadcast wall has no top or bottom edge, and a
+         narrower shot left bands of void that read as letterboxing. */
+      aspect-ratio: 1280 / 592;
+      width: 122vw;
+      transform: translate3d(calc(var(--c) * 5rem), 0, 0)
+        scale(calc(1.02 + var(--c) * 0.05));
+    }
+
+    /* 05 · AERIAL — Linton Villas.
+       The whole window, and almost nothing done to it. A drone crossing a
+       development already contains more camera movement than the page could
+       add, so the page adds one slow settle and gets out of the way. It is
+       also the act's reset: after four interfaces, a landscape. */
+    .well--aerial {
+      height: 100vh;
+    }
+    .shot--aerial {
+      position: absolute;
+      inset: 0;
+      width: auto;
+      aspect-ratio: auto;
+      transform: scale(calc(1.05 - var(--c) * 0.03));
+    }
+
+    /* 06 · SURFACE — Noise.
+       A desktop that runs off the right edge of the window and keeps going,
+       with the copy held in the dark it leaves behind. The only still in the
+       act and the only shot that comes to rest: the act ends by stopping,
+       which is what makes the five before it read as travel. */
+    .well--surface {
+      display: flex;
+      min-height: 90vh;
+      align-items: center;
+    }
+    .shot--surface {
+      height: min(84vh, 58rem);
+      width: auto;
+      margin-inline: auto -8vw;
+      flex: none;
+      transform: translate3d(calc(var(--c) * -2rem), 0, 0)
+        scale(calc(1 + var(--c) * 0.012));
+    }
+  }
 }
 
 /* ==========================================================================
@@ -367,6 +606,17 @@
   .animate-marquee {
     animation: none;
     transform: none;
+  }
+
+  /* The proof act's camera, held at rest. `ScrollStage` never attaches its
+     subscription for this reader, so `--p` already sits at the 0.5 it was
+     rendered with and every shot is already in its neutral composition. This
+     is the guarantee rather than the mechanism: it also covers the case where
+     a reader turns the preference on mid-session, after values have been
+     written. The films, the order, the pitches, the proof and the
+     constellation are all untouched — only the camera stops. */
+  .stage {
+    --c: 0;
   }
 }
 

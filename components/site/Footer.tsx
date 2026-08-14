@@ -34,7 +34,7 @@ export function Footer() {
             aria-hidden
             className="mt-20 select-none text-[19vw] leading-[0.78] font-normal tracking-[-0.055em] text-bone/[0.07] md:mt-24"
           >
-            Quadrum
+            {site.name}
           </div>
         </Reveal>
 

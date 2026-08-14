@@ -4,7 +4,7 @@ import { Rule } from "@/components/primitives/Rule";
 import { Section } from "@/components/primitives/Section";
 import { TextReveal } from "@/components/primitives/TextReveal";
 import { Tally } from "@/components/site/Tally";
-import { figures } from "@/lib/content";
+import { figures, site } from "@/lib/content";
 
 /**
  * Act II½ — the count.
@@ -75,7 +75,7 @@ export function Count() {
                 ) : (
                   <span className="type-label mt-3 flex items-center gap-2 text-ink-25">
                     <span aria-hidden className="size-[4px] shrink-0 border border-rule-strong" />
-                    Quadrum
+                    {site.name}
                   </span>
                 )}
               </li>

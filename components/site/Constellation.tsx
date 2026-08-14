@@ -3,7 +3,7 @@
 import { useScroll, useReducedMotion } from "motion/react";
 import { useEffect, useRef } from "react";
 import { Eyebrow } from "@/components/primitives/Eyebrow";
-import { constellation } from "@/lib/content";
+import { constellation, site } from "@/lib/content";
 
 /**
  * Act IV½ — six products drawing lines to one studio.
@@ -160,7 +160,7 @@ export function Constellation() {
               `,
             }}
           >
-            <p className="type-h2 text-bone">Quadrum</p>
+            <p className="type-h2 text-bone">{site.name}</p>
           </div>
         </div>
 

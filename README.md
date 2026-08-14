@@ -1,4 +1,4 @@
-# Quadrum
+# Quantar
 
 Marketing site for a founder-led product strategy, design and engineering studio.
 
@@ -147,7 +147,7 @@ Three places state the studio's position rather than inventing social proof:
 
 - **Selected work** is labelled *Concept study* in the copy, because it is.
 - **Studio principles** sit inside the process stage each belongs to. They are
-  Quadrum's own positions, not client testimonials — inventing attributed
+  Quantar's own positions, not client testimonials — inventing attributed
   praise for a studio presenting concept studies would be dishonest. If real,
   permissioned client quotes exist, give them their own act.
 - **`metrics`** describes how the work is staffed. No client count, revenue

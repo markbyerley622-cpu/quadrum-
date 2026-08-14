@@ -15,13 +15,13 @@
  */
 
 export const site = {
-  name: "Quadrum",
-  domain: "quadrumstudio.com",
-  url: "https://quadrumstudio.com",
+  name: "Quantar",
+  domain: "quantar.space",
+  url: "https://quantar.space",
   tagline: "Complex digital products. Built to last.",
   description:
-    "Quadrum is a founder-led product strategy, design and engineering studio focused on turning complex ideas into refined digital products.",
-  email: "hello@quadrumstudio.com",
+    "Quantar is a founder-led product strategy, design and engineering studio focused on turning complex ideas into refined digital products.",
+  email: "hello@quantar.space",
   location: "Operating globally",
   founded: 2026,
 } as const;
@@ -603,7 +603,7 @@ export const turn = {
  * The four stages, one line of method each, plus the studio principle that
  * belongs to it.
  *
- * NOTE: these are Quadrum's own positions, not client testimonials. If real,
+ * NOTE: these are Quantar's own positions, not client testimonials. If real,
  * permissioned client quotes ever exist, add them as their own act rather than
  * dressing these up.
  */
