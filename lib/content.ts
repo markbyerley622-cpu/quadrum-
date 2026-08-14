@@ -220,7 +220,7 @@ export type Project = {
 export const projects: readonly Project[] = [
   {
     index: "01",
-    kind: "Merchant infrastructure",
+    kind: "Multi-chain payments",
     name: "Pepay",
     pitch: "Multi-chain payment infrastructure built for modern commerce.",
     summary:
@@ -295,7 +295,7 @@ export const projects: readonly Project[] = [
   },
   {
     index: "02",
-    kind: "Institutional liquidity infrastructure",
+    kind: "Institutional liquidity",
     name: "DRK",
     pitch: "Market infrastructure for making real-world assets liquid.",
     summary:
@@ -331,7 +331,7 @@ export const projects: readonly Project[] = [
   },
   {
     index: "03",
-    kind: "Payments infrastructure",
+    kind: "Programmable payments",
     name: "BNBPay",
     pitch: "Programmable payment infrastructure for merchants, platforms and AI agents.",
     summary:
@@ -483,12 +483,64 @@ export const projects: readonly Project[] = [
   },
 ] as const;
 
+/* ========================================================= ACT II½ — the count
+
+   The proof act carries its numbers as hairline captions under each product,
+   which is the right weight while you are looking at the product they belong to
+   and the wrong weight for the page as a whole. Pulled together and set large,
+   the same figures stop being footnotes and become the single most convincing
+   screen on the site — because unlike everything else here, they cannot be
+   written. Somebody either settled nineteen million dollars or they did not.
+
+   Nothing on this screen is rounded up, aggregated across products to look
+   larger, or projected. Every figure traces to one product and is repeated
+   verbatim in that product's own block. */
+
+export type Figure = {
+  /** The number itself, so it can be counted up rather than faded in. */
+  value: number;
+  decimals?: number;
+  prefix?: string;
+  suffix?: string;
+  /** What it counts. Kept to a few words — the number is the message. */
+  label: string;
+  /** Which product it came from. Absent where it describes the studio. */
+  from?: string;
+};
+
+export const figures: {
+  act: string;
+  headline: readonly string[];
+  body: string;
+  items: readonly Figure[];
+} = {
+  act: "II · The count",
+  headline: ["Numbers we", "can be held to"],
+  body: "Every figure here is taken from a running product and repeats one that appears in its own block above. Nothing is aggregated across products, projected, or rounded up to look larger.",
+  items: [
+    { value: 19.9, decimals: 1, prefix: "$", suffix: "M", label: "settled", from: "Pepay" },
+    { value: 75.9, decimals: 1, suffix: "K", label: "transactions", from: "Pepay" },
+    { value: 26.7, decimals: 1, suffix: "K", label: "paying wallets", from: "Pepay" },
+    { value: 38, label: "villas sold from one site", from: "Linton Villas" },
+    { value: 6, label: "tokens accepted, gaslessly", from: "BNBPay" },
+    { value: 6, label: "products built" },
+    // Live means a public URL a reader can open right now. DRK is pre-release
+    // and Noise is in private beta, and neither is counted here.
+    { value: 4, label: "in production today" },
+    { value: 6, label: "platforms indexed", from: "Noise" },
+  ],
+};
+
 /* ============================================================ ACT III — turn */
 
 export const turn = {
   act: "III · The turn",
   headline: "We build digital products for lasting performance — not just launch day.",
-  body: "Real products evolve. Users change, requirements shift and complexity compounds. We combine product judgment, design discipline and engineering depth to build software that performs under pressure and improves with time.",
+  // Trimmed. The second half used to explain what product judgment, design
+  // discipline and engineering depth get you — to a reader who has just
+  // scrolled six products and eight figures proving it. The evidence had
+  // already made the argument; the paragraph was repeating it back.
+  body: "Real products evolve. Users change, requirements shift and complexity compounds. We build for the version that exists in three years, not the one that launches.",
 } as const;
 
 /**
@@ -585,6 +637,13 @@ export const engagement = {
       body: "A written recommendation showing the trade-offs, risks and next steps — with a plan another capable team could execute without us.",
     },
   ],
+  /**
+   * The line the whole fortnight exists to earn, set large under the timeline.
+   * It is the difference between this and every discovery workshop the reader
+   * has already been sold, and it belongs at the end of the sequence rather
+   * than in the header, where it would be a promise instead of a conclusion.
+   */
+  close: "You leave with a decision. Not another deck.",
   ledger: {
     label: "What you leave with",
     body: "Every output is yours, whether we continue together or not. No lock-in. No dependency. No obligation.",
@@ -604,8 +663,12 @@ export const engagement = {
  */
 export const contact = {
   eyebrow: "Contact",
-  headline: "Have something worth building?",
-  body: "Tell us what you're working on, where things stand and what you need next. We'll review it and respond within two working days.",
+  // "Have something worth building?" asked the reader to rate their own idea,
+  // which is a strange thing to make someone do at the point of contact. This
+  // asks about the work instead, and answers the question the whole page has
+  // been arguing: complicated is the qualification, not a disqualification.
+  headline: "Something complicated?",
+  body: "Tell us what you're building, where it stands and what you need next. We read every enquiry ourselves and respond within two working days.",
   cta: "Discuss a project",
   form: {
     /** Names the revealed region for screen readers. */

@@ -1,6 +1,7 @@
 import { Hinge } from "@/components/primitives/Hinge";
 import { Lattice } from "@/components/lattice/Lattice";
 import { Contact } from "@/components/site/Contact";
+import { Count } from "@/components/site/Count";
 import { Footer } from "@/components/site/Footer";
 import { Hero } from "@/components/site/Hero";
 import { Nav } from "@/components/site/Nav";
@@ -14,10 +15,17 @@ import { hinges, projects, site } from "@/lib/content";
  * The page is a five-act narrative, not a stack of sections.
  *
  *   I    Opening      the claim
- *   II   The proof    four products actually in production
+ *   II   The proof    six products, five of them shown running
+ *   II½  The count    what those products have actually done, set large
  *   III  The turn     the thesis, and how the work is done
  *   IV   The studio   who does it, what we refuse, and how an engagement starts
  *   V    The invitation
+ *
+ * The count is a half-act rather than an act of its own because it introduces
+ * nothing: every figure on it is repeated verbatim from a product block above.
+ * It exists because a reader who skims the work never registers that one of
+ * these things has settled nineteen million dollars, and because it is the only
+ * screen on the site whose claims cannot be written.
  *
  * THE PROOF COMES SECOND, and that ordering is the most important decision on
  * the page. An earlier version ran eight acts and put three invented concept
@@ -93,6 +101,7 @@ export default function Home() {
 
         {/* II */}
         <Work />
+        <Count />
         <Hinge {...hinges.toTurn} />
 
         {/* III */}

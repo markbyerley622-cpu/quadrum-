@@ -12,6 +12,19 @@ import type { Transition, Variants } from "motion/react";
 export const EASE = [0.22, 1, 0.36, 1] as const;
 export const EASE_IN_OUT = [0.65, 0, 0.35, 1] as const;
 
+/**
+ * The house curve as a function, for the rare animation driven by
+ * `requestAnimationFrame` rather than by CSS or `motion` — a number counting up,
+ * for instance. `EASE` is a set of bezier control points: a transition can
+ * consume those, a counter cannot.
+ *
+ * This is easeOutQuint, which tracks cubic-bezier(0.22, 1, 0.36, 1) closely
+ * enough that a figure counting under it and a panel sliding under the CSS curve
+ * read as the same gesture. Solving the bezier per frame would be more correct
+ * and indistinguishable.
+ */
+export const easeOut = (t: number) => 1 - Math.pow(1 - t, 5);
+
 export const transition = {
   /** Default for content arriving on scroll. */
   reveal: { duration: 0.85, ease: EASE } satisfies Transition,

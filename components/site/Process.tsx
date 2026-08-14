@@ -2,23 +2,24 @@ import { Eyebrow } from "@/components/primitives/Eyebrow";
 import { Reveal } from "@/components/primitives/Reveal";
 import { Section } from "@/components/primitives/Section";
 import { TextReveal } from "@/components/primitives/TextReveal";
-import { process } from "@/lib/content";
+import { MethodList } from "@/components/site/MethodList";
 
 /**
  * Act III, second beat — Define → Design → Build → Evolve.
  *
- * This used to be four full-height panels tracked by a sticky index. It read
- * well and cost four screens of scroll to say something the reader had already
- * accepted by this point in the page — so it is now a single quadrant, one
- * screen, four cells.
+ * It has been three things. Four full-height panels tracked by a sticky index,
+ * which cost four screens of scroll to say something the reader had already
+ * accepted. Then a quadrant of four cells, which fixed the length and lost the
+ * point: everything legible, nothing emphasised, four equal blocks of body copy
+ * in a section whose whole subject is sequence.
  *
- * The name is the point of the studio, so the four cells are laid out as an
- * actual quadrant rather than a list: hairlines between them, nothing around
- * them, closed off at the bottom so the block reads as a table rather than a
- * run of items that happened to stop.
+ * Now it is four numerals you open, one at a time. See `MethodList` for why the
+ * accordion is the argument rather than a space-saving device.
  *
- * Each stage carries the studio principle that belongs to it, set in the serif
- * so it reads as an aside in a different voice to the surrounding copy.
+ * The header stays deliberately plain. This section is the one place on the page
+ * making a claim about how the studio works rather than what it has built, and
+ * the reader arriving here has just come through six products and eight figures —
+ * they do not need persuading again, they need it stated.
  */
 export function Process() {
   return (
@@ -46,39 +47,9 @@ export function Process() {
           </div>
         </div>
 
-        <div className="mt-16 grid grid-cols-1 md:mt-24 md:grid-cols-2">
-          {process.map((step, i) => (
-            <Reveal
-              key={step.index}
-              delay={(i % 2) * 0.08}
-              y={18}
-              className={`border-t border-rule ${
-                i % 2 === 1
-                  ? "md:border-l md:border-rule md:pl-10 lg:pl-16"
-                  : "md:pr-10 lg:pr-16"
-              }`}
-            >
-              <div className="group flex h-full items-start gap-5 py-9 md:gap-8 md:py-12">
-                <span className="type-label tnum mt-[0.45rem] shrink-0 text-ink-25 transition-colors duration-500 group-hover:text-accent">
-                  {step.index}
-                </span>
-                <div className="min-w-0">
-                  <h3 className="type-h3">{step.title}</h3>
-                  <p className="type-body measure mt-4 text-ink-70">
-                    {step.summary}
-                  </p>
-                  <figure className="mt-6 border-l border-accent/40 pl-5">
-                    <blockquote className="type-serif measure text-[clamp(1rem,1.35vw,1.2rem)] leading-[1.45] text-ink-45">
-                      {step.principle}
-                    </blockquote>
-                  </figure>
-                </div>
-              </div>
-            </Reveal>
-          ))}
-          {/* Close the quadrant so the last row reads as a table, not a cut-off. */}
-          <div className="border-t border-rule md:col-span-2" />
-        </div>
+        <Reveal delay={0.1} y={18}>
+          <MethodList />
+        </Reveal>
       </div>
     </Section>
   );

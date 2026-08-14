@@ -58,11 +58,17 @@ export function Work() {
           </div>
           <div className="lg:col-span-4 lg:col-start-9 lg:self-end">
             <Reveal delay={0.15}>
+              {/* Names the range, then says what actually connects it. Listing
+                  the sectors alone invites the wrong conclusion — three of the
+                  six are financial, and a reader who stops at the list files
+                  this studio under crypto. The common factor is not an industry
+                  and it is worth saying out loud. */}
               <p className="type-body max-w-[42ch] text-ink-70">
-                Two payment platforms, institutional liquidity infrastructure, a
-                combat-sports network, a thirty-eight villa development and an
-                enterprise AI workspace. Six products, one standard — and five of
-                them recorded running, rather than described.
+                Payments, institutional liquidity, combat sports, property
+                investment and enterprise AI. What these share is not a sector —
+                it is that each was a complicated business that had to become a
+                product someone could actually use. Five of the six are shown
+                running, not described.
               </p>
             </Reveal>
           </div>

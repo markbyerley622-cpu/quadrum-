@@ -3,6 +3,7 @@ import { Reveal } from "@/components/primitives/Reveal";
 import { Rule } from "@/components/primitives/Rule";
 import { Section } from "@/components/primitives/Section";
 import { TextReveal } from "@/components/primitives/TextReveal";
+import { Fortnight } from "@/components/site/Fortnight";
 import { engagement, people } from "@/lib/content";
 
 /**
@@ -17,10 +18,11 @@ import { engagement, people } from "@/lib/content";
  * act because it is the answer to "who are you and how do we start", which is
  * one question, not two.
  *
- * The fortnight was previously a scroll-pinned timeline running over 280vh of
- * document. It was the single most expensive thing on the page and it said what
- * four dated columns say in one screen. The dates are what carry the promise —
- * a phase can slip indefinitely, a day cannot — so the dates are what survived.
+ * The fortnight has been a scroll-pinned sequence over 280vh, then four dated
+ * columns in a row. The columns were right about length and wrong about
+ * substance — see `Fortnight` — so it is now a rail the reader's scroll fills,
+ * at the cost of one custom property and four state changes. The dates are what
+ * carry the promise either way: a phase can slip indefinitely, a day cannot.
  */
 export function People() {
   return (
@@ -92,26 +94,9 @@ export function People() {
 
           <Rule className="mt-12 md:mt-16" />
 
-          <ol className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-            {engagement.moments.map((moment, i) => (
-              <Reveal
-                key={moment.index}
-                delay={i * 0.07}
-                y={16}
-                className={`border-b border-rule py-8 md:py-10 ${
-                  i > 0 ? "lg:border-l lg:border-rule lg:pl-8" : "lg:pr-8"
-                } ${i % 2 === 1 ? "sm:border-l sm:border-rule sm:pl-8 lg:pl-8" : ""}`}
-              >
-                <li className="list-none">
-                  <p className="type-label tnum text-accent">{moment.days}</p>
-                  <h3 className="type-h4 mt-5 max-w-[18ch]">{moment.title}</h3>
-                  <p className="type-small measure mt-3 max-w-[32ch] text-ink-45">
-                    {moment.body}
-                  </p>
-                </li>
-              </Reveal>
-            ))}
-          </ol>
+          <div className="mt-4 md:mt-8">
+            <Fortnight />
+          </div>
 
           <Reveal y={14}>
             <div className="mt-8 flex flex-col gap-x-12 gap-y-3 md:flex-row md:items-baseline md:justify-between">
