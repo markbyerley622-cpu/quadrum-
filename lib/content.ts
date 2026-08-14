@@ -16,8 +16,15 @@
 
 export const site = {
   name: "Quantar",
-  domain: "quantar.space",
-  url: "https://quantar.space",
+  domain: "www.quantar.space",
+  /**
+   * WITH the `www`, because that is the canonical host. The apex 308-redirects
+   * to it, so the shorter form — which this was — pointed every canonical tag,
+   * OG url, sitemap entry and JSON-LD @id at a permanent redirect rather than
+   * at the page. If the redirect is ever reversed at the DNS or project level,
+   * this is the line that has to follow it.
+   */
+  url: "https://www.quantar.space",
   tagline: "Complex digital products. Built to last.",
   description:
     "Quantar is a founder-led product strategy, design and engineering studio focused on turning complex ideas into refined digital products.",
