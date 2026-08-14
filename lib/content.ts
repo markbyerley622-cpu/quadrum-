@@ -38,7 +38,11 @@ export const nav = [
 export const hero = {
   eyebrow: "Product strategy, design and engineering",
   headline: ["Complex", "digital products.", "Built to last."],
-  lead: "Quadrum is a founder-led product studio designing and building high-quality digital products — from initial strategy and product definition through design, engineering, launch and continued development.",
+  // Half the length it was. The old lead listed the phases of an engagement —
+  // strategy, definition, design, engineering, launch, continued development —
+  // to a reader who has not yet been given a reason to care about any of them,
+  // and the six products below make that case far better than the sentence did.
+  lead: "A founder-led product studio. Complicated businesses, turned into products people can actually use.",
   standfirst: [
     "Founder-led delivery",
     "Direct collaboration",
@@ -154,12 +158,22 @@ export type Project = {
   kind: string;
   name: string;
   /**
-   * The pitch. One or two short sentences, set large in the serif — this is
-   * the line a visitor actually reads, so it has to sell the product on its
-   * own and stop before it becomes a paragraph. Keep it under ~110 characters.
+   * The pitch, and the top of the hierarchy every product follows here:
+   * PITCH → DESCRIPTION → PROOF.
+   *
+   * One sentence, set at `type-pitch`, and the test it has to pass is that
+   * somebody could repeat it after five seconds on the page. It is the only
+   * line in the block most visitors will read, so it says what the thing IS
+   * rather than what it does. Under ~95 characters.
    */
   pitch: string;
-  /** The detail, for the reader the pitch already caught. One sentence. */
+  /**
+   * Why it matters, for the reader the pitch already caught. ONE short
+   * sentence, and never a sentence the film below it already proves — the
+   * paragraph is the voiceover, the recording is the evidence. These were two
+   * to three times this length and were explaining what the reader was about to
+   * watch.
+   */
   summary: string;
   /**
    * The live product. Present means the claim on this card is checkable in one
@@ -237,9 +251,9 @@ export const projects: readonly Project[] = [
     index: "01",
     kind: "Multi-chain payments",
     name: "Pepay",
-    pitch: "Multi-chain payment infrastructure built for modern commerce.",
+    pitch: "The payment infrastructure turning crypto into something people can actually use.",
     summary:
-      "Accept digital assets, manage payments and settle across supported networks from one unified system — with invoicing, payment links, QR checkout, subscriptions and financial reconciliation built into the same payment layer.",
+      "Accept any supported asset and settle from one system — invoicing, payment links, QR checkout, subscriptions and reconciliation on the same ledger.",
     href: "https://pepay-merchant-dashboard.vercel.app/home",
     secondary: { label: "@pepaylabs", href: "https://x.com/pepaylabs" },
     status: "Live",
@@ -314,7 +328,7 @@ export const projects: readonly Project[] = [
     name: "DRK",
     pitch: "Market infrastructure for making real-world assets liquid.",
     summary:
-      "Tokenisation solved issuance. It did not solve liquidity. DRK is building the operating layer between tokenised assets and institutional markets — bringing fair value, liquidity, risk, execution and settlement into one system designed to determine how an asset should be priced, traded and made liquid.",
+      "Tokenisation solved issuance. It did not solve liquidity. DRK is the operating layer between tokenised assets and institutional markets.",
     href: "https://drk-deck.vercel.app/",
     // The product itself is pre-release. What is public is the investor
     // experience we built for it, so the link says so rather than implying the
@@ -370,9 +384,9 @@ export const projects: readonly Project[] = [
     index: "03",
     kind: "Programmable payments",
     name: "BNBPay",
-    pitch: "Programmable payment infrastructure for merchants, platforms and AI agents.",
+    pitch: "The payment network built for a world where money moves on-chain.",
     summary:
-      "BNBPay provides gasless, programmable payment infrastructure for merchants, digital platforms and AI agents. Its unified integration supports invoices, subscriptions, gift cards and x402-powered API payments across BNB Chain and opBNB — making on-chain commerce simpler to deploy, operate and scale.",
+      "Gasless, programmable rails for merchants, platforms and AI agents — invoices, subscriptions, gift cards and x402 API payments across BNB Chain and opBNB.",
     href: "https://bnbpayvercel1.vercel.app",
     status: "Live",
     metric: "Six accepted tokens, settled gaslessly on BNB Chain",
@@ -418,9 +432,9 @@ export const projects: readonly Project[] = [
     index: "04",
     kind: "Sports media platform",
     name: "Combat Reviews",
-    pitch: "Every fight that matters, in one place.",
+    pitch: "The intelligence layer for the world's combat sports.",
     summary:
-      "A unified combat-sports platform bringing events, fight cards, rankings, athlete profiles, predictions and community discussion together across major promotions and disciplines — from announcement through to result.",
+      "Events, fight cards, rankings, athlete profiles and predictions across every major promotion, from announcement through to result.",
     href: "https://globalfight-p69k.onrender.com/events",
     status: "Live",
     metric: "Events · Full cards · Rankings · Predictions · Community",
@@ -455,9 +469,9 @@ export const projects: readonly Project[] = [
     index: "05",
     kind: "Property development",
     name: "Linton Villas",
-    pitch: "An investment platform for 38 private villas in South Lombok.",
+    pitch: "The investment case for thirty-eight villas, built to close a buyer who will never visit.",
     summary:
-      "A digital sales experience built to turn a property development into an investable proposition for overseas buyers — combining the masterplan, four villa types, floor plans, financial projections, facilities, an eight-minute film and the full prospectus into one guided narrative designed to build conviction before an investor ever visits the site.",
+      "Masterplan, four villa types, floor plans, financial projections, an eight-minute film and the full prospectus, as one guided narrative.",
     href: "https://lintonvillas.vercel.app",
     status: "Live",
     metric: "38 villas · four types · delivery scheduled for early 2028",
@@ -484,9 +498,9 @@ export const projects: readonly Project[] = [
     index: "06",
     kind: "Enterprise AI",
     name: "Noise",
-    pitch: "An AI-powered communication and knowledge system for organisations.",
+    pitch: "An operating system for turning fragmented work into decisions.",
     summary:
-      "Noise connects information from email, messaging, meetings and internal documents into one intelligent workspace. It helps teams recover context, surface important updates and understand what requires attention without manually searching across disconnected systems.",
+      "Email, chat, meetings and documents indexed into one workspace, so context is recovered rather than hunted for across disconnected systems.",
     // No public URL yet — access is gated behind a request form, so there is
     // nothing honest to link to. Deliberately left unlinked.
     status: "Private beta",
@@ -690,6 +704,44 @@ export const engagement = {
     label: "What you leave with",
     body: "Every output is yours, whether we continue together or not. No lock-in. No dependency. No obligation.",
   },
+} as const;
+
+/* ================================================== ACT IV½ — the constellation
+
+   Six products as one constellation, collapsing into the studio.
+
+   This is the only screen on the site that argues by picture alone. The act
+   above it has just spent six spreads proving each product individually; what it
+   cannot show, product by product, is the thing a client is actually buying —
+   that payments, institutional liquidity, combat sports, property and enterprise
+   AI came out of the same room. A paragraph claiming that is an assertion. Six
+   names drawing lines to one name is a demonstration.
+
+   So the copy here is almost nothing: six names, six facts already stated
+   elsewhere, and one line at the end. Every fact repeats a claim from that
+   product's own block — nothing is introduced this late in the page. */
+
+export const constellation = {
+  act: "IV · The breadth",
+  /** Landed only once the collapse completes. The picture makes the argument. */
+  statement: ["Different sectors.", "One way of working."],
+  /**
+   * Position on a square field, in percent. Arranged as a ring rather than a
+   * grid: a grid of six would read as a card layout, which is exactly what this
+   * section exists instead of.
+   */
+  nodes: [
+    { name: "Noise", fact: "Private beta", x: 50, y: 7 },
+    { name: "DRK", fact: "In development", x: 85, y: 29 },
+    { name: "Pepay", fact: "$19.9M settled", x: 81, y: 73 },
+    { name: "Linton Villas", fact: "38 villas", x: 50, y: 94 },
+    // "Every major promotion" and not "Nine disciplines": the discipline count
+    // was dropped from this product's copy in an earlier pass, and reviving a
+    // retired figure in a section whose whole premise is that it introduces
+    // nothing would be exactly the wrong place to do it.
+    { name: "Combat Reviews", fact: "Every major promotion", x: 18, y: 73 },
+    { name: "BNBPay", fact: "Six tokens, gasless", x: 14, y: 29 },
+  ],
 } as const;
 
 /* ====================================================== ACT V — invitation */

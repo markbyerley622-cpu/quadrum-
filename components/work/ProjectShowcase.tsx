@@ -144,7 +144,7 @@ export function ProjectShowcase({
             </Reveal>
 
             <Reveal delay={0.12}>
-              <p className="type-serif mt-8 max-w-[19ch] text-[clamp(1.55rem,2.5vw,2.35rem)] leading-[1.14] tracking-[-0.02em] text-ink">
+              <p className="type-pitch mt-8 max-w-[17ch] text-ink">
                 {project.pitch}
               </p>
             </Reveal>

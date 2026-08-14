@@ -100,7 +100,7 @@ export function MethodList() {
                   </p>
 
                   <figure className="mt-7 border-l border-accent/40 pl-5 md:col-span-5 md:col-start-8 md:mt-0">
-                    <blockquote className="type-serif text-[clamp(1.05rem,1.5vw,1.35rem)] leading-[1.45] text-ink-45">
+                    <blockquote className="type-lead leading-[1.45] text-ink-45">
                       {step.principle}
                     </blockquote>
                   </figure>

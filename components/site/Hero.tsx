@@ -69,9 +69,7 @@ export function Hero() {
           lines={[
             hero.headline[0],
             hero.headline[1],
-            <span key="l3">
-              Built to <span className="type-serif pr-[0.04em]">last.</span>
-            </span>,
+            hero.headline[2],
           ]}
         />
 

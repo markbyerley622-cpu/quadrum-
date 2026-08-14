@@ -1,5 +1,6 @@
 import { Hinge } from "@/components/primitives/Hinge";
 import { Lattice } from "@/components/lattice/Lattice";
+import { Constellation } from "@/components/site/Constellation";
 import { Contact } from "@/components/site/Contact";
 import { Count } from "@/components/site/Count";
 import { Footer } from "@/components/site/Footer";
@@ -111,6 +112,7 @@ export default function Home() {
 
         {/* IV */}
         <People />
+        <Constellation />
 
         {/* V */}
         <Contact />

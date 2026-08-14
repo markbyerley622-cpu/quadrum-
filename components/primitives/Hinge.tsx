@@ -77,7 +77,7 @@ export function Hinge({
             whileInView={{ opacity: 1, y: 0 }}
             viewport={viewport}
             transition={{ duration: 0.9, ease: EASE, delay: 0.18 }}
-            className={`type-serif mt-5 text-[clamp(1.5rem,3.4vw,2.6rem)] leading-[1.15] ${
+            className={`type-pitch mt-5 max-w-[24ch] ${
               dark ? "text-bone" : "text-ink"
             }`}
           >

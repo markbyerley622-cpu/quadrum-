@@ -39,9 +39,9 @@ export function Process() {
           <div className="lg:col-span-4 lg:col-start-9 lg:self-end">
             <Reveal delay={0.15}>
               <p className="type-body measure text-ink-70">
-                Four capabilities, applied end to end by one accountable team.
-                Strategy, design and engineering stay connected from the first
-                decision through production — no handoffs, no loss of context.
+                Four capabilities, one accountable team. Strategy, design and
+                engineering stay connected from the first decision through
+                production.
               </p>
             </Reveal>
           </div>

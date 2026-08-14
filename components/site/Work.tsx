@@ -63,12 +63,14 @@ export function Work() {
                   six are financial, and a reader who stops at the list files
                   this studio under crypto. The common factor is not an industry
                   and it is worth saying out loud. */}
-              <p className="type-body max-w-[42ch] text-ink-70">
+              {/* Names the range and then stops. The old version explained what
+                  connects six projects across four industries; the constellation
+                  at the end of the act now shows it, and a sentence that
+                  pre-empts a thing the page is about to demonstrate is a
+                  sentence doing the demonstration's job badly. */}
+              <p className="type-body max-w-[40ch] text-ink-70">
                 Payments, institutional liquidity, combat sports, property
-                investment and enterprise AI. What these share is not a sector —
-                it is that each was a complicated business that had to become a
-                product someone could actually use. Five of the six are shown
-                running, not described.
+                investment and enterprise AI. Five of the six are shown running.
               </p>
             </Reveal>
           </div>
