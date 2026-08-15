@@ -32,6 +32,13 @@ import type { Partner } from "@/lib/content";
  * of stickers. `mix-blend-multiply` drops the white grounds into the tile and
  * leaves the colour; each tile is `isolate` so the blend resolves against its
  * own surface rather than against whatever is behind the section.
+ *
+ * THIS IS THE ONE BLOCK THAT DOES NOT INVERT WITH THE THEME, and the blend is
+ * exactly why: multiply against a near-black tile is black, so every mark here
+ * would go out. The tiles are `plate` rather than `paper-raised` — a surface
+ * that stays light in both themes and simply dims a shade in the dark one, so
+ * these read as plaques laid on the page rather than as a hole punched in it.
+ * Anything set inside a tile has to take a `plate-` colour for the same reason.
  */
 
 /**
@@ -90,10 +97,10 @@ export function LogoCloud({
               <Tile
                 {...link}
                 className="group/mark relative isolate flex flex-col items-center justify-center gap-3
-                         border border-rule bg-paper-raised px-5 py-5 sm:px-6
+                         border border-plate-rule bg-plate px-5 py-5 sm:px-6
                          shadow-[0_1px_2px_rgb(20_19_15/0.04)]
                          transition-[border-color,box-shadow,transform] duration-[0.6s] ease-quad
-                         hover:border-rule-strong
+                         hover:border-plate-rule-strong
                          hover:shadow-[0_2px_4px_rgb(20_19_15/0.05),0_14px_28px_-16px_rgb(20_19_15/0.28)]
                          motion-safe:hover:-translate-y-0.5"
               >
@@ -149,7 +156,7 @@ export function LogoCloud({
                 // Set in the marks' own casing rather than the eyebrow's caps:
                 // these are proper nouns, and uppercasing turns YZi Labs into
                 // YZILABS and USDC's siblings into a row that reads as shouting.
-                <span className="type-small text-center leading-[1.3] text-ink-45">
+                <span className="type-small text-center leading-[1.3] text-plate-ink-45">
                   {partner.name}
                 </span>
               ) : null}

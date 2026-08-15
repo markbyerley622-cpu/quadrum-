@@ -104,6 +104,23 @@ const jobs = [
     width: 720,
   },
   {
+    from: "combat-app.mp4",
+    to: "combat-app",
+    // The app itself, unedited, standing beside the reel. The reel is the
+    // product presented; this is the product running — 252x548, which is 9:19.6
+    // and the reason the phone it sits in is the only one on the page at a real
+    // handset's aspect.
+    //
+    // Three seconds: the breaking bar, the upcoming events feed and the UFC 330
+    // main event with its quick pick, all populated rather than mid-load.
+    poster: 3,
+    crf: 26,
+    // NATIVE WIDTH, deliberately. The source is 252px across; scaling it up
+    // would add nothing but bytes, and the device it renders inside is sized
+    // to match — see the handset shot in globals.css.
+    width: 252,
+  },
+  {
     from: "linton-hero.mp4",
     to: "linton-hero",
     // The only live-action source in the set, and it costs. Grain, foliage and
@@ -224,7 +241,11 @@ function stills({ from, to, poster: at, crop, width = WIDTH }) {
   const stillWidth = Math.min(1600, width);
   const grab = (seconds, suffix) => {
     const output = path.join(OUT, `${to}${suffix}.jpg`);
-    ffmpeg(["-ss", String(seconds), "-i", input, "-frames:v", "1", "-vf", filter(crop, stillWidth), "-q:v", "4", output]);
+    // `format=yuv420p` is not cosmetic: a phone capture can arrive as full-range
+    // YUV, and mjpeg refuses to encode it — the still comes out as an ffmpeg
+    // error and a zero-byte file rather than a picture. Normalising the range
+    // costs nothing on the sources that were already fine.
+    ffmpeg(["-ss", String(seconds), "-i", input, "-frames:v", "1", "-vf", `${filter(crop, stillWidth)},format=yuv420p`, "-q:v", "4", output]);
     console.log(`still  ${to}${suffix}.jpg  t=${seconds}s  ${size(output)}`);
   };
 

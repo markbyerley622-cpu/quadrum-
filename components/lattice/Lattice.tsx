@@ -161,7 +161,20 @@ export function Lattice() {
      */
     let screenRanges: Array<[number, number]> = [];
 
+    /**
+     * True while the whole page is dark. Read once per frame from the root
+     * element, which is where the theme lives.
+     *
+     * Under the dark theme the surface question this function exists to answer
+     * has one answer everywhere: the page is dark, the inverted sections are
+     * darker, and ink hairlines would be invisible on both. So the object draws
+     * in bone throughout, and the accent takes its softened tint — the same
+     * decision the dark sections have always made, applied to the page.
+     */
+    let inverted = false;
+
     function toneAtY(y: number) {
+      if (inverted) return 1;
       let t = 0;
       for (let i = 0; i < screenRanges.length; i++) {
         const [top, bottom] = screenRanges[i];
@@ -189,6 +202,7 @@ export function Lattice() {
     };
 
     function render(time: number, forcedProgress?: number) {
+      inverted = document.documentElement.dataset.theme === "dark";
       const p = forcedProgress ?? clamp01(scrollYProgress.get());
       // The camera and the rotation ride the whole document; how *ordered* the
       // object is rides the turn specifically, so that acts can be added
@@ -212,10 +226,10 @@ export function Lattice() {
       const centreX = narrow ? width * 0.5 : width * cam.cx;
       const centreY = height * (narrow ? 0.46 : cam.cy);
       const scale = Math.min(width, height) * cam.s * (narrow ? 0.85 : 1);
-      // The points. 0.3 rather than the 0.22 this ran at, so a node is never
+      // The points. 0.26 rather than the 0.22 this ran at, so a node is never
       // fainter than the lines arriving at it — a dot dimmer than its own
       // connections reads as a smudge on the paper rather than as a joint.
-      const alpha = cam.a * (narrow ? 0.3 : 1);
+      const alpha = cam.a * (narrow ? 0.26 : 1);
 
       /**
        * Lines are faded LESS than points on a phone, and that asymmetry is the
@@ -230,8 +244,13 @@ export function Lattice() {
        * of what the thing is about. Holding the lines much higher costs no
        * legibility — a hairline at 6% ink over paper is a texture either way —
        * and the points read as connected because they are.
+       *
+       * The ratio is what matters here, not the absolute number: roughly twice
+       * the points. Both were dialled back a step after the first pass, because
+       * a phone has no side margin to put this object in — it sits over the
+       * copy, and at full strength it was arguing with it.
        */
-      const lineAlpha = cam.a * (narrow ? 0.62 : 1);
+      const lineAlpha = cam.a * (narrow ? 0.5 : 1);
 
       // Rotation: a slow constant turn plus a scroll-driven sweep, so the
       // object is never static but never spins for the sake of it.
@@ -336,7 +355,18 @@ export function Lattice() {
       };
       draw();
       window.addEventListener("resize", draw);
-      return () => window.removeEventListener("resize", draw);
+      // Nothing else redraws this canvas for a reader who has asked for no
+      // motion, so a theme flip would leave the object in the previous theme's
+      // ink until the next resize. One observer, one redraw.
+      const themed = new MutationObserver(draw);
+      themed.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ["data-theme"],
+      });
+      return () => {
+        window.removeEventListener("resize", draw);
+        themed.disconnect();
+      };
     }
 
     let frame = 0;

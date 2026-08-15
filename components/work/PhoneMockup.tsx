@@ -47,8 +47,9 @@ export function PhoneMockup({
    * A device frame exists to say "this is what the product looks like in a
    * hand", and it stops saying that the moment the picture inside it is cropped
    * or letterboxed to fit a screen shape the recording never had. So the screen
-   * takes its aspect from the film. Combat's reel is 9:16 and arrives whole;
-   * the phone simply reads as a slightly shorter phone.
+   * takes its aspect from the recording, and the phone reads as whatever phone
+   * that recording came off — Combat's capture is 252x548, which is a hair
+   * taller than 9:19.5.
    */
   screenAspect,
   /**

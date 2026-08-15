@@ -223,7 +223,13 @@ export function ProductWell({
     case "handset":
       return (
         <div className="well well--handset">
-          <div className="shot shot--handset">
+          <div
+            className="shot shot--handset"
+            // Two devices need a smaller unit than one, or the pair is wider
+            // than the phone it is being read on. The shot sets the width; this
+            // only tells it how many objects it is composing. See globals.css.
+            data-pair={media.kind === "film" && media.also ? "true" : undefined}
+          >
             {/* Ambient light behind the device. The only place on the page that
                 hints at the product's own colour, and the reason the phone reads
                 as standing in a space rather than pasted onto a dark band. */}
@@ -232,27 +238,70 @@ export function ProductWell({
               className="pointer-events-none absolute left-1/2 top-1/2 h-[72%] w-[190%] -translate-x-1/2 -translate-y-1/2
                          rounded-[50%] bg-[radial-gradient(closest-side,rgb(176_73_42/0.16),transparent_70%)] blur-2xl"
             />
+            {/* THE REEL, framed, standing to the left of the device.
+                It is NOT in a phone. It is a cut piece of film whose own
+                footage is a phone in somebody's hand, and a device drawn round
+                that is a phone inside a phone — a frame round a frame, which is
+                the same mistake the handset shot exists to avoid. It gets the
+                treatment every other film in the act gets: a soft corner and a
+                hairline.
+
+                Its width is derived from the device's, so the two objects come
+                out the same height. That is the whole composition: one height,
+                two aspects, the sold version beside the running one. */}
+            {media.kind === "film" && media.also ? (
+              <div
+                className="relative z-[1] w-[calc(var(--handset)*1.22)] shrink-0 overflow-hidden
+                           rounded-[clamp(0.75rem,1.2vw,1.375rem)]
+                           shadow-[inset_0_0_0_1px_rgb(237_234_226/0.22)]"
+                style={{ aspectRatio: media.aspect }}
+              >
+                <ProductFilm
+                  src={media.src}
+                  poster={media.poster}
+                  still={media.still}
+                  alt={media.alt}
+                  priority={priority}
+                  sizes="(min-width: 1024px) 300px, 55vw"
+                />
+              </div>
+            ) : null}
+
             {media.kind === "film" ? (
               <PhoneMockup
-                film={{
-                  src: media.src,
-                  poster: media.poster,
-                  still: media.still,
-                }}
-                alt={media.alt}
+                film={
+                  // With a second film present the DEVICE carries the raw
+                  // capture — the app itself, running, which is the thing a
+                  // device frame is honest about. Alone, it carries the primary
+                  // film, whatever that is.
+                  media.also
+                    ? {
+                        src: media.also.src,
+                        poster: media.also.poster,
+                        still: media.also.still,
+                      }
+                    : { src: media.src, poster: media.poster, still: media.still }
+                }
+                alt={media.also ? media.also.alt : media.alt}
                 // The screen takes its shape from the footage rather than the
-                // footage being cropped to a stock screen shape. Combat's reel
-                // is 9:16, so the device is a 9:16 device — and it carries no
-                // dynamic island, because this footage is a composed scene
-                // rather than a screen capture with a status bar to cover.
-                screenAspect={media.aspect}
+                // footage being cropped to a stock screen shape — and it
+                // carries no dynamic island, because neither of these captures
+                // has an iOS status bar for one to sit in front of. A pill
+                // drawn over the app's own masthead is a black mark on the
+                // product, not a detail on the device.
+                screenAspect={media.also ? media.also.aspect : media.aspect}
                 island={false}
                 // No idle bob. The shot already moves with the scroll, and a
                 // device floating on its own under a travelling camera reads as
                 // a widget rather than as a thing in the scene.
                 drift={0}
-                priority={priority}
-                className="relative z-[1] w-[var(--handset)]"
+                priority={priority && !media.also}
+                className={`relative z-[2] w-[var(--handset)] ${
+                  // Overlapping the film's edge rather than sitting clear of
+                  // it. Two objects with a gap between them are two exhibits;
+                  // two that overlap are one scene with depth in it.
+                  media.also ? "-ml-[calc(var(--handset)*0.12)]" : ""
+                }`}
               />
             ) : null}
           </div>

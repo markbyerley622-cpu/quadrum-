@@ -3,6 +3,7 @@
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "motion/react";
 import { useCallback, useEffect, useState } from "react";
 import { Logomark, Wordmark } from "@/components/site/Logo";
+import { ThemeToggle } from "@/components/site/ThemeToggle";
 import { nav, site } from "@/lib/content";
 import { EASE, transition } from "@/lib/motion";
 
@@ -81,7 +82,15 @@ export function Nav() {
                 </ul>
               </nav>
 
-              <div className="hidden md:block">
+              {/* The right-hand group. The lamp sits with the actions rather
+                  than in the link list: it changes the page, it does not
+                  navigate it. It is outside the `md:` wrapper deliberately —
+                  the phone is where most people meet a dark page, so the
+                  control has to be reachable without opening the menu. */}
+              <div className="flex items-center gap-1 md:gap-4">
+                <ThemeToggle className="-mr-1 md:mr-0" />
+
+                <div className="hidden md:block">
                 <a
                   href="#contact"
                   className="group relative inline-flex items-center gap-2.5 overflow-hidden border border-rule-strong px-5 py-2.5 text-ink transition-colors duration-500 hover:border-ink"
@@ -95,7 +104,7 @@ export function Nav() {
                     Start a conversation
                   </span>
                 </a>
-              </div>
+                </div>
 
               <button
                 type="button"
@@ -118,6 +127,7 @@ export function Nav() {
                   />
                 </span>
               </button>
+              </div>
             </div>
           </div>
 

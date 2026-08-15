@@ -59,11 +59,30 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
+  // The light value, because that is what the page opens in. `ThemeToggle`
+  // rewrites this meta tag when the visitor turns the lamp over, so the browser
+  // chrome follows the page instead of framing a dark page in bone.
   themeColor: "#f4f2ed",
-  colorScheme: "light",
+  colorScheme: "light dark",
   width: "device-width",
   initialScale: 1,
 };
+
+/**
+ * Applies the remembered theme BEFORE the first paint.
+ *
+ * This has to be an inline, synchronous script in the document — anything that
+ * waits for React is a visible flash of the wrong theme on every navigation,
+ * and the whiter the default the worse it looks. It is deliberately the only
+ * inline script on the site.
+ *
+ * IT DOES NOT READ `prefers-color-scheme`. The light theme is the design; dark
+ * is the alternative a visitor can choose, and it is then remembered for good.
+ * If that judgement is ever reversed, the change is one clause here — fall back
+ * to `matchMedia('(prefers-color-scheme: dark)').matches` when nothing is
+ * stored — and nothing else in the codebase moves.
+ */
+const THEME_SCRIPT = `(function(){try{var t=localStorage.getItem('quantar-theme');document.documentElement.dataset.theme=t==='dark'?'dark':'light';}catch(e){document.documentElement.dataset.theme='light';}})();`;
 
 export default function RootLayout({
   children,
@@ -72,7 +91,13 @@ export default function RootLayout({
     <html
       lang="en-GB"
       className={`${geistSans.variable} ${geistMono.variable}`}
+      // The script below sets `data-theme` on this element before React
+      // hydrates, which is a server/client difference by design.
+      suppressHydrationWarning
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+      </head>
       <body className="bg-paper text-ink antialiased">
         <a
           href="#main"

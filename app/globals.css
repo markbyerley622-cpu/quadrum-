@@ -62,6 +62,109 @@
   /* --- Layout ----------------------------------------------------------- */
   --spacing-gutter: clamp(1.25rem, 4.5vw, 4.5rem);
   --container-page: 1560px;
+
+  /* --- The plate --------------------------------------------------------
+     A surface that stays LIGHT in both themes, for artwork that is not ours.
+
+     Every partner mark on this page ships on a white ground and is dropped
+     into its tile with `mix-blend-multiply`. Multiply against a near-black
+     tile is black: the entire logo wall would go out in dark mode, and the one
+     thing those marks exist to do is be recognised. So the tiles they sit in
+     do not invert — they become slightly dimmer plaques on a dark page, which
+     is also how a physical object behaves. Anything drawn ON a plate takes
+     `plate-ink`, because the plate does not turn over with the theme. */
+  --color-plate: #faf9f6;
+  --color-plate-ink: #14130f;
+  --color-plate-ink-45: #837e71;
+  --color-plate-rule: rgb(20 19 15 / 0.14);
+  --color-plate-rule-strong: rgb(20 19 15 / 0.26);
+}
+
+/* ==========================================================================
+   THE OTHER LAMP
+   The same design, lit from the other side. Nothing here is a second design
+   system: it redefines the tokens the first one is built out of, so every
+   `bg-paper`, `text-ink-70` and `border-rule` in the codebase follows without
+   a single dark: variant in the markup. If you find yourself writing one, the
+   token is missing — add it here instead.
+
+   THREE RULES held it together:
+
+    1. THE RELATIONSHIPS INVERT, NOT THE VALUES. Paper stays the page, sunk
+       stays a step back from it, raised stays a step in front. Ink is still
+       the loudest thing on the surface and ink-25 the quietest. Every ratio
+       the light theme was designed around survives, which is why nothing in
+       the components had to change.
+    2. THE WELLS STAY DARKEST. Void goes DOWN, not up: an aperture cut through
+       the page has to be darker than the page in both themes, or six films
+       stop being holes and start being panels. This is the reason the page
+       ground is #14120f and not #0d0d0b — the dark theme needs somewhere below
+       itself to put the shots.
+    3. WHAT IS NOT OURS DOES NOT INVERT. See the plate above.
+
+   The accent moves one step up. Burnt sienna at #b0492a is set for paper and
+   goes muddy on near-black; the dark theme takes the tint the inverted
+   sections have always used, so the accent is the same colour doing the same
+   job at the contrast the surface needs.
+   ========================================================================== */
+
+:root {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --color-paper: #14120f;
+  --color-paper-sunk: #100f0c;
+  --color-paper-raised: #1e1c18;
+
+  --color-ink: #edeae2;
+  --color-ink-70: #b4aea1;
+  --color-ink-45: #8a8477;
+  --color-ink-25: #5b5750;
+
+  --color-void: #0a0a08;
+  --color-void-raised: #16150f;
+
+  --color-accent: #cb6a45;
+  --color-accent-soft: #dd8a68;
+
+  --color-rule: rgb(237 234 226 / 0.13);
+  --color-rule-strong: rgb(237 234 226 / 0.26);
+
+  /* Dimmed a shade off white. A plaque at #faf9f6 on a near-black page is a
+     light source; at #e8e5dd it is a piece of paper lying on a dark table. */
+  --color-plate: #e8e5dd;
+}
+
+/* The flip itself.
+
+   Colour transitions are added for the half second either side of a theme
+   change and then taken away again, rather than living permanently on every
+   surface. Permanent transitions would make the page feel laggy on ordinary
+   interactions — a hover that fades its border over 450ms reads as a slow
+   site — and would fight the transitions the components already declare.
+   `!important` is what lets this win for those few hundred milliseconds. */
+.theme-flip,
+.theme-flip *,
+.theme-flip *::before,
+.theme-flip *::after {
+  transition:
+    background-color 0.45s var(--ease-quad),
+    border-color 0.45s var(--ease-quad),
+    color 0.45s var(--ease-quad),
+    fill 0.45s var(--ease-quad),
+    box-shadow 0.45s var(--ease-quad) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-flip,
+  .theme-flip *,
+  .theme-flip *::before,
+  .theme-flip *::after {
+    transition: none !important;
+  }
 }
 
 /* ==========================================================================
@@ -413,6 +516,7 @@
      drop shadow all live outside its own box. */
   .shot--handset {
     display: flex;
+    align-items: center;
     justify-content: center;
     aspect-ratio: auto;
     margin-inline: 0;
@@ -421,6 +525,13 @@
     box-shadow: none;
     padding-block: 2.75rem;
     --handset: min(15rem, 62vw);
+  }
+  /* A film and a device instead of one device. The group is 2.1 units wide —
+     the film at 1.22, the phone at 1, overlapping by 0.12 — so the unit has to
+     come down or the object is wider than the screen it is read on. At 41vw the
+     pair lands at about 86vw, which leaves the gutter on both sides. */
+  .shot--handset[data-pair] {
+    --handset: min(11rem, 41vw);
   }
   .shot--surface {
     aspect-ratio: 1280 / 612;
@@ -577,6 +688,12 @@
          large frame now, instead of a huge one panning inside it. */
       transform: translate3d(calc(var(--c) * 4.5rem), calc(var(--c) * -3rem), 0)
         scale(calc(1 + var(--c) * 0.05));
+    }
+    .shot--handset[data-pair] {
+      /* The group is 2.1 units across, so it takes a smaller unit to land at
+         roughly the width one device used to. The shot is still the narrowest
+         in the act — that contrast is the whole reason it exists. */
+      --handset: min(15rem, 19vw);
     }
 
     /* 05 · AERIAL — Linton Villas.

@@ -38,6 +38,27 @@ import { EASE } from "@/lib/motion";
  *
  * ON A PHONE nothing changes but the scale. There is no composition to re-cut.
  */
+/**
+ * Sets `hero.emphasis` in the accent wherever it closes a line, and returns the
+ * rest of the line untouched.
+ *
+ * Done here rather than in `lib/content.ts` so the copy stays a string a
+ * non-engineer can edit without meeting a `<span>`. The line is still one
+ * continuous piece of text in the DOM — the colour change is inside it, not a
+ * second element beside it — so the mask reveal, the line breaks and anything
+ * reading the page aloud are all unaffected.
+ */
+function accent(line: string) {
+  if (!line.endsWith(hero.emphasis)) return line;
+
+  return (
+    <>
+      {line.slice(0, -hero.emphasis.length)}
+      <span className="text-accent">{hero.emphasis}</span>
+    </>
+  );
+}
+
 export function Hero() {
   return (
     <section
@@ -82,7 +103,7 @@ export function Hero() {
           className="type-display mt-14 -ml-[0.05em] md:mt-20"
           stagger={0.1}
           delay={0.22}
-          lines={[hero.headline[0], hero.headline[1], hero.headline[2]]}
+          lines={hero.headline.map(accent)}
         />
 
         {/* --- The range, as five words. Nothing follows it. ------------- */}

@@ -72,11 +72,26 @@ export const hero = {
    * make the kind of thing they need.
    *
    * The middle line was "complicated businesses", which put the reader's own
-   * company in the difficult chair on the first sentence they read. "Ambitious"
-   * describes the same client — the one with a hard problem and the appetite to
-   * take it on — from the side they would recognise themselves from.
+   * company in the difficult chair on the first sentence they read. It then
+   * spent a pass as "ambitious businesses", which was flattery, and flattery
+   * is a thing a reader has to discount before they can believe the next
+   * sentence. The adjective is gone: no qualifier, no filtering of who this is
+   * addressed to, and the claim is shorter and harder without it.
    */
-  headline: ["We build the products", "ambitious businesses", "need next."],
+  headline: ["We build the products", "businesses need next."],
+  /**
+   * The two words the whole sentence turns on, set in the accent.
+   *
+   * Anyone can say they build products. The claim here is about WHEN — not the
+   * thing you needed last year, the thing you need next — and that is the half
+   * of the sentence a reader skims straight past. It is the only coloured type
+   * on the page above the fold, which is the entire reason it works; the moment
+   * a second phrase is highlighted, neither is.
+   *
+   * Must appear verbatim at the END of one of the lines above. `Hero` splits on
+   * it rather than the copy carrying markup, so this file stays plain text.
+   */
+  emphasis: "need next.",
   /**
    * The range, as six words, in place of the paragraph that used to sit here.
    * Every one of these is a sector with a shipped product behind it lower down
@@ -164,6 +179,23 @@ export type Media =
        * flow, the devices carry the form factor.
        */
       screens?: readonly { src: string; alt: string }[];
+      /**
+       * A SECOND film, shown in its own device beside the first.
+       *
+       * Only used where the two recordings are genuinely different kinds of
+       * evidence rather than two angles on one. Combat has both: a cut reel of
+       * the product presented, and the raw unedited capture of the product
+       * running. The reel is the better picture and the capture is the better
+       * proof, and the pair says something neither says alone — which is the
+       * only reason to spend a second device on it.
+       */
+      also?: {
+        src: string;
+        poster: string;
+        still: string;
+        alt: string;
+        aspect: number;
+      };
     };
 
 /**
@@ -364,7 +396,10 @@ export const projects: readonly Project[] = [
   },
   {
     index: "02",
-    kind: "Institutional liquidity",
+    // "Institutional liquidity" is the sector as the sector calls itself, and
+    // it is two words a reader outside it has to translate before they can read
+    // the pitch underneath. The label says what the thing is instead.
+    kind: "Trading infrastructure",
     name: "DRK",
     pitch: "The infrastructure that makes real-world assets easier to buy, sell and trade.",
     // "Tokenisation solved issuance. It did not solve liquidity." is the best
@@ -515,6 +550,22 @@ export const projects: readonly Project[] = [
       still: "/work/video/combat-demo.jpg",
       alt: "The Combat Reviews reel: the app in the hand, moving through the events feed, a fight card with its prediction challenge, and the rankings leaderboard.",
       aspect: 9 / 16,
+      /**
+       * The raw capture, and the one that goes in the device.
+       *
+       * The reel above is a cut piece with a scene and a grade — the best
+       * picture in the act and, unavoidably, marketing. This is the app itself,
+       * recorded off a phone with nothing done to it. Side by side they make
+       * the argument this act is actually making: here is how it is sold, and
+       * here is the thing behind it, running. Neither would say that alone.
+       */
+      also: {
+        src: "/work/video/combat-app.mp4",
+        poster: "/work/video/combat-app-open.jpg",
+        still: "/work/video/combat-app.jpg",
+        alt: "An unedited capture of the Combat Reviews app: the breaking bar, the upcoming events feed and the UFC 330 main event with its odds, broadcast details and quick pick.",
+        aspect: 252 / 548,
+      },
     },
     partners: {
       label: "Official partners",
@@ -542,7 +593,7 @@ export const projects: readonly Project[] = [
      */
     kind: "Property marketing",
     name: "Linton Villas",
-    pitch: "The sales site for a thirty-eight villa resort, built for buyers who will never visit.",
+    pitch: "A thirty-eight villa resort in South Lombok, presented online for overseas buyers.",
     summary:
       "We built the experience the developer sells through: masterplan, villa types, floor plans, financial projections, an eight-minute film and the full prospectus, as one guided journey.",
     href: "https://lintonvillas.vercel.app",
