@@ -240,6 +240,13 @@ export function ProductWell({
                   still: media.still,
                 }}
                 alt={media.alt}
+                // The screen takes its shape from the footage rather than the
+                // footage being cropped to a stock screen shape. Combat's reel
+                // is 9:16, so the device is a 9:16 device — and it carries no
+                // dynamic island, because this footage is a composed scene
+                // rather than a screen capture with a status bar to cover.
+                screenAspect={media.aspect}
+                island={false}
                 // No idle bob. The shot already moves with the scroll, and a
                 // device floating on its own under a travelling camera reads as
                 // a widget rather than as a thing in the scene.

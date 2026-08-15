@@ -70,14 +70,21 @@ export const hero = {
    * describes the job, which is the thing a prospective client is actually
    * trying to work out on the first screen: not what we make, but whether we
    * make the kind of thing they need.
+   *
+   * The middle line was "complicated businesses", which put the reader's own
+   * company in the difficult chair on the first sentence they read. "Ambitious"
+   * describes the same client — the one with a hard problem and the appetite to
+   * take it on — from the side they would recognise themselves from.
    */
-  headline: ["We build the products", "complicated businesses", "need next."],
+  headline: ["We build the products", "ambitious businesses", "need next."],
   /**
-   * The range, as five words, in place of the paragraph that used to sit here.
+   * The range, as six words, in place of the paragraph that used to sit here.
    * Every one of these is a sector with a shipped product behind it lower down
    * the page — nothing here is aspirational, and nothing is a service list.
+   * Crypto and Web3 earn their place on Pepay and BNBPay, which are the two
+   * products carrying the hardest numbers on the page.
    */
-  sectors: ["Payments", "Markets", "Sport", "Property", "AI"],
+  sectors: ["Payments", "Crypto & Web3", "Markets", "Sport", "Property", "AI"],
 } as const;
 
 /* ========================================================== ACT II — proof */
@@ -287,7 +294,10 @@ export const projects: readonly Project[] = [
     href: "https://pepay-merchant-dashboard.vercel.app/home",
     secondary: { label: "@pepaylabs", href: "https://x.com/pepaylabs" },
     status: "Live",
-    metric: "$19.9M settled · 75.9K transactions · 26.7K paying wallets",
+    // "Paying wallets" is the metric the system actually counts, and it is also
+    // a phrase that means nothing outside crypto. Saying what it counts —
+    // wallets that have paid — keeps the figure exact and drops the jargon.
+    metric: "$19.9M settled · 75.9K transactions · 26.7K wallets that have paid",
     tags: [
       "Cross-chain",
       "Settlement",
@@ -356,9 +366,13 @@ export const projects: readonly Project[] = [
     index: "02",
     kind: "Institutional liquidity",
     name: "DRK",
-    pitch: "Market infrastructure for making real-world assets liquid.",
+    pitch: "The infrastructure that makes real-world assets easier to buy, sell and trade.",
+    // "Tokenisation solved issuance. It did not solve liquidity." is the best
+    // line this product has and it stays — but it only lands for a reader who
+    // already knows what issuance and liquidity mean in the same sentence, so
+    // the next clause says the same thing in words that need nothing.
     summary:
-      "Tokenisation solved issuance. It did not solve liquidity. DRK is the operating layer between tokenised assets and institutional markets.",
+      "Tokenisation solved issuance. It did not solve liquidity: it makes an asset digital without making it easy to trade. DRK is the layer between tokenised assets and the institutions that trade them.",
     href: "https://drk-deck.vercel.app/",
     // The product itself is pre-release. What is public is the investor
     // experience we built for it, so the link says so rather than implying the
@@ -415,11 +429,14 @@ export const projects: readonly Project[] = [
     kind: "Programmable payments",
     name: "BNBPay",
     pitch: "The payment network built for a world where money moves on-chain.",
+    // "Gasless, programmable rails" was two pieces of jargon in three words:
+    // "rails" is industry, "gasless" is crypto, and a merchant reading this has
+    // to decode both before reaching the list of things the product does.
     summary:
-      "Gasless, programmable rails for merchants, platforms and AI agents — invoices, subscriptions, gift cards and x402 API payments across BNB Chain and opBNB.",
+      "Payments that move on-chain without the payer covering blockchain fees — invoices, subscriptions, gift cards and API payments for merchants, platforms and AI agents across BNB Chain and opBNB.",
     href: "https://bnbpayvercel1.vercel.app",
     status: "Live",
-    metric: "Six accepted tokens, settled gaslessly on BNB Chain",
+    metric: "Six tokens accepted, with no blockchain fee for the payer",
     tags: [
       "Multi-token",
       "x402 Flex",
@@ -462,7 +479,10 @@ export const projects: readonly Project[] = [
     index: "04",
     kind: "Sports media platform",
     name: "Combat Reviews",
-    pitch: "The intelligence layer for the world's combat sports.",
+    // "The intelligence layer for the world's combat sports" told a reader what
+    // kind of company wrote it rather than what the thing is. A fan, a promoter
+    // and an investor all understand the line below on the first read.
+    pitch: "A platform for following combat sports, the fighters and the events.",
     summary:
       "Events, fight cards, rankings, athlete profiles and predictions across every major promotion, from announcement through to result.",
     href: "https://globalfight-p69k.onrender.com/events",
@@ -479,17 +499,22 @@ export const projects: readonly Project[] = [
     stack: ["Next.js", "TypeScript", "Postgres", "Prisma"],
     logo: { src: "/work/logos/combat-reviews.png", alt: "Combat Reviews", aspect: 507 / 350 },
     /**
-     * The only portrait capture in the act, and the only product shown inside a
+     * The only portrait film in the act, and the only product shown inside a
      * device. It replaced a landscape recording of the desktop site — which was
      * a good-looking shot of the wrong surface. This product is used on a phone.
+     *
+     * The footage is now the product's own reel rather than a 258px screen
+     * capture, so it is 9:16 and the device it renders in takes that shape. It
+     * is also the one film here that is a composed piece rather than a raw
+     * capture, and the alt text says what is actually in it.
      */
     media: {
       kind: "film",
       src: "/work/video/combat-demo.mp4",
       poster: "/work/video/combat-demo-open.jpg",
       still: "/work/video/combat-demo.jpg",
-      alt: "The Combat Reviews app running on a phone: the upcoming events feed, then an ONE Championship fight night with its card, odds and a locked quick pick on the main event.",
-      aspect: 258 / 560,
+      alt: "The Combat Reviews reel: the app in the hand, moving through the events feed, a fight card with its prediction challenge, and the rankings leaderboard.",
+      aspect: 9 / 16,
     },
     partners: {
       label: "Official partners",
@@ -502,25 +527,33 @@ export const projects: readonly Project[] = [
   },
   {
     index: "05",
-    kind: "Property development",
+    /**
+     * WE BUILT THE SITE, NOT THE RESORT, and every line in this block has to
+     * say so.
+     *
+     * It used to be filed under "Property development" and pitched as "Thirty-
+     * eight villas on the South Lombok coast", with tags reading "38-villa
+     * development" and "Masterplan & villa types" — which is a description of
+     * the client's development rather than of the thing this studio made. A
+     * reader skimming the act came away thinking Quantar builds resorts. The
+     * work is the digital sales experience the developer sells through, and it
+     * is a better credential stated accurately: the villas are somebody else's,
+     * the product that presents them is ours.
+     */
+    kind: "Property marketing",
     name: "Linton Villas",
-    // "…built to close a buyer who will never visit" was the sales brief, not
-    // the product. It described what the client wanted the thing to DO to
-    // someone, which is the one register this act cannot afford — every other
-    // pitch here says what the product IS. It also put the reader in the
-    // position of the mark.
-    pitch: "Thirty-eight villas on the South Lombok coast, understood without going there.",
+    pitch: "The sales site for a thirty-eight villa resort, built for buyers who will never visit.",
     summary:
-      "Masterplan, four villa types, floor plans, financial projections, an eight-minute film and the full prospectus, as one guided narrative.",
+      "We built the experience the developer sells through: masterplan, villa types, floor plans, financial projections, an eight-minute film and the full prospectus, as one guided journey.",
     href: "https://lintonvillas.vercel.app",
     status: "Live",
-    metric: "38 villas · four types · delivery scheduled for early 2028",
+    metric: "38 villas, four types and the full prospectus in one site",
     tags: [
-      "38-villa development",
-      "Investment presentation",
+      "Investor website",
+      "Guided sales journey",
       "Masterplan & villa types",
       "Financial projections",
-      "Interactive property experience",
+      "Interactive property tour",
       "Investor prospectus",
     ],
     stack: ["Strategy", "UX/UI", "Next.js", "Interactive media"],
@@ -538,9 +571,13 @@ export const projects: readonly Project[] = [
     index: "06",
     kind: "Enterprise AI",
     name: "Noise",
-    pitch: "An operating system for turning fragmented work into decisions.",
+    // "An operating system for turning fragmented work into decisions" asked
+    // the reader to decode three ideas before the sentence resolved. This one
+    // resolves on the first read, and the paragraph under it says why it
+    // matters — which is the order every pitch on this page follows.
+    pitch: "One place for your team's email, chats, meetings and documents.",
     summary:
-      "Email, chat, meetings and documents indexed into one workspace, so context is recovered rather than hunted for across disconnected systems.",
+      "Everything the team works in is brought together and indexed, so context is found in seconds instead of hunted across a dozen disconnected systems.",
     href: "https://noiselanding.vercel.app/",
     // The product itself is still gated — access goes through a request form —
     // so this points at what IS public, and the label says exactly that. A
@@ -637,18 +674,22 @@ export const figures: {
 } = {
   act: "II · The count",
   headline: ["Numbers we", "can be held to"],
-  body: "Every figure here is taken from a running product, and every one of them appears again in that product's own block below. Nothing is aggregated across products, projected, or rounded up to look larger.",
+  // Was: "Every figure here is taken from a running product, and every one of
+  // them appears again in that product's own block below. Nothing is aggregated
+  // across products, projected, or rounded up to look larger." True, and
+  // written like a disclaimer. Same three promises, said plainly.
+  body: "These figures come straight from the products themselves, and every one of them appears again in that product's own block below. Nothing is projected, combined across products or rounded up.",
   items: [
     { value: 19.9, decimals: 1, prefix: "$", suffix: "M", label: "settled", from: "Pepay" },
     { value: 75.9, decimals: 1, suffix: "K", label: "transactions", from: "Pepay" },
-    { value: 26.7, decimals: 1, suffix: "K", label: "paying wallets", from: "Pepay" },
-    // "Sold" is the word this must never say. Delivery is scheduled for early
-    // 2028 and the development is being taken to market, not cleared — the site
-    // presents thirty-eight villas, it has not shifted them, and a count of
-    // sales is a claim nobody has made. What is true is the size of the thing
-    // the product had to carry.
-    { value: 38, label: "villas in one development", from: "Linton Villas" },
-    { value: 6, label: "tokens accepted, gaslessly", from: "BNBPay" },
+    { value: 26.7, decimals: 1, suffix: "K", label: "wallets that have paid", from: "Pepay" },
+    // "Sold" is the word this must never say. The development is being taken to
+    // market, not cleared — the site presents thirty-eight villas, it has not
+    // shifted them, and a count of sales is a claim nobody has made. Nor is it
+    // "villas built": the villas are the client's, the site is ours. What is
+    // true is the size of the thing the product had to carry.
+    { value: 38, label: "villas presented in one site", from: "Linton Villas" },
+    { value: 6, label: "tokens accepted, no payer fees", from: "BNBPay" },
     { value: 6, label: "products built" },
     // Live means a public URL a reader can open right now. DRK is pre-release
     // and Noise is in private beta, and neither is counted here.
@@ -660,13 +701,17 @@ export const figures: {
 /* ============================================================ ACT III — turn */
 
 export const turn = {
-  act: "III · The turn",
+  // "III · The turn" was a name for what the section does to the page, which is
+  // information the reader has no use for. The acts now say what they contain:
+  // the proof is what we have built, the approach is how we build, the studio
+  // is who builds it. Change this and change `hinges.toTurn` with it.
+  act: "III · The approach",
   headline: "We build digital products for lasting performance — not just launch day.",
   // Trimmed. The second half used to explain what product judgment, design
   // discipline and engineering depth get you — to a reader who has just
   // scrolled six products and eight figures proving it. The evidence had
   // already made the argument; the paragraph was repeating it back.
-  body: "Real products evolve. Users change, requirements shift and complexity compounds. We build for the version that exists in three years, not the one that launches.",
+  body: "Products don't stay still. Customers change, requirements change and new problems appear. We build for the version that exists in three years, not the one that launches.",
 } as const;
 
 /**
@@ -682,7 +727,7 @@ export const process = [
     index: "01",
     title: "Define",
     summary:
-      "Clarify the commercial problem, the users, the constraints and how success will be measured.",
+      "Work out what the business is trying to achieve, who it is for, what limits it and how success gets measured.",
     principle:
       "The most expensive product decisions are often made before anyone realises they are making them.",
   },
@@ -690,7 +735,7 @@ export const process = [
     index: "02",
     title: "Design",
     summary:
-      "Shape the interface, information architecture and system model together — not as separate disciplines handed from one team to another.",
+      "Shape the interface, the way information is organised and the system underneath it together — not as separate jobs passed between teams.",
     principle:
       "A design is not finished when it looks right. It is finished when it still works when the data is messy, the edge cases arrive and the network does not.",
   },
@@ -698,7 +743,7 @@ export const process = [
     index: "03",
     title: "Build",
     summary:
-      "Ship in working increments, under test and observable from the first deployment.",
+      "Ship in working pieces, each one tested and monitored from the day it goes live.",
     principle:
       "Build the codebase for the engineer who inherits it eighteen months from now. Often, that engineer is you.",
   },
@@ -706,7 +751,7 @@ export const process = [
     index: "04",
     title: "Evolve",
     summary:
-      "Improve the product against evidence from production, user behaviour and the needs of the business as they change.",
+      "Keep improving the product against what real use shows and what the business needs next.",
     principle:
       "Production teaches you things the original specification never could. The advantage belongs to teams that keep listening.",
   },
@@ -717,12 +762,22 @@ export const process = [
 export const people = {
   act: "IV · The studio",
   headline: ["The people you meet", "are the people", "who build"],
-  body: "Strategy, design and engineering decisions stay close to the people building the product, keeping communication direct and execution accountable.",
+  body: "The same team stays with the work from the first idea through to the finished product, so you are always talking to the people making the decisions.",
+  /**
+   * Each of these has to open with "No" — `People.tsx` sets the first word in
+   * the accent and the rest in ink, and the negation is the whole grammar of
+   * the list.
+   *
+   * They used to be stated as industry terms: pyramid staffing, an
+   * account-management layer, a sales-to-delivery handoff. Every one of those
+   * names a practice the reader has probably suffered without knowing what it
+   * is called, so each now describes what they would EXPERIENCE instead.
+   */
   refusals: [
-    "No pyramid staffing",
-    "No account-management layer",
-    "No sales-to-delivery handoff",
-    "No technology chosen for fashion",
+    "No junior team replacing the people you met",
+    "No account managers sitting in between",
+    "No handoff from sales to a different team",
+    "No technology chosen because it is fashionable",
   ],
 } as const;
 
@@ -736,7 +791,7 @@ export const people = {
  */
 export const engagement = {
   label: "How an engagement starts",
-  headline: "Fourteen days. Four fixed outputs. Enough clarity to decide what should happen next — without creating dependency.",
+  headline: "Fourteen days. Four fixed outputs. Enough clarity to decide what happens next — and nothing you cannot walk away from.",
   moments: [
     {
       index: "01",
@@ -748,13 +803,17 @@ export const engagement = {
       index: "02",
       days: "Day 03 — 05",
       title: "The constraint map",
-      body: "A clear view of what is fixed, what is assumed and what remains open — with every assumption made explicit.",
+      body: "We map what we know, what we are assuming and what still needs an answer — with every assumption written down.",
     },
     {
       index: "03",
       days: "Day 06 — 09",
-      title: "The thin slice",
-      body: "One meaningful path through the product, built end to end and deployed. Real enough to expose technical, product and operational risk before larger commitments are made.",
+      // "The thin slice" is what this is called by the people who build
+      // software and nothing at all to anybody else, which is the wrong way
+      // round for the one output on this page a non-technical founder is being
+      // asked to picture.
+      title: "A working first version",
+      body: "One important part of the product, built end to end and deployed. Real enough to expose the technical, product and operational problems before you commit to building everything.",
     },
     {
       index: "04",
@@ -804,13 +863,13 @@ export const constellation = {
     { name: "Noise", fact: "Private beta", x: 50, y: 7 },
     { name: "DRK", fact: "In development", x: 85, y: 29 },
     { name: "Pepay", fact: "$19.9M settled", x: 81, y: 73 },
-    { name: "Linton Villas", fact: "38 villas", x: 50, y: 94 },
+    { name: "Linton Villas", fact: "38 villas presented", x: 50, y: 94 },
     // "Every major promotion" and not "Nine disciplines": the discipline count
     // was dropped from this product's copy in an earlier pass, and reviving a
     // retired figure in a section whose whole premise is that it introduces
     // nothing would be exactly the wrong place to do it.
     { name: "Combat Reviews", fact: "Every major promotion", x: 18, y: 73 },
-    { name: "BNBPay", fact: "Six tokens, gasless", x: 14, y: 29 },
+    { name: "BNBPay", fact: "Six tokens, no payer fees", x: 14, y: 29 },
   ],
 } as const;
 
@@ -883,7 +942,7 @@ export const hinges = {
     question: "So what have you actually built?",
   },
   toTurn: {
-    act: "III · The turn",
+    act: "III · The approach",
     question: "And what makes those hold up once they are live?",
   },
   toStudio: {

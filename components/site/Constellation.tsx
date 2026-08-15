@@ -89,7 +89,25 @@ export function Constellation() {
       >
         <Eyebrow invert>{constellation.act}</Eyebrow>
 
-        <div className="relative mx-auto mt-12 aspect-[3/4] w-full max-w-[64rem] sm:aspect-[4/3] lg:mt-16 lg:aspect-[16/10]">
+        {/* `--spread` narrows the ring horizontally on a phone.
+
+            The field is laid out in percentages of its own box, and the two
+            products at x=14 and x=18 are named "BNBPay" and "Combat Reviews" —
+            set at `type-h3` and unwrappable, those names are wider than the
+            distance between their node and the edge of a 393px screen. So the
+            ring was being drawn correctly and rendered as two columns of type
+            running off both sides of the section, clipped by its own
+            `overflow-hidden`.
+
+            Rather than shrink the type until it fits, the ring itself is
+            compressed toward the vertical axis: every node's horizontal offset
+            from the centre is multiplied by this, and the SVG carrying the
+            connections is scaled by exactly the same factor about its own
+            centre — so the lines still land on the nodes. At 1 it is the ring
+            the desktop has always drawn. */}
+        <div
+          className="relative mx-auto mt-12 aspect-[3/4] w-full max-w-[64rem] [--spread:0.5] sm:aspect-[4/3] sm:[--spread:0.78] lg:mt-16 lg:aspect-[16/10] lg:[--spread:1]"
+        >
           {/* The connections. One line per product, drawn from the centre
               outwards by running a dash offset to zero.
 
@@ -106,7 +124,8 @@ export function Constellation() {
             aria-hidden
             viewBox="0 0 100 100"
             preserveAspectRatio="none"
-            className="absolute inset-0 h-full w-full"
+            className="absolute inset-0 h-full w-full origin-center"
+            style={{ transform: "scaleX(var(--spread))" }}
           >
             {constellation.nodes.map((node) => (
               <line
@@ -128,7 +147,10 @@ export function Constellation() {
               key={node.name}
               className="absolute -translate-x-1/2 -translate-y-1/2 text-center"
               style={{
-                left: `${node.x}%`,
+                // The same compression the connections get, applied to the node
+                // that sits at the end of one. Both are offsets from the centre
+                // scaled by `--spread`, which is why they cannot disagree.
+                left: `calc(50% + ${node.x - 50} * var(--spread) * 1%)`,
                 top: `${node.y}%`,
                 // Collapse pulls each product back along its own line to the
                 // centre — the distance is its own offset from 50%, so nothing
@@ -136,7 +158,7 @@ export function Constellation() {
                 transform: `
                   translate(-50%, -50%)
                   translate(
-                    calc((50 - ${node.x}) * var(--collapse) * 1%),
+                    calc((50 - ${node.x}) * var(--collapse) * var(--spread) * 1%),
                     calc((50 - ${node.y}) * var(--collapse) * 1%)
                   )
                   scale(calc(1 - var(--collapse) * 0.35))
@@ -144,8 +166,19 @@ export function Constellation() {
                 opacity: "calc(var(--draw) * (1 - var(--collapse)))",
               }}
             >
-              <p className="type-h3 whitespace-nowrap text-bone">{node.name}</p>
-              <p className="type-label mt-2 whitespace-nowrap text-bone-35">{node.fact}</p>
+              {/* The name keeps `type-h3`'s shape and takes a smaller size on a
+                  phone, where two of these sit level with each other either
+                  side of the field and the clamp's 24px floor put them within
+                  nine pixels of touching. */}
+              <p className="whitespace-nowrap text-[1.0625rem] leading-[1.08] tracking-[-0.028em] text-bone sm:text-[1.5rem] lg:text-[clamp(1.5rem,2.9vw,2.4rem)]">
+                {node.name}
+              </p>
+              {/* The fact wraps below `sm` instead of running. "Every major
+                  promotion" set on one line is wider than the gap between its
+                  own node and the next one along. */}
+              <p className="type-label mx-auto mt-2 max-w-[11ch] text-bone-35 sm:max-w-none sm:whitespace-nowrap">
+                {node.fact}
+              </p>
             </div>
           ))}
 

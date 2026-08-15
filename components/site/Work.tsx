@@ -81,8 +81,9 @@ export function Work() {
                   pre-empts a thing the page is about to demonstrate is a
                   sentence doing the demonstration's job badly. */}
               <p className="type-body max-w-[40ch] text-ink-70">
-                Payments, institutional liquidity, combat sports, property
-                investment and enterprise AI. All six are shown running.
+                Payments, crypto, trading infrastructure, combat sports,
+                property investment and enterprise AI. All six are shown
+                running.
               </p>
             </Reveal>
           </div>

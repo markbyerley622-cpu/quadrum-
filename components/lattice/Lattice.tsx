@@ -212,7 +212,26 @@ export function Lattice() {
       const centreX = narrow ? width * 0.5 : width * cam.cx;
       const centreY = height * (narrow ? 0.46 : cam.cy);
       const scale = Math.min(width, height) * cam.s * (narrow ? 0.85 : 1);
-      const alpha = cam.a * (narrow ? 0.22 : 1);
+      // The points. 0.3 rather than the 0.22 this ran at, so a node is never
+      // fainter than the lines arriving at it — a dot dimmer than its own
+      // connections reads as a smudge on the paper rather than as a joint.
+      const alpha = cam.a * (narrow ? 0.3 : 1);
+
+      /**
+       * Lines are faded LESS than points on a phone, and that asymmetry is the
+       * fix for the one thing this object did wrong at that size.
+       *
+       * Everything used to be scaled by a single narrow factor. But a point is
+       * drawn at up to 65% alpha and a connection at 30% of it, so knocking
+       * both down by the same 0.22 took the points to something still visible
+       * and the lines to roughly 0.06 — under the cutoff for anything at depth.
+       * The object arrived on a phone as a field of loose dots: the structure
+       * was being drawn and could not be seen, which is precisely the opposite
+       * of what the thing is about. Holding the lines much higher costs no
+       * legibility — a hairline at 6% ink over paper is a texture either way —
+       * and the points read as connected because they are.
+       */
+      const lineAlpha = cam.a * (narrow ? 0.62 : 1);
 
       // Rotation: a slow constant turn plus a scroll-driven sweep, so the
       // object is never static but never spins for the sake of it.
@@ -260,7 +279,7 @@ export function Lattice() {
       if (chaosAlpha > 0.004) {
         for (const e of chaotic) {
           const depth = (pd[e.a] + pd[e.b]) * 0.5;
-          const a = chaosAlpha * alpha * 0.13 * depth;
+          const a = chaosAlpha * lineAlpha * 0.13 * depth;
           if (a < 0.004) continue;
           const my = (py[e.a] + py[e.b]) * 0.5;
           ctx!.strokeStyle = e.accent ? accentShade(my, a * 1.8) : shade(my, a);
@@ -276,7 +295,7 @@ export function Lattice() {
       if (orderAlpha > 0.004) {
         for (const e of ordered) {
           const depth = (pd[e.a] + pd[e.b]) * 0.5;
-          const a = orderAlpha * alpha * 0.3 * depth * depth;
+          const a = orderAlpha * lineAlpha * 0.3 * depth * depth;
           if (a < 0.004) continue;
           const my = (py[e.a] + py[e.b]) * 0.5;
           ctx!.strokeStyle = shade(my, a);

@@ -143,7 +143,7 @@
      stood in the other half. The object is gone and the claim has the width
      back — it is the opening screen now, not a caption beside something.
 
-     The number that governs this is the longest line, "complicated businesses",
+     The number that governs this is the longest line, "We build the products",
      which Geist sets at almost exactly 10x the font size. At 7vw that is about
      1010px inside a 1310px measure at 1440. Go much past it and the line wraps,
      which breaks the authored three-line break — that break is typesetting, not
@@ -424,6 +424,31 @@
   }
   .shot--surface {
     aspect-ratio: 1280 / 612;
+  }
+
+  /* BNBPay, on a phone.
+     It arrived as the smallest picture in the act at the size where it could
+     least afford to be: a 4:3 crop of a DESKTOP application, so its panels are
+     already a third of the height of anything else here at the same width, and
+     it is the only spread with a pair of devices under the film taking screen
+     as well. Inside the gutter at 393px the film was 353px wide and its
+     invoice rows were unreadable.
+
+     So below `lg` this one shot gives up the gutter and runs slightly wider
+     than the window: about 22% more picture, all of it in the panels. It is
+     the one place the act's "nothing exceeds the viewport" rule is broken, and
+     the two reasons for that rule are both settled here — the frame comes off
+     with the margin, so there is no radius to clip, and 5% a side is well
+     inside the air the encode's crop already leaves around the app (the
+     masthead sits between 18% and 84% of the frame). Check that before
+     widening it further. */
+  @media (max-width: 1023px) {
+    .shot--travel {
+      width: 110vw;
+      margin-inline: -5vw;
+      border-radius: 0;
+      box-shadow: none;
+    }
   }
 
   /* The devices in the travel shot. Below `lg` they sit under the film with

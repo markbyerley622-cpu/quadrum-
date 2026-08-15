@@ -81,24 +81,27 @@ const jobs = [
     crop: { w: 1250, h: 936, x: 330, y: 0 },
   },
   {
-    from: "combat-vertical.mp4",
+    from: "combat-reel.mp4",
     to: "combat-demo",
-    // The only PORTRAIT source in the set, and the reason the whole spread
-    // changed shape: this is a capture of the Combat Reviews app on a phone,
-    // 258x560, which is 9:19.5 to within a pixel. It replaced a landscape
-    // recording of the desktop site — the product's real surface is the app,
-    // and a desktop capture of it was showing the wrong thing beautifully.
+    // The only PORTRAIT source in the set, and the reason the whole spread is
+    // shaped the way it is: Combat Reviews is used on a phone, so it is shown
+    // on one.
     //
-    // Ten seconds, and this frame has the main event, the odds and a locked
-    // pick all populated rather than mid-transition.
-    poster: 5,
-    crf: 26,
-    // NATIVE WIDTH, deliberately. The source is 258px across; every other job
-    // here scales DOWN to 1280 from a capture two or three times that. Scaling
-    // this one up would add nothing but bytes, so the delivery width is the
-    // capture width and the phone it renders inside is sized to match — see
-    // `--phone` in PhonePair and the handset shot in globals.css.
-    width: 258,
+    // This replaced a raw 258x560 screen capture of the app. Same product, same
+    // orientation, better picture — the reel is 1080x1920 and cut, so the phone
+    // it renders inside is no longer showing an upscale of a thumbnail-sized
+    // recording. It is 9:16 rather than the capture's 9:19.5, and the device
+    // frame takes its screen aspect from the film rather than the other way
+    // round — see `screenAspect` in PhoneMockup. Letterboxing a film inside a
+    // device is a video player; cropping it loses the type at both edges.
+    //
+    // Eight seconds in: the leaderboard populated, inside the frame, mid-scene.
+    poster: 8,
+    crf: 28,
+    // 720 wide, not 1280. The device it renders inside is at most 280px across,
+    // so this is already more than 2x on the largest display that will ever
+    // show it, and the 15s runtime makes every extra pixel expensive.
+    width: 720,
   },
   {
     from: "linton-hero.mp4",

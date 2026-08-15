@@ -40,6 +40,24 @@ export function PhoneMockup({
    * letterboxed into a landscape plate. When present, `src` is ignored.
    */
   film,
+  /**
+   * Width ÷ height of the screen, where the thing inside it is not a native
+   * 9:19.5 capture.
+   *
+   * A device frame exists to say "this is what the product looks like in a
+   * hand", and it stops saying that the moment the picture inside it is cropped
+   * or letterboxed to fit a screen shape the recording never had. So the screen
+   * takes its aspect from the film. Combat's reel is 9:16 and arrives whole;
+   * the phone simply reads as a slightly shorter phone.
+   */
+  screenAspect,
+  /**
+   * The dynamic island. On by default, because a screen capture of an app has a
+   * status bar the island belongs in front of. Turn it OFF for footage that is
+   * a composed scene rather than a capture — an island drawn over a graded shot
+   * is a black pill covering somebody's picture.
+   */
+  island = true,
   /** Travel of the idle float, in px. Under 12 or it stops reading as "floating". */
   drift = 8,
   delay = 0,
@@ -49,6 +67,8 @@ export function PhoneMockup({
   src?: string;
   alt: string;
   film?: { src: string; poster: string; still: string };
+  screenAspect?: number;
+  island?: boolean;
   drift?: number;
   delay?: number;
   priority?: boolean;
@@ -87,7 +107,10 @@ export function PhoneMockup({
           {/* Bezel */}
           <div className="relative rounded-[2.4rem] bg-[#070709] p-[5px]">
             {/* Screen */}
-            <div className="relative aspect-[9/19.5] w-full overflow-hidden rounded-[2.1rem] bg-void">
+            <div
+              className="relative w-full overflow-hidden rounded-[2.1rem] bg-void"
+              style={{ aspectRatio: screenAspect ?? 9 / 19.5 }}
+            >
               {film ? (
                 <ProductFilm
                   src={film.src}
@@ -95,8 +118,9 @@ export function PhoneMockup({
                   still={film.still}
                   alt={alt}
                   priority={priority}
-                  // The capture is 258px across and the screen is about 262 —
-                  // asking for a larger source would be asking for an upscale.
+                  // The screen is about 262px across at its largest, so this is
+                  // the size the still is fetched at. The film's own delivery
+                  // width is set in scripts/build-work-video.js.
                   sizes="280px"
                 />
               ) : src ? (
@@ -112,10 +136,12 @@ export function PhoneMockup({
               ) : null}
 
               {/* Dynamic island. Inside the screen, as it is on the device. */}
-              <span
-                aria-hidden
-                className="absolute left-1/2 top-[9px] h-[22px] w-[32%] -translate-x-1/2 rounded-full bg-black"
-              />
+              {island ? (
+                <span
+                  aria-hidden
+                  className="absolute left-1/2 top-[9px] h-[22px] w-[32%] -translate-x-1/2 rounded-full bg-black"
+                />
+              ) : null}
 
               {/* Glass. One diagonal sheen at low opacity — enough to say the
                   screen has a surface, not enough to obscure the interface. */}
